@@ -1,0 +1,301 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: black;
+    background-size: cover;
+    background-position: center center;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    color: azure;
+    margin-bottom: 10px;
+}
+h3 {
+    color: azure;
+    font-size: 30px;
+    font-weight: 500px;
+    font-style: italic;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+p {
+    color: aliceblue;
+}
+
+.wrapper.small {
+    margin-top: 5%;
+    height: 100%;
+    min-height: 30vh;
+    width: 100%;
+}
+
+.form-box {
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+}
+
+.buttons-container {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.button {
+    background-color: RGB(100, 320, 350, 0.9);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: RGB(100, 320, 350, 0.9);
+}
+.main-controller-page{
+    position: relative;
+}
+.model3d {
+    margin-top: 93px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 90%;
+    height: 50%;
+    margin-left: 5%;
+    border: 2px solid RGB(100, 320, 350, 0.9);; 
+}
+
+.arrow-controlls {
+    position: absolute;
+    left: 0;
+    margin-top: 90px;
+    width: 25%;
+    height: 30%;
+    margin-left: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid rgba(100, 320, 350, 0.9);
+    padding: 10px;
+}
+.settings-controlls{
+    left: 0;
+    position: absolute;
+    width: 40%;
+    height: 30%;
+    margin-left: 30%;
+    margin-top: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid RGB(100, 320, 350, 0.9);
+}
+.mbot-connection-controlls{
+    right: 0;
+    position: absolute;
+    width: 25%;
+    height: 30%;
+    margin-right: 5%;
+    margin-top: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid RGB(100, 320, 350, 0.9);
+}
+
+.arrow-controlls button.LEFT {
+    background-color: transparent;
+    background-image: url("/images/leftkey.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-right: auto;
+    height: 55px;
+    width: 55px;
+}
+
+.arrow-controlls button.RIGHT {
+    background-color: transparent;
+    background-image: url("/images/rightkey.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-left: auto;
+    height: 55px;
+    width: 55px;
+}
+.arrow-controlls button.UP {
+    background-color: transparent;
+    background-image: url("/images/upkey.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 55px;
+    width: 55px;
+}
+.arrow-controlls button.DOWN {
+    background-color: transparent;
+    background-image: url("/images/downkey.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 55px;
+    width: 55px;
+}
+
+#mbot2Model{
+    min-height: 100%;
+    max-height: 200%;
+    min-width: 100%;
+    max-width: 200%;
+    margin-top: -5%;
+}
+
+.arrow-controlls button {
+    width: 80px; /* Adjust width as needed */
+    height: 30px; /* Adjust height as needed */
+    border: none;
+    background-color: lightgray; /* Adjust background color as needed */
+    cursor: pointer;
+    font-size: 14px; /* Adjust font size as needed */
+    margin: 5px; /* Adjust margin as needed */
+}
+
+.settings-p {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 500px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+#lineFollower{
+    margin-left: 55px;
+}
+#suicidePrev{
+    margin-left: 78px;
+}
+
+.main-controll-page{
+    pointer-events: none;
+    opacity: 0.2;
+}
+.wrapper{
+    color: #fff;
+    pointer-events:all;
+    opacity: 1;
+}
+
+.dropbtn {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border: 2px solid white;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 RGB(100, 320, 350, 0.9);
+    z-index: 1;
+    
+    border: 2px solid RGB(100, 320, 350, 0.9);
+  }
+  
+  /* Style the links inside the dropdown */
+  .dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+@media only screen and (max-width: 1270px) {
+
+    .arrow-controlls{
+        left: 0;
+        position: absolute;
+        width: 35%;
+        height: 30%;
+        margin-left: 5%;
+    }
+    .settings-controlls{
+        left: 0;
+        position: absolute;
+        width: 55%;
+        height: 30%;
+        margin-left: 40%;
+        margin-top: 90px;
+    }
+
+    .mbot-connection-controlls{
+        left: 5%;
+        top: 80%;
+        position: absolute;
+        width: 35%;
+        height: 30%;
+        margin-right: 5%;
+        margin-top: 90px;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+
+    .arrow-controlls{
+        left: 10%;
+        position: absolute;
+        width: 70%;
+        height: 35%;
+        margin-left: 5%;
+    }
+    .settings-controlls{
+        left: -25%;
+        top: 85%;
+        position: absolute;
+        width: 70%;
+        height: 30%;
+        margin-top: 90px;
+    }
+
+    .mbot-connection-controlls{
+        left: 15%;
+        top: 115%;
+        position: absolute;
+        width: 70%;
+        height: 30%;
+        margin-right: 5%;
+        margin-top: 90px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    h3{
+        font-size: 20px;
+    }
+}
