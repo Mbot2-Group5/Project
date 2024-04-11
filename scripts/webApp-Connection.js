@@ -216,6 +216,7 @@ socket.onmessage = async function (event) {
     }
 }
 
+//Funktion zur Kommunikation mit dem MBot
 async function communicating() {
     await sendToMBot2();
     await checkGamepadInput();
@@ -225,6 +226,9 @@ async function communicating() {
 function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleRight, lightSensorRight) {
     try {
         if (lightSensorLeft === "black" && lightSensorRight === "black") {
+            if (speed < 0) {
+                speed = 0;
+            }
             speed += 1;
             left = speed;
             right = speed;
@@ -235,6 +239,9 @@ function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleR
             left = speed;
             right = speed + addedSpeedForCurve;
         } else if (lightSensorLeft !== "black" && lightSensorRight !== "black") {
+            if (speed > 0) {
+                speed = 0;
+            }
             speed -= 1;
             left = speed;
             right = speed;
@@ -258,7 +265,7 @@ function suicidePrevention(distanceToObject) {
             right = 0;
         }
     } catch (error) {
-        console.log(`Error while calculating commands in SuicidePrevention: ${error}`);
+        console.log(`Error in SuicidePrevention: ${error}`);
     }
 }
 
@@ -292,12 +299,18 @@ function stopMoving(element) {
 function move(element) {
     try {
         if (element.id === 'button-controll') {
+            if (speed < 0) {
+                speed = 0;
+            }
             speed += 1;
             left = speed;
             right = speed;
             console.log("Moved straight");
         }
         if (element.id === 'button-controll2') {
+            if (speed > 0) {
+                speed = 0;
+            }
             speed -= 1;
             left = speed;
             right = speed;
@@ -443,62 +456,17 @@ function checkGamepadInput() {
                     const stickX = gamepad.axes[2];
                     const stickY = gamepad.axes[3];
 
-                    //Links & Rechts überprüfen
-                    if (stickX >= 1) {
-                        left = speed + addedSpeedForCurve;
-                        right = speed;
-                        console.log("Moving right");
-                    }
-                    if (stickX <= -1) {
-                        left = speed;
-                        right = speed + addedSpeedForCurve;
-                        console.log("Moving left");
-                    }
-                    if (stickX === 0 && (left || right)) {
-                        left = speed;
-                        right = speed;
-                        console.log("Stopped Moving Left/Right")
-                    }
+                    // Druckstärke (links & rechts) ausrechnen (zwischen 1 & -1)
+                    let leftRaw = stickY + stickX;
+                    let rightRaw = stickY - stickX;
 
-                    //Vorwärts & Rückwärts überprüfen
-                    if (stickY <= -1) {
-                        left = speed;
-                        right = speed;
-                        console.log("Moving straight");
-                    }
-                    if (stickY >= 1) {
-                        left = speed;
-                        right = speed;
-                        console.log("Moved back");
-                    }
-                    if (stickY === 0) {
-                        left = 0;
-                        right = 0;
-                        console.log("Stopped Moving Forward/Backward");
-                    }
+                    //Soll-limits definieren
+                    const maxSpeed = 998;
+                    const minSpeed = -998;
 
-                    // Linker Trigger (Langsamer), begrenzt auf 1 Eingabe pro 250 ms
-                    let lastTriggerSlower = 0;
-                    if (Date.now() - lastTriggerSlower > 250) {
-                        if (gamepad.buttons[6].value) {
-                            let drueckstaerke = gamepad.buttons[6].value;
-                            speed += -(60 + drueckstaerke * (200 - 60));
-                            console.log("Moving slower");
-                            lastTriggerSlower = Date.now();
-                        }
-                    }
-
-
-                    // Rechter Trigger (Schneller), begrenzt auf 1 Eingabe pro 250 ms
-                    let lastTriggerFaster = 0;
-                    if (Date.now() - lastTriggerFaster > 250) {
-                        if (gamepad.buttons[7].value) {
-                            let drueckstaerke = gamepad.buttons[6].value;
-                            speed += 60 + drueckstaerke * (200 - 60);
-                            console.log("Moving faster");
-                            lastTriggerFaster = Date.now();
-                        }
-                    }
+                    //Druckstärke auf die Sollwerte skalieren
+                    let left = Math.max(Math.min(leftRaw, maxSpeed), minSpeed);
+                    let right = Math.max(Math.min(rightRaw, maxSpeed), minSpeed);
 
                     // Linker Trigger (SuicidePrevention), begrenzt auf 1 Eingabe pro 250 ms
                     if (Date.now() - lastTriggerSuicidePrevention > 250) {
