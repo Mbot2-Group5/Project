@@ -5,8 +5,10 @@ let cacheVersion = 'my-cache';
 
 //Definition Versions-Dokumente
 const versionDocuments = [
+    /*Stylesheets*/
     './css/controller.css',
     './css/main.css',
+    /*Bilder*/
     './images/about_left.png',
     './images/about_right.png',
     './images/controller.png',
@@ -29,27 +31,28 @@ const versionDocuments = [
     './images/Tobias.jpg',
     './images/upkey.png',
     './images/wlan.png',
+    /*Icons*/
     './images/icons/icon.ico',
     './images/icons/replacement_icon.png',
+    /*3D Model*/
     './model/mbot2_model.glb',
+    /*Skripte*/
     './scripts/connection.js',
     './scripts/email_provider.js',
     './scripts/firebase.js',
     './scripts/login_button.js',
-    './scripts/mbot.js',
     './scripts/modelViewer.js',
     './scripts/register.js',
     './scripts/webApp-Connection.js',
     './scripts/website_logic.js',
+    /*HTML Dokumente*/
     './index.html',
     './login.html',
-    './manifest.json',
-    './package.json',
-    './package-lock.json',
     './register.html',
-    './start.html'
+    './start.html',
+    /*Manifest*/
+    './manifest.json'
     //WebsocketServer noch nicht eingebunden
-    //kann package, package-lock gelöscht werden???
 ]
 
 //Hinzufügen der Ressourcen zum Cache

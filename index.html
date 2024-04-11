@@ -7,6 +7,9 @@
     <link rel="icon" type="image/x-icon" href="./images/icons/icon.ico">
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/controller.css">
+
+    <!-- MBot2 Connection Skript -->
+    <script src="./scripts/webApp-Connection.js"></script>
 </head>
 <body>
     <header>
@@ -20,7 +23,7 @@
             <a href="start.html#about">About</a>
             <a href="start.html#team">Team</a>
             <a href="start.html#log">Log</a>
-            <a href="index.html#controller">Controller</a>
+            <a href="index.html#controller" onclick="getPossibleMBots()">Controller</a>
             <button  class="btnLogin-popup" id="one-login">Login</button>
         </nav>
 
@@ -34,13 +37,14 @@
             <span class="icon-close"><ion-icon name="close"></ion-icon></span>
             <form class="searchMBot" action="#">
                 <div class="wrapper small">
-                    <div class="info-text">
+                    <ul id="showPossibleMBots"></ul>
+                    <div id="textForWhileSearchingMBot" class="info-text">
                         <p class="search_label">Searching</p>
                     </div>
                 </div>
             </form>
             <div class="buttons-container">
-                <button class="button">Connect</button>
+                <button class="button" onclick="connectToMBot2()">Connect</button>
                 <button class="button">Save</button>
             </div>
         </div>
@@ -49,18 +53,18 @@
     <div class="main-controll-page">
         <div class="model3d">
             <h3>3D-Model:</h3>
-            <model-viewer id ="mbot2Model" src="model/mbot2_model.glb" alt="A 3D model" orientation="0 0 0"  ></model-viewer>
+            <model-viewer id ="mbot2Model" src="./model/mbot2_model.glb" alt="A 3D model" orientation="0 0 0"></model-viewer>
         </div>
         <div class="controlls">
             <div class="arrow-controlls">
                 <h3 class="controllertext">Controller:</h3>
                 <div class="button-left">
-                    <button id="button-controll" class="UP" onmousedown="scaleUp(this)" onmouseup="scaleDown(this)" ontouchstart="scaleUp(this)" ontouchend="scaleDown(this)"></button>
+                    <button id="button-controll" class="UP" onmousedown="startMoving(this)" onmouseup="stopMoving(this)" ontouchstart="startMoving(this)" ontouchend="stopMoving(this)"></button>
                 </div>
                 <div class="button-top">
-                    <button id="button-controll1" class="LEFT" onmousedown="scaleUp(this)" onmouseup="scaleDown(this)" ontouchstart="scaleUp(this)" ontouchend="scaleDown(this)"></button>
-                    <button id="button-controll2" class="DOWN" onmousedown="scaleUp(this)" onmouseup="scaleDown(this)" ontouchstart="scaleUp(this)" ontouchend="scaleDown(this)"></button>
-                    <button id="button-controll3" class="RIGHT" onmousedown="scaleUp(this)" onmouseup="scaleDown(this)" ontouchstart="scaleUp(this)" ontouchend="scaleDown(this)"></button>
+                    <button id="button-controll1" class="LEFT" onmousedown="startMoving(this)" onmouseup="stopMoving(this)" ontouchstart="startMoving(this)" ontouchend="stopMoving(this)"></button>
+                    <button id="button-controll2" class="DOWN" onmousedown="startMoving(this)" onmouseup="stopMoving(this)" ontouchstart="startMoving(this)" ontouchend="stopMoving(this)"></button>
+                    <button id="button-controll3" class="RIGHT" onmousedown="startMoving(this)" onmouseup="stopMoving(this)" ontouchstart="startMoving(this)" ontouchend="stopMoving(this)"></button>
                 </div>
             </div>
             <div class="settings-controlls">
@@ -107,7 +111,6 @@
 
         function scaleDown(element) {
                 element.style.transform = "scale(1)";
-                isButtonPressed = false; // Reset flag
         }
 
         // Attach event listeners to button for mouse and touch events
@@ -210,7 +213,3 @@ document.addEventListener('keyup', function(event) {
     </script>
 </body>
 </html>
-
-
-
-

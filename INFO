@@ -1,0 +1,13 @@
+Disconnect function muss noch eingebunden/aufgerufen werden
+4 RGB-Sensoren für LineFollower müssen noch angezeigt werden
+Farbe unter dem MBot muss noch angezeigt werden
+Accelometer muss noch angezeigt werden
+Abstand zum Hinderniss muss noch angezeigt werden
+
+Beleuchtung des fahren beim MBot muss noch richtig gestellt werden
+Ton beim MBot muss noch funktionsfähig gemacht werden
+
+Line Follower muss noch getestet werden
+Suicide Prevention muss noch getestet werden
+
+Schauen ob vom mbot alle benötigten daten richtig ausgelesen und gesendet (bzw. hier empfangen) werden

@@ -106,7 +106,6 @@ async def sendDataToMBot2FromWebApp(websocket):
             elif not first_message:
                 first_message = True
                 openTCPClient(message)
-                await sendDataToWebAppFromMBot2()               #Testen ob so funktioniert (ZZZZZZZZZZZ.py funktioniert, dieses Script benötigt MBot zum testen)
             else:
                 print("Received Data from WebApp, sending to MBot now")
                 tcp_socket.send(message)

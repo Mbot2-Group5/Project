@@ -16,6 +16,7 @@ let lastTriggerLineFollower = 0;
 
 //Geschwindigkeit
 let speed = 60;
+const addedSpeedForCurve = 20;
 
 //Liste für alle Verfügbare MBots
 let possibleMBot2sToConnect = [];
@@ -129,6 +130,7 @@ socket.onmessage = async function (event) {
         //Liste an möglichen MBots erhalten
         if (Array.isArray(data) && data.length > 0 && data[0] === "MBots:") {
             const mbots = data.slice(1);
+            document.getElementById("textForWhileSearchingMBot").style.display = "none";
 
             //Liste in HTML anzeigen
             const myList = document.getElementById("ShowPossibleMBots");
@@ -177,15 +179,13 @@ socket.onmessage = async function (event) {
                 listElement.id = `${i}`;
 
                 //Listenelement stylen
-                listElement.style.whiteSpace = 'pre-line';
+                listElement.style.whiteSpace = "pre-line";
 
                 //Listenelement zu GUI-Liste hinzufügen
                 myList.appendChild(listElement);
             }
         } else {
             connected = true;
-
-            //Autor: Patrick Thor
             //Daten des Gyrosensors erhalten & an ModelViewer übergeben
             updateOrientation(data.gyroscopeRoll, data.gyroscopePitch, data.gyroscopeYaw);
 
@@ -200,7 +200,7 @@ socket.onmessage = async function (event) {
             }
 
             //Überprüfen, ob die SuicidePrevention eingeschalten ist (wenn ja, Daten verarbeiten)
-            if (document.getElementById("suicidePrevention").checked) {
+            if (document.getElementById("suicidePrev").checked) {
                 suicidePrevention(data.ultrasonicSensor);
             }
 
@@ -229,11 +229,11 @@ function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleR
             left = speed;
             right = speed;
         } else if (lightSensorLeft === "black" && lightSensorRight !== "black") {
-            left = speed + 1;
+            left = speed + addedSpeedForCurve;
             right = speed;
         } else if (lightSensorLeft !== "black" && lightSensorRight === "black") {
             left = speed;
-            right = speed + 1;
+            right = speed + addedSpeedForCurve;
         } else if (lightSensorLeft !== "black" && lightSensorRight !== "black") {
             speed -= 1;
             left = speed;
@@ -268,6 +268,7 @@ let moveInterval;
 //Grafik-Bewegung beginnen
 function startMoving(element) {
     try {
+        element.style.transform = "scale(1.3)";
         moveInterval = setInterval(function () {
             move(element);
         }, 100);
@@ -279,6 +280,7 @@ function startMoving(element) {
 //Grafik-Bewegung stoppen
 function stopMoving(element) {
     try {
+        element.style.transform = "scale(1)";
         clearInterval(moveInterval);
         stopMove(element);
     } catch (error) {
@@ -289,22 +291,25 @@ function stopMoving(element) {
 //Überprüfen, ob der MBot2 fährt (Angezeigte Steuerelemente)
 function move(element) {
     try {
-        if (element.id === 'up') {
+        if (element.id === 'button-controll') {
             speed += 1;
             left = speed;
             right = speed;
             console.log("Moved straight");
-        } else if (element.id === 'down') {
+        }
+        if (element.id === 'button-controll2') {
             speed -= 1;
             left = speed;
             right = speed;
             console.log("Moved back");
-        } else if (element.id === 'left') {
+        }
+        if (element.id === 'button-controll1') {
             left = speed;
-            right = speed + 1;
+            right = speed + addedSpeedForCurve;
             console.log("Moved left");
-        } else if (element.id === 'right') {
-            left = speed + 1;
+        }
+        if (element.id === 'button-controll3') {
+            left = speed + addedSpeedForCurve;
             right = speed;
             console.log("Moved right");
         }
@@ -316,15 +321,18 @@ function move(element) {
 //Überprüfen, ob der MBot2 stehen geblieben ist (Angezeigte Steuerelemente)
 function stopMove(element) {
     try {
-        if (element.id === 'up') {
+        if (element.id === 'button-controll') {
             speed = 0;
             console.log("Stopped moving straight");
-        } else if (element.id === 'down') {
+        }
+        if (element.id === 'button-controll2') {
             speed = 0;
             console.log("Stopped moving back");
-        } else if (element.id === 'left') {
+        }
+        if (element.id === 'button-controll1') {
             console.log("Stopped moving left");
-        } else if (element.id === 'right') {
+        }
+        if (element.id === 'button-controll3') {
             console.log("Stopped moving right");
         }
         left = speed;
@@ -375,21 +383,30 @@ function handleKeys() {
     try {
         // Check key state and update speed accordingly
         if (keyState['ArrowUp'] || keyState['w']) {
+            if (speed < 0) {
+                speed = 0;
+            }
             speed += 1;
             left = speed;
             right = speed;
             console.log("Moving straight");
-        } else if (keyState['ArrowDown'] || keyState['s']) {
+        }
+        if (keyState['ArrowDown'] || keyState['s']) {
+            if (speed > 0) {
+                speed = 0;
+            }
             speed -= 1;
             left = speed;
             right = speed;
             console.log("Moving back");
-        } else if (keyState['ArrowLeft'] || keyState['a']) {
+        }
+        if (keyState['ArrowLeft'] || keyState['a']) {
             left = speed;
-            right = speed + 1;
+            right = speed + addedSpeedForCurve;
             console.log("Moving left");
-        } else if (keyState['ArrowRight'] || keyState['d']) {
-            left = speed + 1;
+        }
+        if (keyState['ArrowRight'] || keyState['d']) {
+            left = speed + addedSpeedForCurve;
             right = speed;
             console.log("Moving right");
         } else {
@@ -399,7 +416,7 @@ function handleKeys() {
             console.log("Stopped moving");
         }
     } catch (error) {
-        console.log(`Error while handling keyborad keys: ${error}`);
+        console.log(`Error while handling keyboard keys: ${error}`);
     }
 }
 
@@ -428,14 +445,16 @@ function checkGamepadInput() {
 
                     //Links & Rechts überprüfen
                     if (stickX >= 1) {
-                        left = speed + 1;
+                        left = speed + addedSpeedForCurve;
                         right = speed;
                         console.log("Moving right");
-                    } else if (stickX <= -1) {
+                    }
+                    if (stickX <= -1) {
                         left = speed;
-                        right = speed + 1;
+                        right = speed + addedSpeedForCurve;
                         console.log("Moving left");
-                    } else if (stickX === 0 && (left || right)) {
+                    }
+                    if (stickX === 0 && (left || right)) {
                         left = speed;
                         right = speed;
                         console.log("Stopped Moving Left/Right")
@@ -446,11 +465,13 @@ function checkGamepadInput() {
                         left = speed;
                         right = speed;
                         console.log("Moving straight");
-                    } else if (stickY >= 1) {
+                    }
+                    if (stickY >= 1) {
                         left = speed;
                         right = speed;
                         console.log("Moved back");
-                    } else if (stickY === 0) {
+                    }
+                    if (stickY === 0) {
                         left = 0;
                         right = 0;
                         console.log("Stopped Moving Forward/Backward");
@@ -482,11 +503,11 @@ function checkGamepadInput() {
                     // Linker Trigger (SuicidePrevention), begrenzt auf 1 Eingabe pro 250 ms
                     if (Date.now() - lastTriggerSuicidePrevention > 250) {
                         if (gamepad.buttons[4].pressed && document.getElementById("suicidePrevention").checked) {
-                            document.getElementById("suicidePrevention").checked = false;
+                            document.getElementById("suicidePrev").checked = false;
                             console.log("SuicidePrevention deactivated");
                             lastTriggerSuicidePrevention = Date.now();
                         } else if (gamepad.buttons[6].pressed) {
-                            document.getElementById("suicidePrevention").checked = true;
+                            document.getElementById("suicidePrev").checked = true;
                             console.log("SuicidePrevention activated");
                             lastTriggerSuicidePrevention = Date.now();
                         }
@@ -518,19 +539,18 @@ function checkGamepadInput() {
 async function sendToMBot2() {
     try {
         //Linken Motor limitieren
-        if(left > 999) {
+        if (left > 999) {
             left -= 1;
         }
 
         //Rechten Motor limitieren
-        if(right > 999) {
+        if (right > 999) {
             right -= 1;
         }
 
         //JSON für MBot (Motorengeschwindigkeit)
         const data = {
-            links: left,
-            rechts: right
+            links: left, rechts: right
         }
         //Daten durch WebSocket über Server zu MBot2 senden
         const json = JSON.stringify(data);
@@ -548,8 +568,7 @@ async function connectToMBot2() {
         initialized = true;
 
         //Verbindung des ausgewählten MBots senden
-        //socket.send(possibleMBot2sToConnect[mBotID]);                         //Entkommentieren, um Funktionalität wieder herzustellen
-        socket.send("TEST");                                                //DEBUG (diese Zeile löschen)
+        socket.send(possibleMBot2sToConnect[mBotID]);
         await communicating();
 
         console.log("MBot2 connected & communicating");
