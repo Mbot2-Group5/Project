@@ -118,4 +118,5 @@ async def main():
     async with websockets.serve(sendDataToMBot2FromWebApp, "localhost", 5431):
         await asyncio.Future()
 
+
 asyncio.run(main())

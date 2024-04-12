@@ -36,6 +36,10 @@ const versionDocuments = [
     './images/icons/replacement_icon.png',
     /*3D Model*/
     './model/mbot2_model.glb',
+    /*Librarys*/
+    './librarys/model-viewer-lib.js',
+    './librarys/ionicons-lib.js',
+    './librarys/ionicons-lib.esm.js',
     /*Skripte*/
     './scripts/connection.js',
     './scripts/firebase.js',

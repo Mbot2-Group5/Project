@@ -144,9 +144,9 @@ socket.onmessage = async function (event) {
             updateOrientation(data.gyroscopeRoll, data.gyroscopePitch, data.gyroscopeYaw);
 
             //Andere Sensordaten
-            document.getElementById("accelerometer").value = data.accelerometer;
+            document.getElementById("accelerometer").textContent = data.accelerometer;
             document.getElementById("rgbSensor").style.background = data.rgbSensorMiddleRight;
-            document.getElementById("ultrasonicSensor").value = data.ultrasonicSensor;
+            document.getElementById("ultrasonicSensor").textContent = data.ultrasonicSensor;
 
             //Überprüfen, ob der LineFollower eingeschalten ist (wenn ja, Daten verarbeiten)
             if (document.getElementById("lineFollower").checked) {
@@ -212,7 +212,7 @@ async function makeListElementsForArray(mBots, myList) {
         //Doppelklick Eventhandler auf Listenelement legen
         listElement.ondblclick = function () {
             connectToMBot2();
-            closeConnecting();                                                  //DEBUG
+            closeConnecting();
         };
 
         //Klick Eventhandler auf Listenelement legen

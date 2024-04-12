@@ -1,6 +1,7 @@
-Line Follower muss noch getestet werden
-Suicide Prevention muss noch getestet werden
+NOCH ZU TESTEN:
+Line Follower
+Suicide Prevention
+Controller-Steuerung
 
-Steuerung mit WASD & Pfeil-Tasten schaltet das Fahren sofort wieder aus
-
-Schauen ob vom MBot alle benötigten daten richtig ausgelesen und gesendet (bzw. hier empfangen & angezeigt) werden
+FEHLER:
+Steuerung durch WASD & Pfeil-Tasten fixen (alle außer rechts schalten wieder aus, obwohl die Taste gedrückt ist)
