@@ -82,18 +82,18 @@
                     </div>
                 </div>
                 <div class="lineFolowerContainer scp">
-                    <p class="settings-p">Suicide Prev.: </p>
-                    <input class="settings-p" type="checkbox" id="suicidePrev" name="SuicidePrevCheckBox">
+                    <p class="settings-p scp1">Suicide Prev.: </p>
+                    <input class="settings-p scpcb" type="checkbox" id="suicidePrev" name="SuicidePrevCheckBox">
 
                     <p class="settings-p bs">B-Sensor: </p>
-                    <p id="accelerometer" class="settings-p"></p>
+                    <p id="accelerometer" class="settings-p bsm"></p>
                 </div>
                 <div class="lineFolowerContainer udssr">
                     <p class="settings-p uss">Ultrasonic Sensor:</p>
                     <p id="ultrasonicSensor" class="settings-p"></p>
                 </div>
                 <div class="lineFolowerContainer fut">
-                    <p class="settings-p">Farbe unter MBot: </p>
+                    <p class="settings-p fum">Farbe unter MBot: </p>
                     <button id="rgbSensor" class="farbe-unter-mbot-button"></button>
                 </div>
             </div>
@@ -120,6 +120,18 @@
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
 
     <script>
+        window.addEventListener("resize", function () {
+            const label = document.querySelector(".uss");
+            const label1 = document.querySelector(".fum");
+            if (window.innerWidth < 610) {
+                label.textContent = "U-Sensor:";
+                label1.textContent = "Farbe:";
+            } else {
+                label.textContent = "Ultrasonic Sensor:";
+                label1.textContent = "Farbe unter MBOT:";
+            }
+        });
+
         function scaleUp(element) {
             element.style.transform = "scale(1.3)";
         }
