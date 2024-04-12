@@ -34,7 +34,7 @@
     <div class="wrapper">
         <div class="form-box">
             <h2>Connect</h2>
-            <span class="icon-close"><ion-icon name="close"></ion-icon></span>
+            <span class="icon-close" onclick="closeConnecting()"><ion-icon name="close"></ion-icon></span>
             <form class="searchMBot" action="#">
                 <div class="wrapper small">
                     <ul id="showPossibleMBots"></ul>
@@ -44,8 +44,9 @@
                 </div>
             </form>
             <div class="buttons-container">
+                <button class="button" onclick="getPossibleMBots()">Reload</button>
                 <button class="button" onclick="connectToMBot2()">Connect</button>
-                <button class="button">Save</button>
+                <button class="button" onclick="addToFormerConnected()">Save</button>
             </div>
         </div>
     </div>
@@ -69,28 +70,43 @@
             </div>
             <div class="settings-controlls">
                 <h3>Settings:</h3>
-                <div class="lineFolowerContainer">
-                     <p class="settings-p">Line Follower: </p>
-                     <input type="checkbox" id="lineFollower" name="lineFolowerCheckBox">
+                <div class="lineFolowerContainer lf">
+                    <p class="settings-p lfrf lft">Line Follower: </p>
+                    <input class="settings-p lfrf lfc" type="checkbox" id="lineFollower" name="lineFolowerCheckBox">
+
+                    <div class="colorbuttons">
+                        <button id="lightSensorLeft" class="colorb b1"></button>
+                        <button id="lightSensorMiddleLeft" class="colorb b2"></button>
+                        <button id="lightSensorMiddleRight" class="colorb b3"></button>
+                        <button id="lightSensorRight" class="colorb b4"></button>
+                    </div>
                 </div>
-                <div class="lineFolowerContainer">
-                     <p class="settings-p">Suicide Prevention: </p>
-                     <input type="checkbox" id="suicidePrev" name="SuicidePrevCheckBox">
+                <div class="lineFolowerContainer scp">
+                    <p class="settings-p">Suicide Prev.: </p>
+                    <input class="settings-p" type="checkbox" id="suicidePrev" name="SuicidePrevCheckBox">
+
+                    <p class="settings-p bs">B-Sensor: </p>
+                    <p id="accelerometer" class="settings-p"></p>
+                </div>
+                <div class="lineFolowerContainer udssr">
+                    <p class="settings-p uss">Ultrasonic Sensor:</p>
+                    <p id="ultrasonicSensor" class="settings-p"></p>
+                </div>
+                <div class="lineFolowerContainer fut">
+                    <p class="settings-p">Farbe unter MBot: </p>
+                    <button id="rgbSensor" class="farbe-unter-mbot-button"></button>
                 </div>
             </div>
             <div class="mbot-connection-controlls">
                 <h3>Connection:</h3>
                 <div class="dropdown">
-                    <button class="dropbtn">SELECT</button>
+                    <button class="dropbtn" onclick="showFormerMBots()">SELECT</button>
                     <div class="dropdown-content">
-                      <a>ADD</a>
-                      <a>MBOT: 192.11.168.1</a>
-                      <a>MBOT: 192.168.168.148</a>
-                      <a>MBOT: 192.168.168.148</a>
+                        <ul id="showFormerConnectedMBots"></ul>
                     </div>
                   </div>
-                  <button class="Connect">Connect</button>
-                  <button class="Disconnect">Disconnect</button>
+                  <button class="Connect" onclick="connectToFormerMBot()">Connect</button>
+                  <button class="Disconnect" onclick="deleteFormerMBot()">Disconnect</button>
             </div>
         </div>
     </div>
@@ -102,7 +118,6 @@
     <script src="./scripts/login_button.js"></script>
     <script src="./scripts/connection.js"></script>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
-    <script type="module" src="/scripts/mbot2.js"></script>
 
     <script>
         function scaleUp(element) {

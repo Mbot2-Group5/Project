@@ -20,6 +20,7 @@ const addedSpeedForCurve = 20;
 
 //Liste für alle Verfügbare MBots
 let possibleMBot2sToConnect = [];
+let formerConnectedMBots = [];
 
 //MBots geladen Zeitbegrenzung
 let lastExecutionTime = 0;
@@ -133,57 +134,10 @@ socket.onmessage = async function (event) {
             document.getElementById("textForWhileSearchingMBot").style.display = "none";
 
             //Liste in HTML anzeigen
-            const myList = document.getElementById("ShowPossibleMBots");
+            const myList = document.getElementById("showPossibleMBots");
             myList.innerHTML = "";
 
-            if (mbots.length === 0) {
-                const messageEmpty = document.createElement("li");
-                messageEmpty.innerHTML = "Es wurden keine MBots gefunden";
-                myList.appendChild(messageEmpty);
-            }
-
-            //MBots anzeigen und in Liste speichern (Name, IP-Adresse & Portnummer, Status (Text & Farbkreis))
-            for (let i = 0; i < mbots.length; i++) {
-                //MBots in Liste hinzufügen
-                possibleMBot2sToConnect.push(mbots[i]);
-
-                //Listenelement zum Anzeigen des MBots erstellen
-                let listElement = document.createElement("li");
-
-                //Text zum Listenelement hinzufügen
-                listElement.innerHTML = `MBot${i + 1}<br>${mbots[i]}<br>Status: Getrennt`;
-
-                //Statusanzeige (Kreis erstellen & Farbe zuweisen)
-                const stateCycle = document.createElement("div");
-
-                //Statusanzeigen stylen (Größe, Farbe & Kreis)
-                stateCycle.style.backgroundColor = "red";
-                stateCycle.style.width = "10px";
-                stateCycle.style.height = "10px";
-                stateCycle.style.borderRadius = "50%";
-
-                //Statusanzeige zum Listenelement hinzufügen
-                listElement.appendChild(stateCycle);
-
-                //Doppelklick Eventhandler auf Listenelement legen
-                listElement.ondblclick = function () {
-                    connectToMBot2();
-                };
-
-                //Klick Eventhandler auf Listenelement legen
-                listElement.onclick = function () {
-                    mBotID = this.id;
-                }
-
-                //Listenelement ID zuweisen
-                listElement.id = `${i}`;
-
-                //Listenelement stylen
-                listElement.style.whiteSpace = "pre-line";
-
-                //Listenelement zu GUI-Liste hinzufügen
-                myList.appendChild(listElement);
-            }
+            await makeListElementsForArray(mbots, myList);
         } else {
             connected = true;
             //Daten des Gyrosensors erhalten & an ModelViewer übergeben
@@ -216,6 +170,67 @@ socket.onmessage = async function (event) {
     }
 }
 
+//Funktion um MBot-Verbindungen grafisch anzuzeigen
+async function makeListElementsForArray(mBots, myList) {
+    //Überprüfen, ob die Liste/Array leer ist
+    if (mBots.length === 0) {
+        const messageEmpty = document.createElement("li");
+        messageEmpty.innerHTML = "Es wurden keine MBots gefunden";
+        myList.appendChild(messageEmpty);
+    }
+
+    //MBots anzeigen und in Liste/Array speichern (Name, IP-Adresse & Portnummer, Status (Text & Farbkreis))
+    for (let i = 0; i < mBots.length; i++) {
+        let found = false;
+        possibleMBot2sToConnect.forEach(bot => {
+            if(bot === mBots[i]) {
+                found = true;
+            }
+        });
+        if(!found) {
+            possibleMBot2sToConnect.push(mBots[i]);
+        }
+
+        //Listenelement zum Anzeigen des MBots erstellen
+        let listElement = document.createElement("li");
+
+        //Text zum Listenelement hinzufügen
+        listElement.innerHTML = `MBot${i + 1}<br>${mBots[i]}<br>Status: Getrennt`;
+
+        //Statusanzeige (Kreis erstellen & Farbe zuweisen)
+        const stateCycle = document.createElement("div");
+
+        //Statusanzeigen stylen (Größe, Farbe & Kreis)
+        stateCycle.style.backgroundColor = "red";
+        stateCycle.style.width = "10px";
+        stateCycle.style.height = "10px";
+        stateCycle.style.borderRadius = "50%";
+
+        //Statusanzeige zum Listenelement hinzufügen
+        listElement.appendChild(stateCycle);
+
+        //Doppelklick Eventhandler auf Listenelement legen
+        listElement.ondblclick = function () {
+            connectToMBot2();
+            closeConnecting();                                                  //DEBUG
+        };
+
+        //Klick Eventhandler auf Listenelement legen
+        listElement.onclick = function () {
+            mBotID = this.id;
+        }
+
+        //Listenelement ID zuweisen
+        listElement.id = `${i}`;
+
+        //Listenelement stylen
+        listElement.style.whiteSpace = "pre-line";
+
+        //Listenelement zu GUI-Liste hinzufügen
+        myList.appendChild(listElement);
+    }
+}
+
 //Funktion zur Kommunikation mit dem MBot
 async function communicating() {
     await sendToMBot2();
@@ -225,20 +240,20 @@ async function communicating() {
 //Funktion für die Berechnungen des LineFollowers
 function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleRight, lightSensorRight) {
     try {
-        if (lightSensorLeft === "black" && lightSensorRight === "black") {
+        if (lightSensorLeft !== "white" && lightSensorRight !== "white") {
             if (speed < 0) {
                 speed = 0;
             }
             speed += 1;
             left = speed;
             right = speed;
-        } else if (lightSensorLeft === "black" && lightSensorRight !== "black") {
+        } else if (lightSensorLeft !== "white" && lightSensorRight === "white") {
             left = speed + addedSpeedForCurve;
-            right = speed;
-        } else if (lightSensorLeft !== "black" && lightSensorRight === "black") {
-            left = speed;
+            right = speed - addedSpeedForCurve;
+        } else if (lightSensorLeft === "white" && lightSensorRight !== "white") {
+            left = speed - addedSpeedForCurve;
             right = speed + addedSpeedForCurve;
-        } else if (lightSensorLeft !== "black" && lightSensorRight !== "black") {
+        } else if (lightSensorLeft === "white" && lightSensorRight === "white") {
             if (speed > 0) {
                 speed = 0;
             }
@@ -317,13 +332,13 @@ function move(element) {
             console.log("Moved back");
         }
         if (element.id === 'button-controll1') {
-            left = speed;
+            left = speed - addedSpeedForCurve;
             right = speed + addedSpeedForCurve;
             console.log("Moved left");
         }
         if (element.id === 'button-controll3') {
             left = speed + addedSpeedForCurve;
-            right = speed;
+            right = speed - addedSpeedForCurve;
             console.log("Moved right");
         }
     } catch (error) {
@@ -414,13 +429,13 @@ function handleKeys() {
             console.log("Moving back");
         }
         if (keyState['ArrowLeft'] || keyState['a']) {
-            left = speed;
+            left = speed - addedSpeedForCurve;
             right = speed + addedSpeedForCurve;
             console.log("Moving left");
         }
         if (keyState['ArrowRight'] || keyState['d']) {
             left = speed + addedSpeedForCurve;
-            right = speed;
+            right = speed - addedSpeedForCurve;
             console.log("Moving right");
         } else {
             speed = 0;
@@ -518,7 +533,8 @@ async function sendToMBot2() {
 
         //JSON für MBot (Motorengeschwindigkeit)
         const data = {
-            links: left, rechts: right
+            links: left,
+            rechts: right
         }
         //Daten durch WebSocket über Server zu MBot2 senden
         const json = JSON.stringify(data);
@@ -529,13 +545,51 @@ async function sendToMBot2() {
     }
 }
 
+//Funktion um schon einmal verbundene MBots anzuzeigen
+async function showFormerMBots() {
+    //Liste in HTML anzeigen
+    const myList = document.getElementById("showFormerConnectedMBots");
+    let listElement = document.createElement("li");
+    listElement.innerHTML = "Anderen MBot verbinden";
+    listElement.id = "NewMBot";
+    listElement.onclick = function () {
+        mBotID = this.id;
+    }
+    myList.appendChild(listElement);
+    await makeListElementsForArray(formerConnectedMBots, myList);
+}
+
+//Funktion zum Hinzufügen von MBots zur Liste
+async function addToFormerConnected() {
+    formerConnectedMBots.push(possibleMBot2sToConnect[mBotID]);
+}
+
+//Funktion zum Anzeigen von bereits verbundenen MBots
+async function connectToFormerMBot() {
+    if(mBotID !== "NewMBot") {
+        socket.send(formerConnectedMBots[mBotID]);
+        await communicating();
+        console.log("MBot2 connected & communicating");
+    } else {
+        window.location.href = "index.html#controller";
+    }
+}
+
+//Funktion zum Trennen von bereits verbundenen MBots
+function deleteFormerMBot() {
+    disconnectFromMBot2();
+    formerConnectedMBots = formerConnectedMBots.filter(item => item !== formerConnectedMBots[mBotID]);
+}
+
 //Verbindung mit MBot herstellen
 async function connectToMBot2() {
+    closeConnecting();
     try {
         //Kommunikation mit MBot2 freigeben
         initialized = true;
 
         //Verbindung des ausgewählten MBots senden
+        formerConnectedMBots.push(possibleMBot2sToConnect[mBotID]);
         socket.send(possibleMBot2sToConnect[mBotID]);
         await communicating();
 

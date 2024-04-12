@@ -38,7 +38,6 @@ const versionDocuments = [
     './model/mbot2_model.glb',
     /*Skripte*/
     './scripts/connection.js',
-    './scripts/email_provider.js',
     './scripts/firebase.js',
     './scripts/login_button.js',
     './scripts/modelViewer.js',

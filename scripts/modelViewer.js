@@ -8,13 +8,13 @@ let icon_close = document.querySelector('.icon-close');
 let wrapper = document.querySelector('.wrapper');
 let main = document.querySelector('.main-controll-page');
 
-//Eventlistener
-icon_close.addEventListener('click', function () {
+export function closeConnecting() {
     wrapper.style.display = 'none';
     main.style.display = 'block';
     main.style.pointerEvents = 'auto'; // Re-enable pointer events
     main.style.opacity = '1'; // Set opacity back to 1
-});
+}
 
 //Funktion für alle Skripte verfügbar machen
+window.closeConnecting = closeConnecting;
 window.updateOrientation = updateOrientation;
