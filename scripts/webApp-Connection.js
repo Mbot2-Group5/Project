@@ -10,9 +10,13 @@ let mBotID = 999999999;
 //Variable für senden/Controller checken
 let initialized = false;
 
-//Trigger-Variablen
-let lastTriggerSuicidePrevention = 0;
-let lastTriggerLineFollower = 0;
+//Controller-Trigger-Variablen
+let lineFollowerPressed = false;
+let suicidePreventionPressed = false;
+
+const TESTDEBUG = setInterval(async () => {
+    await checkGamepadInput();
+})
 
 //Geschwindigkeit
 let speed = 60;
@@ -407,8 +411,8 @@ document.addEventListener('keyup', (event) => {
 
 //Auf Tasten reagieren
 function handleKeys() {
-
     try {
+        let keyPressed = false;
         // Check key state and update speed accordingly
         if (keyState['ArrowUp'] || keyState['w']) {
             if (speed < 0) {
@@ -418,6 +422,7 @@ function handleKeys() {
             left = speed;
             right = speed;
             console.log("Moving straight");
+            keyPressed = true;
         }
         if (keyState['ArrowDown'] || keyState['s']) {
             if (speed > 0) {
@@ -427,17 +432,21 @@ function handleKeys() {
             left = speed;
             right = speed;
             console.log("Moving back");
+            keyPressed = true;
         }
         if (keyState['ArrowLeft'] || keyState['a']) {
             left = speed - addedSpeedForCurve;
             right = speed + addedSpeedForCurve;
             console.log("Moving left");
+            keyPressed = true;
         }
         if (keyState['ArrowRight'] || keyState['d']) {
             left = speed + addedSpeedForCurve;
             right = speed - addedSpeedForCurve;
             console.log("Moving right");
-        } else {
+            keyPressed = true;
+        }
+        if (!keyPressed) {
             speed = 0;
             left = speed;
             right = speed
@@ -480,32 +489,41 @@ function checkGamepadInput() {
                     const minSpeed = -998;
 
                     //Druckstärke auf die Sollwerte skalieren
-                    let left = Math.max(Math.min(leftRaw, maxSpeed), minSpeed);
-                    let right = Math.max(Math.min(rightRaw, maxSpeed), minSpeed);
+                    left = Math.max(Math.min(leftRaw, maxSpeed), minSpeed);
+                    right = Math.max(Math.min(rightRaw, maxSpeed), minSpeed);
+                    console.log(left);          //DEBUG
+                    console.log(right);         //DEBUG
+                    //ist nur von 1 bis -1 (wird nicht auf das gesamte Spektrum gezählt)
 
                     // Linker Trigger (SuicidePrevention), begrenzt auf 1 Eingabe pro 250 ms
-                    if (Date.now() - lastTriggerSuicidePrevention > 250) {
-                        if (gamepad.buttons[4].pressed && document.getElementById("suicidePrevention").checked) {
+                    if(!gamepad.buttons[5].pressed) {
+                        suicidePreventionPressed = false;
+                    }
+                    if (!suicidePreventionPressed) {
+                        if (gamepad.buttons[5].pressed && document.getElementById("suicidePrev").checked) {
                             document.getElementById("suicidePrev").checked = false;
                             console.log("SuicidePrevention deactivated");
-                            lastTriggerSuicidePrevention = Date.now();
-                        } else if (gamepad.buttons[6].pressed) {
+                            suicidePreventionPressed = true;
+                        } else if (gamepad.buttons[5].pressed) {
                             document.getElementById("suicidePrev").checked = true;
                             console.log("SuicidePrevention activated");
-                            lastTriggerSuicidePrevention = Date.now();
+                            suicidePreventionPressed = true;
                         }
                     }
 
-                    // Rechter Trigger (LineFollower), begrenzt auf 1 Eingabe pro 250 ms
-                    if (Date.now() - lastTriggerLineFollower > 250) {
-                        if (gamepad.buttons[5].pressed && document.getElementById("lineFollower").checked) {
+                    // Rechter Trigger (LineFollower)
+                    if(!gamepad.buttons[4].pressed) {
+                        lineFollowerPressed = false;
+                    }
+                    if (!lineFollowerPressed) {
+                        if (gamepad.buttons[4].pressed && document.getElementById("lineFollower").checked) {
                             document.getElementById("lineFollower").checked = false;
                             console.log("LineFollower deactivated");
-                            lastTriggerLineFollower = Date.now();
-                        } else if (gamepad.buttons[7].pressed) {
+                            lineFollowerPressed = true;
+                        } else if (gamepad.buttons[4].pressed) {
                             document.getElementById("lineFollower").checked = true;
                             console.log("LineFollower activated");
-                            lastTriggerLineFollower = Date.now();
+                            lineFollowerPressed = true;
                         }
                     }
                 } else {

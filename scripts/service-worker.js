@@ -37,7 +37,13 @@ const versionDocuments = [
     /*3D Model*/
     './model/mbot2_model.glb',
     /*Librarys*/
+    /*ModelViewer*/
     './librarys/model-viewer-lib.js',
+    /*Ionicons*/
+    './librarys/p-d15ec307.js',
+    './librarys/p-40ae2aa7.js',
+    './librarys/1c0b2c47.entry.js',
+    './librarys/svg/close.svg',
     './librarys/ionicons-lib.js',
     './librarys/ionicons-lib.esm.js',
     /*Skripte*/

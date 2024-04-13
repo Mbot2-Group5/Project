@@ -1,7 +1,5 @@
 NOCH ZU TESTEN:
 Line Follower
 Suicide Prevention
-Controller-Steuerung
 
-FEHLER:
-Steuerung durch WASD & Pfeil-Tasten fixen (alle außer rechts schalten wieder aus, obwohl die Taste gedrückt ist)
+Controller-Steuerung Bewegung funktioniert noch nicht ganz
