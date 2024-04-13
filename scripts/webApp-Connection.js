@@ -39,7 +39,7 @@ try {
     encoder = new TextEncoder();
     decoder = new TextDecoder();
 } catch (error) {
-    console.log(`Error while creating UTF-8 Encoder & Decoder ${error}`);
+    console.error(`Error while creating UTF-8 Encoder & Decoder ${error}`);
 }
 
 //WebSocket
@@ -47,7 +47,7 @@ let socket;
 try {
     socket = new WebSocket('ws://localhost:5431');
 } catch (error) {
-    console.log(`Can't connect to Websocket: ${error}`);
+    console.error(`Can't connect to Websocket: ${error}`);
 }
 
 //Websocket verbunden
@@ -62,7 +62,7 @@ socket.onclose = function () {
 
 //WebSocket Error
 socket.onerror = function (event) {
-    console.log(`WebSocket error: ${event.data}`);
+    console.error(`WebSocket error: ${event.data}`);
 }
 
 //Disconnected Funktion in Console schreiben
@@ -105,7 +105,7 @@ function checkConnectionStatus() {
             //Statusanzeige zum Listenelement hinzufügen
             listElement.appendChild(stateCycle);
         } catch (error) {
-            console.log(`Couldn't change the Connection-State of the MBot: ${error}`);
+            console.error(`Couldn't change the Connection-State of the MBot: ${error}`);
         }
     }
 }
@@ -118,7 +118,7 @@ function getPossibleMBots() {
             lastExecutionTime = Date.now();
         }
     } catch (error) {
-        console.log(`Looking for MBots failed: ${error}`);
+        console.error(`Looking for MBots failed: ${error}`);
     }
 }
 
@@ -162,7 +162,7 @@ socket.onmessage = async function (event) {
             connected = true;
         }
     } catch (error) {
-        console.log(`Error while receiving Message from MBot: ${error}`);
+        console.error(`Error while receiving Message from MBot: ${error}`);
     }
 
     if (initialized) {
@@ -268,7 +268,7 @@ function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleR
         document.getElementById("lightSensorMiddleRight").style.background = lightSensorMiddleRight;
         document.getElementById("lightSensorRight").style.background = lightSensorRight;
     } catch (error) {
-        console.log(`Error while calculating commands in LineFollower: ${error}`);
+        console.error(`Error while calculating commands in LineFollower: ${error}`);
     }
 }
 
@@ -280,7 +280,7 @@ function suicidePrevention(distanceToObject) {
             right = 0;
         }
     } catch (error) {
-        console.log(`Error in SuicidePrevention: ${error}`);
+        console.error(`Error in SuicidePrevention: ${error}`);
     }
 }
 
@@ -295,7 +295,7 @@ function startMoving(element) {
             move(element);
         }, 100);
     } catch (error) {
-        console.log(`Error while moving (with graphic interface): ${error}`);
+        console.error(`Error while moving (with graphic interface): ${error}`);
     }
 }
 
@@ -306,7 +306,7 @@ function stopMoving(element) {
         clearInterval(moveInterval);
         stopMove(element);
     } catch (error) {
-        console.log(`Error while stopping (with graphic interface): ${error}`);
+        console.error(`Error while stopping (with graphic interface): ${error}`);
     }
 }
 
@@ -342,7 +342,7 @@ function move(element) {
             console.log("Moved right");
         }
     } catch (error) {
-        console.log(`Error while moving : ${error}`);
+        console.error(`Error while moving : ${error}`);
     }
 }
 
@@ -366,7 +366,7 @@ function stopMove(element) {
         left = speed;
         right = speed;
     } catch (error) {
-        console.log(`Error while stopping: ${error}`);
+        console.error(`Error while stopping: ${error}`);
     }
 
 }
@@ -390,7 +390,7 @@ document.addEventListener('keydown', (event) => {
         keyState[event.key] = true;
         handleKeys();
     } catch (error) {
-        console.log(`Error while moving (with keyboard): ${error}`);
+        console.error(`Error while moving (with keyboard): ${error}`);
     }
 });
 
@@ -401,7 +401,7 @@ document.addEventListener('keyup', (event) => {
         keyState[event.key] = false;
         handleKeys();
     } catch (error) {
-        console.log(`Error while stopping (with keyboard): ${error}`);
+        console.error(`Error while stopping (with keyboard): ${error}`);
     }
 });
 
@@ -444,7 +444,7 @@ function handleKeys() {
             console.log("Stopped moving");
         }
     } catch (error) {
-        console.log(`Error while handling keyboard keys: ${error}`);
+        console.error(`Error while handling keyboard keys: ${error}`);
     }
 }
 
@@ -514,7 +514,7 @@ function checkGamepadInput() {
             }
         }
     } catch (error) {
-        console.log(`Error while checking controller inputs: ${error}`);
+        console.error(`Error while checking controller inputs: ${error}`);
     }
 }
 
@@ -541,7 +541,7 @@ async function sendToMBot2() {
         socket.send(encoder.encode(json));
 
     } catch (error) {
-        console.log(`Error while sending Commands to TCP-Server: ${error}`);
+        console.error(`Error while sending Commands to TCP-Server: ${error}`);
     }
 }
 
@@ -595,7 +595,7 @@ async function connectToMBot2() {
 
         console.log("MBot2 connected & communicating");
     } catch (error) {
-        console.log(`Error while connecting to MBot: ${error}`);
+        console.error(`Error while connecting to MBot: ${error}`);
     }
 }
 
@@ -611,7 +611,7 @@ function disconnectFromMBot2() {
 
         console.log("MBot2 disconnected");
     } catch (error) {
-        console.log(`Error while disconnecting from MBot: ${error}`);
+        console.error(`Error while disconnecting from MBot: ${error}`);
     }
 }
 
@@ -621,6 +621,6 @@ window.addEventListener("beforeunload", function () {
         socket.send("Close");
         socket.close();
     } catch (error) {
-        console.log(`Error while closing Connection with Server: ${error}`);
+        console.error(`Error while closing Connection with Server: ${error}`);
     }
 });
