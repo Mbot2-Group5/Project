@@ -1,14 +1,14 @@
 /* Autor: Stefan Rautner */
 
-//Definition Cache-Version
+// Definition Cache-Version
 let cacheVersion = 'my-cache';
 
-//Definition Versions-Dokumente
+// Definition Versions-Dokumente
 const versionDocuments = [
-    /*Stylesheets*/
+    /* Stylesheets */
     './css/controller.css',
     './css/main.css',
-    /*Bilder*/
+    /* Bilder */
     './images/about_left.png',
     './images/about_right.png',
     './images/controller.png',
@@ -31,22 +31,22 @@ const versionDocuments = [
     './images/Tobias.jpg',
     './images/upkey.png',
     './images/wlan.png',
-    /*Icons*/
+    /* Icons */
     './images/icons/icon.ico',
     './images/icons/replacement_icon.png',
-    /*3D Model*/
+    /* 3D Model */
     './model/mbot2_model.glb',
-    /*Librarys*/
-    /*ModelViewer*/
+    /* Librarys */
+    /* ModelViewer */
     './librarys/model-viewer-lib.js',
-    /*Ionicons*/
+    /* Ionicons */
     './librarys/p-d15ec307.js',
     './librarys/p-40ae2aa7.js',
-    './librarys/1c0b2c47.entry.js',
+    './librarys/p-1c0b2c47.entry.js',
     './librarys/svg/close.svg',
     './librarys/ionicons-lib.js',
     './librarys/ionicons-lib.esm.js',
-    /*Skripte*/
+    /* Skripte */
     './scripts/connection.js',
     './scripts/firebase.js',
     './scripts/login_button.js',
@@ -54,65 +54,57 @@ const versionDocuments = [
     './scripts/register.js',
     './scripts/webApp-Connection.js',
     './scripts/website_logic.js',
-    /*HTML Dokumente*/
+    /* HTML Dokumente */
     './index.html',
     './login.html',
     './register.html',
     './start.html',
-    /*Manifest*/
+    /* Manifest */
     './manifest.json'
-    //WebsocketServer noch nicht eingebunden
-]
+    // WebsocketServer noch nicht eingebunden
+];
 
-//Hinzufügen der Ressourcen zum Cache
-const addToCache = () => {
+// Hinzufügen der Ressourcen zum Cache
+const addToCache = async () => {
     try {
-        return caches.open(cacheVersion).then((cache) => {
-            return cache.addAll(versionDocuments).then(() => {
-                console.log("Added documents to Cache");
-            });
-        });
+        const cache = await caches.open(cacheVersion);
+        await cache.addAll(versionDocuments);
+        console.log("Added documents to Cache");
     } catch (error) {
-        console.log(`Error while adding Documents to Cache: $error}`);
+        console.log(`Error while adding Documents to Cache: ${error}`);
     }
-
 };
 
-//Service Worker installieren
+// Service Worker installieren
 self.addEventListener('install', (event) => {
     event.waitUntil(addToCache());
     console.log("Service Worker installed");
 });
 
-//Service Worker aktivieren und alte Caches entfernen
+// Service Worker aktivieren und alte Caches entfernen
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((existingCacheName) => {
                     if (existingCacheName !== cacheVersion) {
-                        try {
-                            console.log("Newer version detected");
-                            return caches.delete(existingCacheName);
-                        } catch (error) {
-                            console.log(`Error while activating the Service-worker: $error}`);
-                        }
+                        console.log("Newer version detected");
+                        return caches.delete(existingCacheName);
                     }
-                    console.log("No newer version detected");
                 })
             );
         })
     );
+    console.log("Service Worker activated");
 });
 
-
-//Beim Öffnen der App auf Updates prüfen
+// Beim Öffnen der App auf Updates prüfen
 self.addEventListener('fetch', (event) => {
     if (event.request.mode === 'navigate') {
         event.respondWith(
-            fetch(event.request).then((response) => {
+            fetch(event.request).then(async (response) => {
                 try {
-                    checkForUpdates();
+                    await checkForUpdates();
                     console.log("Checked for Updates");
                 } catch (error) {
                     console.log(`Error while checking for Updates: ${error}`);
@@ -126,52 +118,46 @@ self.addEventListener('fetch', (event) => {
     }
 });
 
-//Regelmäßiges Überprüfen auf Updates
-setInterval(() => {
+// Regelmäßiges Überprüfen auf Updates
+setInterval(async () => {
     try {
-        checkForUpdates();
+        await checkForUpdates();
         console.log("Check for Updates (once every 24 hours)");
     } catch (error) {
         console.log(`Error while checking for updates: ${error}`);
     }
-}, 24 * 60 * 60 * 1000);   //Alle 24 Stunden
+}, 24 * 60 * 60 * 1000);   // Alle 24 Stunden
 
-//Überprüfen auf Updates (durch Vergleich der Versionsnummer)
-function checkForUpdates() {
+// Überprüfen auf Updates (durch Vergleich der Versionsnummer)
+async function checkForUpdates() {
     try {
         console.log("Checking for Updates");
-        Promise.all(
+        const versions = await Promise.all(
             versionDocuments.map((document) => fetch(document)
                 .then((response) => response.text())
             )
-        ).then((versions) => {
-            const newerVersion = versions.some((latestVersion) => latestVersion !== cacheVersion);
+        );
+        const newerVersion = versions.some((latestVersion) => latestVersion !== cacheVersion);
 
-            if (newerVersion) {
-                console.log("Update found");
-                cacheVersion = 'my-cache-' + Date.now();
-                console.log("Updating cache");
-                addToCache().then(() => {
-                    console.log("Cache updated");
-                });
+        if (newerVersion) {
+            console.log("Update found");
+            cacheVersion = 'my-cache-' + Date.now();
+            console.log("Updating cache");
+            await addToCache();
+            console.log("Cache updated");
 
-                self.clients.matchAll({type: 'window'})
-                    .then((clients) => {
-                        if(clients && clients.length > 0) {
-                            clients.forEach((client) => {
-                                client.navigate(client.url).then(() => {
-                                    console.log("Window updated to newer Version");
-                                });
-                            });
-                        } else {
-                            console.log("No clients found");
-                        }
-                    });
+            const clients = await self.clients.matchAll({ type: 'window' });
+            if (clients && clients.length > 0) {
+                await Promise.all(clients.map(async (client) => {
+                    await client.navigate(client.url);
+                    console.log("Window updated to newer Version");
+                }));
             } else {
-                console.log("No Updates found");
-                console.log("Cache is up to date");
+                console.log("No clients found");
             }
-        });
+        } else {
+            console.log("No Updates found\nCache is up to date");
+        }
     } catch (error) {
         console.log(`Error while checking for updates: ${error}`);
     }
