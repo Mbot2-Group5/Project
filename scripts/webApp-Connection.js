@@ -18,7 +18,7 @@ setInterval(async () => {     //DEBUG
     await checkGamepadInput();                      //DEBUG
 });                                                 //DEBUG
 
-//Geschwindigkeiten
+//Geschwindigkeiten (max 998, wenn mehr gebraucht, dann Zeile 193 in NetworkConnection_MBot2.py 28 --> 29 ändern)
 let speed = 0;
 const addedSpeedForCurve = 20;
 const maxReverseSpeed = -100;
@@ -26,6 +26,7 @@ const maxForwardSpeed = 100;
 
 //Minimaler Abstand zur Wand
 const minDistanceToWall = 10;
+let underMinDistanceToWall = false;
 
 //Liste für alle Verfügbare MBots
 let possibleMBot2sToConnect = [];
@@ -285,8 +286,7 @@ function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleR
 function suicidePrevention(distanceToObject) {
     try {
         if (distanceToObject < minDistanceToWall) {
-            left = 0;
-            right = 0;
+            underMinDistanceToWall = true;
         }
     } catch (error) {
         console.error(`Error in SuicidePrevention: ${error}`);
@@ -539,12 +539,21 @@ async function sendToMBot2() {
     try {
         //Linken Motor limitieren
         if (left > maxForwardSpeed) {
-            left -= 1;
+            left = maxForwardSpeed - 1;
+        } else if(left < maxReverseSpeed) {
+            left = maxReverseSpeed + 1;
         }
 
         //Rechten Motor limitieren
         if (right > maxForwardSpeed) {
-            right -= 1;
+            right = maxForwardSpeed - 1;
+        } else if(right < maxReverseSpeed) {
+            right = maxReverseSpeed - 1;
+        }
+
+        if(underMinDistanceToWall) {
+            left = 0;
+            right = 0;
         }
 
         //JSON für MBot (Motorengeschwindigkeit)
