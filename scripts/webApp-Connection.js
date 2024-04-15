@@ -14,13 +14,18 @@ let initialized = false;
 let lineFollowerPressed = false;
 let suicidePreventionPressed = false;
 
-const TESTDEBUG = setInterval(async () => {
-    await checkGamepadInput();
-})
+setInterval(async () => {     //DEBUG
+    await checkGamepadInput();                      //DEBUG
+});                                                 //DEBUG
 
-//Geschwindigkeit
-let speed = 60;
+//Geschwindigkeiten
+let speed = 0;
 const addedSpeedForCurve = 20;
+const maxReverseSpeed = -100;
+const maxForwardSpeed = 100;
+
+//Minimaler Abstand zur Wand
+const minDistanceToWall = 10;
 
 //Liste für alle Verfügbare MBots
 let possibleMBot2sToConnect = [];
@@ -279,7 +284,7 @@ function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleR
 //SuicidePrevention, sodass der MBot2 nicht gegen die Wand fährt
 function suicidePrevention(distanceToObject) {
     try {
-        if (distanceToObject < 10) {
+        if (distanceToObject < minDistanceToWall) {
             left = 0;
             right = 0;
         }
@@ -484,16 +489,9 @@ function checkGamepadInput() {
                     let leftRaw = stickY + stickX;
                     let rightRaw = stickY - stickX;
 
-                    //Soll-limits definieren
-                    const maxSpeed = 998;
-                    const minSpeed = -998;
-
-                    //Druckstärke auf die Sollwerte skalieren
-                    left = Math.max(Math.min(leftRaw, maxSpeed), minSpeed);
-                    right = Math.max(Math.min(rightRaw, maxSpeed), minSpeed);
-                    console.log(left);          //DEBUG
-                    console.log(right);         //DEBUG
-                    //ist nur von 1 bis -1 (wird nicht auf das gesamte Spektrum gezählt)
+                    //-1 bis 1 auf maxReverseSpeed bis maxForwardSpeed mappen
+                    left = (leftRaw - -1) * (maxForwardSpeed - maxReverseSpeed) / (1 - -1) + maxReverseSpeed;
+                    right = (rightRaw - -1) * (maxForwardSpeed - maxReverseSpeed) / (1 - -1) + maxReverseSpeed;
 
                     // Linker Trigger (SuicidePrevention), begrenzt auf 1 Eingabe pro 250 ms
                     if(!gamepad.buttons[5].pressed) {
@@ -540,12 +538,12 @@ function checkGamepadInput() {
 async function sendToMBot2() {
     try {
         //Linken Motor limitieren
-        if (left > 999) {
+        if (left > maxForwardSpeed) {
             left -= 1;
         }
 
         //Rechten Motor limitieren
-        if (right > 999) {
+        if (right > maxForwardSpeed) {
             right -= 1;
         }
 
