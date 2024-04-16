@@ -4,10 +4,10 @@
 let cacheVersion = 'my-cache';
 
 // Definition Versions-Dokumente
-const versionDocuments = [
+const versionDocuments = [          //HIER DAS PROBLEM?
     /* Stylesheets */
     './css/about.css',
-    './css/about_feature.css',
+    './css/about-feature.css',
     './css/controller.css',
     './css/form.css',
     './css/form-temp.css',
@@ -34,17 +34,20 @@ const versionDocuments = [
     './images/icons/icon.ico',
     './images/icons/replacement_icon.png',
     /* 3D Model */
-    './model/mbot2_model.glb',
+    './Mbot2/mbot2_model.glb',
     /* Librarys */
     /* ModelViewer */
-    './librarys/model-viewer-lib.js',
-    /* Ionicons */
-    './librarys/p-d15ec307.js',
-    './librarys/p-40ae2aa7.js',
-    './librarys/p-1c0b2c47.entry.js',
-    './librarys/svg/close.svg',
-    './librarys/ionicons-lib.js',
-    './librarys/ionicons-lib.esm.js',
+    './librarys/modelViewer/model-viewer-lib.js',
+    /* ionicons */
+    './librarys/ionicons/svg/close.svg',
+    './librarys/ionicons/p-d15ec307.js',
+    './librarys/ionicons/p-40ae2aa7.js',
+    './librarys/ionicons/p-1c0b2c47.entry.js',
+    './librarys/ionicons/ionicons-lib.js',
+    './librarys/ionicons/ionicons-lib.esm.js',
+    /* gsap */
+    './librarys/gsap/gsap.min.js',
+    './librarys/gsap/ScrollTrigger.min.js',
     /* Skripte */
     './scripts/about.js',
     './scripts/connection.js',
@@ -52,14 +55,16 @@ const versionDocuments = [
     './scripts/login_button.js',
     './scripts/modelViewer.js',
     './scripts/register.js',
-    './scripts/webApp-Connection.js',
     './scripts/website_logic.js',
+    /* Connection to WebSocket-Sever (MBot2) */
+    './scripts/webApp-Connection.js',
     /* HTML Dokumente */
     './index.html',
     './login.html',
     './register.html',
     './start.html',
-    /* Manifest */
+    /* Service-Worker & Manifest */
+    './service-worker.js',
     './manifest.json'
     // WebsocketServer noch nicht eingebunden
 ];

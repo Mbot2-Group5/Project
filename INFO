@@ -2,11 +2,8 @@ Noch zu TESTEN (Daten werden richtig erhalten & Funktionen aufgerufen):
 Line Follower
 Suicide Prevention
 
-Service-Worker hat ein Problem (registriert richtig, aber macht keine Updates, etc
+Service-Worker Download (code in irgendeine JS-Datei schreiben):
 
-
-
-Service-Worker Download (in irgendeine js datei schreiben)
 let installPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -32,3 +29,9 @@ function downloadButton() {
         installPrompt = null;
     });
 }
+
+
+Failed to load resource: ":63342/favicon.ico/:1" the server responded with a status of 404 (Not Found)
+
+Error while adding Documents to Cache:
+TypeError: Failed to execute 'addAll' on 'Cache': Request failed (service-worker.js:79)

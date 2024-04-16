@@ -6,7 +6,7 @@
     <title>MBOT</title>
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/about.css">
-    <link rel="stylesheet" href="./css/about_features.css">
+    <link rel="stylesheet" href="css/about-features.css">
     <link rel="stylesheet" href="./css/form.css">
     <link rel="stylesheet" href="./css/team.css">
 </head>
@@ -25,6 +25,19 @@
         <a class="anav" href="index.html#controller">Controller</a>
         <button  class="btnLogin-popup" id="one-login">Login</button>
     </nav>
+
+    <!-- Service-Worker registrieren-->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js')
+                .then((registration) => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch((error) => {
+                    console.error('Service Worker registration failed:', error);
+                });
+        }
+    </script>
 </header>
 
 <div class="main">
@@ -244,10 +257,10 @@
 <!--Scripts-->
 <script src="./scripts/website_logic.js"></script>
 <script src="./scripts/login_button.js"></script>
-<script type="module" src="./librarys/ionicons-lib.esm.js"></script>
-<script nomodule src="./librarys/ionicons-lib.js"></script>
-<script src="./librarys/gsap.min.js"></script>
-<script src="./librarys/ScrollTrigger.min.js"></script>
+<script type="module" src="librarys/ionicons/ionicons-lib.esm.js"></script>
+<script nomodule src="librarys/ionicons/ionicons-lib.js"></script>
+<script src="librarys/gsap/gsap.min.js"></script>
+<script src="librarys/gsap/ScrollTrigger.min.js"></script>
 <script src="/scripts/about.js"></script>
 </body>
 </html>
