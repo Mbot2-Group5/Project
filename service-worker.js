@@ -7,7 +7,6 @@ let cacheVersion = 'my-cache';
 const versionDocuments = [          //HIER DAS PROBLEM?
     /* Stylesheets */
     './css/about.css',
-    './css/about_feature.css',
     './css/controller.css',
     './css/form.css',
     './css/form-temp.css',
