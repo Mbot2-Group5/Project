@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const parallaxText = document.getElementById('parallax-text');
     parallaxText.classList.add('loaded'); // Add the 'loaded' class when the DOM is loaded
 });

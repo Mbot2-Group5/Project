@@ -1,48 +1,37 @@
+//Funktionalität hinter dem Download-Button
 let deferredPrompt;
-let installPrompt;
 
-// Funktion zum Anzeigen der Installations-Aufforderung
-const promptInstallApp = () => {
+// Function to handle the installation prompt
+async function installWebApp() {
     if (deferredPrompt) {
+        await sleep(4000);
+        // Show the install prompt
         deferredPrompt.prompt();
 
+        // Wait for the user to respond to the prompt
         deferredPrompt.userChoice.then((choiceResult) => {
             if (choiceResult.outcome === 'accepted') {
                 console.log('User accepted the installation prompt');
             } else {
                 console.log('User dismissed the installation prompt');
             }
+            // Reset the deferredPrompt variable, as it can only be used once
             deferredPrompt = null;
         });
     }
-};
-
-function downloadButton() {
-    // Show the install prompt
-    installPrompt.prompt();
-    // Wait for the user to respond to the prompt
-    installPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-        } else {
-            console.log('User dismissed the install prompt');
-        }
-        // Reset the deferredPrompt variable, as it can only be used once
-        installPrompt = null;
-    });
 }
 
-
-// Event Listener für das beforeinstallprompt-Ereignis
+// Event listener for the beforeinstallprompt event
 window.addEventListener('beforeinstallprompt', (event) => {
-    // Verhindere, dass der Browser die Standardinstallationsaufforderung anzeigt
+    // Prevent the default browser install prompt
     event.preventDefault();
 
-    // Behalte das Ereignis für die spätere Verwendung
-    deferredPrompt = installPrompt = event;
-    console.log(deferredPrompt);
-    console.log(installPrompt);
+    // Store the event object for later use
+    deferredPrompt = event;
 
-    // Zeige den Installations-Button
+    // Show the install button
     document.getElementById('installButton').style.display = 'block';
 });
+
+//Wartezeit für Download-Button setzen
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));

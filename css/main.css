@@ -98,6 +98,14 @@ html {
     margin-bottom: 3%;
     max-width: 50%;
 }
+#p-about{
+    font-size: 17px;
+    margin-top: 10px;
+    letter-spacing: 2px;
+}
+.bird-container{
+    margin-top: 180px;
+}
 #account,#who{
     text-align: right;
 }

@@ -11,11 +11,11 @@ export async function registerUser() {
     const availability = await checkAvailability(username, email);
 
     //Handle Register Success 
-    if(!terms.checked) {
+    if (!terms.checked) {
         error.textContent = "Agree to the Terms & Conditions!";
         return false;
     }
-    if(password.length < 8) {
+    if (password.length < 8) {
         error.textContent = "Password atleast 8 Characters!";
         return false;
     }
@@ -23,13 +23,13 @@ export async function registerUser() {
         try {
             console.log(availability);
             // Make a POST request to register the user
-            let response = await postUser(username,email,password);
+            let response = await postUser(username, email, password);
             if (response) {
                 console.log("HAHAHAHHA");
                 return true;
-             } else {
-                 console.error("Whoops, something went wrong!");
-                  return false;
+            } else {
+                console.error("Whoops, something went wrong!");
+                return false;
             }
         } catch (error) {
             console.error(error);
@@ -40,16 +40,16 @@ export async function registerUser() {
         console.log(error);
     }
 
-  return false;
+    return false;
 }
 
 export async function checkAvailability(username, email) {
     try {
-      let result = await checkUserAvailability(username, email);
-      return result;
+        let result = await checkUserAvailability(username, email);
+        return result;
     } catch (error) {
-      console.error('Error fetching availability:', error);
+        console.error('Error fetching availability:', error);
     }
-  }
+}
   
 

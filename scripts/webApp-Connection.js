@@ -193,11 +193,11 @@ async function makeListElementsForArray(mBots, myList) {
     for (let i = 0; i < mBots.length; i++) {
         let found = false;
         possibleMBot2sToConnect.forEach(bot => {
-            if(bot === mBots[i]) {
+            if (bot === mBots[i]) {
                 found = true;
             }
         });
-        if(!found) {
+        if (!found) {
             possibleMBot2sToConnect.push(mBots[i]);
         }
 
@@ -494,7 +494,7 @@ function checkGamepadInput() {
                     right = (rightRaw - -1) * (maxForwardSpeed - maxReverseSpeed) / (1 - -1) + maxReverseSpeed;
 
                     // Linker Trigger (SuicidePrevention), begrenzt auf 1 Eingabe pro 250 ms
-                    if(!gamepad.buttons[5].pressed) {
+                    if (!gamepad.buttons[5].pressed) {
                         suicidePreventionPressed = false;
                     }
                     if (!suicidePreventionPressed) {
@@ -510,7 +510,7 @@ function checkGamepadInput() {
                     }
 
                     // Rechter Trigger (LineFollower)
-                    if(!gamepad.buttons[4].pressed) {
+                    if (!gamepad.buttons[4].pressed) {
                         lineFollowerPressed = false;
                     }
                     if (!lineFollowerPressed) {
@@ -540,18 +540,18 @@ async function sendToMBot2() {
         //Linken Motor limitieren
         if (left > maxForwardSpeed) {
             left = maxForwardSpeed - 1;
-        } else if(left < maxReverseSpeed) {
+        } else if (left < maxReverseSpeed) {
             left = maxReverseSpeed + 1;
         }
 
         //Rechten Motor limitieren
         if (right > maxForwardSpeed) {
             right = maxForwardSpeed - 1;
-        } else if(right < maxReverseSpeed) {
+        } else if (right < maxReverseSpeed) {
             right = maxReverseSpeed - 1;
         }
 
-        if(underMinDistanceToWall) {
+        if (underMinDistanceToWall) {
             left = 0;
             right = 0;
         }
@@ -574,6 +574,7 @@ async function sendToMBot2() {
 async function showFormerMBots() {
     //Liste in HTML anzeigen
     const myList = document.getElementById("showFormerConnectedMBots");
+    myList.innerHTML = "";
     let listElement = document.createElement("li");
     listElement.innerHTML = "Anderen MBot verbinden";
     listElement.id = "NewMBot";
@@ -591,7 +592,7 @@ async function addToFormerConnected() {
 
 //Funktion zum Anzeigen von bereits verbundenen MBots
 async function connectToFormerMBot() {
-    if(mBotID !== "NewMBot") {
+    if (mBotID !== "NewMBot") {
         socket.send(formerConnectedMBots[mBotID]);
         await communicating();
         console.log("MBot2 connected & communicating");

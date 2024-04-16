@@ -2,36 +2,10 @@ Noch zu TESTEN (Daten werden richtig erhalten & Funktionen aufgerufen):
 Line Follower
 Suicide Prevention
 
-Service-Worker Download (code in irgendeine JS-Datei schreiben):
-
-let installPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent Chrome 76 and later from showing the mini-infobar
-    e.preventDefault();
-    // Stash the event so it can be triggered later
-    installPrompt = e;
-    // Update UI to notify the user they can add to home screen
-    document.getElementById('installButton').style.display = 'block';
-});
-
-function downloadButton() {
-    // Show the install prompt
-    installPrompt.prompt();
-    // Wait for the user to respond to the prompt
-    installPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-        } else {
-            console.log('User dismissed the install prompt');
-        }
-        // Reset the deferredPrompt variable, as it can only be used once
-        installPrompt = null;
-    });
-}
+Problem mit DownloadButton "beforeinstallprompt"-Event in download.js wird nicht aufgefufen (in TEST Program aber schon):
+Nirgends Fehler ersichtlich, auch in Console nichts zu sehen
+WO IST DAS PROBLEM???
 
 
-Failed to load resource: ":63342/favicon.ico/:1" the server responded with a status of 404 (Not Found)
-
-Error while adding Documents to Cache:
-TypeError: Failed to execute 'addAll' on 'Cache': Request failed (service-worker.js:79)
+Este Zeile in download.js scheißt den Fehler: Uncaught TypeError: Cannot read properties of null (reading 'style') at HTMLDivElement.<anonymous> (download.js:19:15 === label.style.fontSize = '15px';)
+Wahrscheinlich wird gleicher Fehler be i2ter zeile auftreten

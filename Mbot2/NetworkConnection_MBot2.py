@@ -1,6 +1,6 @@
 # Autor: Stefan Rautner
 
-#imports
+# imports
 import time
 import json
 import usocket

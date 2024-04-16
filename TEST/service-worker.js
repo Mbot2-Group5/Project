@@ -5,26 +5,32 @@ let cacheVersion = 'my-cache';
 
 // Definition Versions-Dokumente
 const versionDocuments = [
-    './home.html',
-    './service-worker.js',
-    './script.js',
-    './manifest.json'
+    'home.html',
+    'service-worker.js',
+    'script.js',
+    'manifest.json'
 ];
 
-// Hinzufügen der Ressourcen zum Cache
-const addToCache = async () => {
-    try {
-        const cache = await caches.open(cacheVersion);
-        await cache.addAll(versionDocuments);
-        console.log("Added documents to Cache");
-    } catch (error) {
-        console.error(`Error while adding Documents to Cache: ${error}`);
+// Hinzufügen der Ressourcen zum Cache in Chargen
+const addToCacheInBatches = async () => {
+    const batchSize = 10;                                                                                       // Anzahl der Dateien pro Upload-Batch
+    const batches = Math.ceil(versionDocuments.length / batchSize);
+
+    for (let i = 0; i < batches; i++) {
+        const batch = versionDocuments.slice(i * batchSize, (i + 1) * batchSize);
+        try {
+            const cache = await caches.open(cacheVersion);
+            await cache.addAll(batch);
+            console.log(`Added batch ${i + 1}/${batches} to Cache`);
+        } catch (error) {
+            console.error(`Error while adding batch ${i + 1}/${batches} to Cache: ${error}`);
+        }
     }
 };
 
 // Service Worker installieren
 self.addEventListener('install', (event) => {
-    event.waitUntil(addToCache());
+    event.waitUntil(addToCacheInBatches());
     console.log("Service Worker installed");
 });
 
@@ -90,7 +96,7 @@ async function checkForUpdates() {
             console.log("Update found");
             cacheVersion = 'my-cache-' + Date.now();
             console.log("Updating cache");
-            await addToCache();
+            await addToCacheInBatches(); // Hinzufügen der Ressourcen in Chargen aktualisieren
             console.log("Cache updated");
 
             const clients = await self.clients.matchAll({ type: 'window' });

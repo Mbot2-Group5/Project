@@ -2,7 +2,7 @@
     "name": "MBot2 Controller",
     "short_name": "MBot2-CON.",
     "description": "Controller for Controlling the MBot2",
-    "start_url": "/",
+    "start_url": "./home.html",
     "display": "standalone",
     "background_color": "#000000",
     "theme_color": "#ffffff",

@@ -10,9 +10,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: black;
-    background-size: cover;
-    background-position: center center;
+    background-image: repeating-linear-gradient(90deg, hsla(253,0%,96%,0.05) 0px, hsla(253,0%,96%,0.05) 1px,transparent 1px, transparent 104px),repeating-linear-gradient(0deg, hsla(253,0%,96%,0.05) 0px, hsla(253,0%,96%,0.05) 1px,transparent 1px, transparent 104px),repeating-linear-gradient(0deg, hsla(253,0%,96%,0.07) 0px, hsla(253,0%,96%,0.07) 1px,transparent 1px, transparent 26px),repeating-linear-gradient(90deg, hsla(253,0%,96%,0.07) 0px, hsla(253,0%,96%,0.07) 1px,transparent 1px, transparent 26px),linear-gradient(45deg, hsl(213,62%,51%),hsl(213,62%,51%));
     margin: 0;
     padding: 0;
 }
@@ -44,7 +42,6 @@ p {
 .form-box {
     text-align: center;
     padding: 20px;
-    background-color: rgba(0, 0, 0, 0.8);
     border-radius: 10px;
 }
 
@@ -57,17 +54,18 @@ p {
 }
 
 .button {
-    background-color: RGB(100, 320, 350, 0.9);
+    background-color: transparent;
     color: white;
     padding: 10px 15px;
-    border: none;
+    border-color: white;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .button:hover {
-    background-color: RGB(100, 320, 350, 0.9);
+    background-color: white;
+    color: black;
 }
 .main-controller-page{
     position: relative;
@@ -80,7 +78,6 @@ p {
     width: 90%;
     height: 50%;
     margin-left: 5%;
-    border: 2px solid RGB(100, 320, 350, 0.9);; 
 }
 
 .arrow-controlls {
@@ -93,7 +90,7 @@ p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 2px solid rgba(100, 320, 350, 0.9);
+    border: 2px solid white;
     padding: 10px;
 }
 .settings-controlls{
@@ -106,7 +103,7 @@ p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 2px solid RGB(100, 320, 350, 0.9);
+    border: 2px solid white;
 }
 .mbot-connection-controlls{
     right: 0;
@@ -118,7 +115,7 @@ p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 2px solid RGB(100, 320, 350, 0.9);
+    border: 2px solid white;
 }
 
 .arrow-controlls button.LEFT {
@@ -166,13 +163,13 @@ p {
 }
 
 .arrow-controlls button {
-    width: 80px; /* Adjust width as needed */
-    height: 30px; /* Adjust height as needed */
+    width: 80px;
+    height: 30px;
     border: none;
-    background-color: lightgray; /* Adjust background color as needed */
+    background-color: lightgray;
     cursor: pointer;
-    font-size: 14px; /* Adjust font size as needed */
-    margin: 5px; /* Adjust margin as needed */
+    font-size: 14px;
+    margin: 5px;
 }
 
 .lineFolowerContainer{
@@ -257,13 +254,12 @@ p {
     display: none;
     position: absolute;
     min-width: 160px;
-    box-shadow: 0 8px 16px 0 RGB(100, 320, 350, 0.9);
+    box-shadow: 0 8px 16px 0 white;
     z-index: 1;
     
-    border: 2px solid RGB(100, 320, 350, 0.9);
+    border: 2px solid white;
   }
   
-  /* Style the links inside the dropdown */
   .dropdown-content a {
     color: white;
     padding: 12px 16px;
@@ -271,12 +267,10 @@ p {
     display: block;
   }
   
-  /* Change color of dropdown links on hover */
   .dropdown-content a:hover {
     background-color: #f1f1f1;
   }
   
-  /* Show the dropdown menu on hover */
   .dropdown:hover .dropdown-content {
     display: block;
   }

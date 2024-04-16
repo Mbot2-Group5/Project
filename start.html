@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MBOT</title>
+    <title>MBot-Controller</title>
+    <link rel="icon" type="image/x-icon" href="./images/icons/icon.ico">
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/about.css">
-    <link rel="stylesheet" href="css/about_features.css">
     <link rel="stylesheet" href="./css/form.css">
     <link rel="stylesheet" href="./css/team.css">
+    <link rel="stylesheet" href="./css/download.css">
 </head>
 <body>
 <header>
@@ -26,6 +27,9 @@
         <button  class="btnLogin-popup" id="one-login">Login</button>
     </nav>
 
+    <!-- Manifest einbinden -->
+    <link rel="manifest" href="./manifest.json">
+
     <!-- Service-Worker registrieren-->
     <script>
         if ('serviceWorker' in navigator) {
@@ -38,6 +42,9 @@
                 });
         }
     </script>
+
+    <!-- Funktionalität für Download Button -->
+    <script src="./scripts/download.js"></script>
 </header>
 
 <div class="main">
@@ -176,7 +183,33 @@
                         </div>
                         <div>
                             <div class="card">
-                                <h2>Card 5</h2>
+                                <h2>Download</h2>
+                                <p id="p-about">Hi there, now you can actually download this Website and use it like an app! For that, just press on the download button and you are good to go! Thanks for the support!</p> <br>
+                                <div class="bird-container">
+                                    <div class="button button--hoo">
+                                        <button id="installButton" style="display: none" onclick="installWebApp()" class="button__wrapper">
+                                            <span class="button__text">DOWNLOAD</span>
+                                        </button>
+                                        <div class="characterBox">
+                                            <div class="character wakeup">
+                                                <div class="character__face"></div>
+                                                <div class="charactor__face2"></div>
+                                                <div class="charactor__body"></div>
+                                            </div>
+                                            <div class="character wakeup">
+                                                <div class="character__face"></div>
+                                                <div class="charactor__face2"></div>
+                                                <div class="charactor__body"></div>
+                                            </div>
+                                            <div class="character">
+                                                <div class="character__face"></div>
+                                                <div class="charactor__face2"></div>
+                                                <div class="charactor__body"></div>
+                                                <p class="download-progress"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -201,7 +234,7 @@
                                 </div>
                             </div>
                             <div class="card-content">
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                                <p class="card-text">Life is pleasant. Death is peaceful. It's the transition that's troublesome." - someone</p>
                             </div>
                         </article>
                     </li>
@@ -217,7 +250,7 @@
                                 </div>
                             </div>
                             <div class="card-content">
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                                <p class="card-text">"The problem with the world is that the intelligent people are full of doubts, while the stupid ones are full of confidence! I don't know where i belong to.." - unknown</p>
                             </div>
                         </article>
                     </li>
@@ -233,7 +266,7 @@
                                 </div>
                             </div>
                             <div class="card-content">
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                                <p class="card-text">"A clever person takes notice of everything; a stupid one makes comment about everything." Hi there :)</p>
                             </div>
                         </article>
                     </li>
