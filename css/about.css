@@ -1,0 +1,34 @@
+.horizontal-scoll-wrapper {
+    overflow: hidden;
+    height: 525px;
+    overflow: hidden;
+  }
+  
+  .horizontal {
+    display: flex;
+    height: 100%;
+  }
+  
+  .horizontal > div {
+    display: flex;
+    flex-shrink: 0;
+    padding: 0 5px;
+  }
+  
+  .horizontal > div:first-child {
+    padding: 0 5px 0 15px;
+  }
+  
+  .horizontal > div:last-child {
+    padding: 0 15px 0 5px;
+  }
+  
+  .horizontal .card {
+    align-items: stretch;
+    width: 370px;
+    padding: 50px 40px;
+    background: #6e4ce1;
+    border-radius: 38px;
+    color: #f6f2e8;
+  }
+  

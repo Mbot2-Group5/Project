@@ -1,4 +1,4 @@
-let iconClose = document.querySelector('.icon-close');
+const iconClose = document.querySelector('.icon-close');
 const acceptTerms = document.querySelector('.acceptTerms');
 const buttonLogin = document.querySelector('#login');
 const buttonRegister = document.querySelector('#register');
@@ -19,12 +19,59 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const parallaxText = document.getElementById('parallax-text');
+    parallaxText.classList.add('loaded'); // Add the 'loaded' class when the DOM is loaded
+});
+
+let lastScrollTop = 0;
 document.addEventListener('scroll', function () {
     const parallaxText = document.getElementById('parallax-text');
+    const waves = document.querySelector('.waves');
+    const anavLinks = document.querySelectorAll('.anav');
+    const logo = document.querySelectorAll('.logo');
+    const login = document.querySelectorAll('.btnLogin-popup');
+    const hamburger = document.querySelectorAll('.icon-menu');
+
     const scrollPosition = window.scrollY;
 
     // Adjust the value (0.5) to control the speed of the parallax effect
     parallaxText.style.transform = 'translate(-50%, ' + scrollPosition * 0.3 + 'px)';
+    waves.style.height = 200 + scrollPosition * 0.5;
+
+
+    let st = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (st > lastScrollTop) {
+        anavLinks.forEach(link => {
+            link.classList.add('scroll-down');
+        });
+        logo.forEach(link => {
+            link.classList.add('scroll-down');
+        });
+        login.forEach(link => {
+            link.classList.add('scroll-down');
+        });
+        hamburger.forEach(link => {
+            link.classList.add('scroll-down');
+        });
+    } else {
+        anavLinks.forEach(link => {
+            link.classList.remove('scroll-down');
+        });
+        logo.forEach(link => {
+            link.classList.remove('scroll-down');
+        });
+        login.forEach(link => {
+            link.classList.remove('scroll-down');
+        });
+        hamburger.forEach(link => {
+            link.classList.remove('scroll-down');
+        });
+    }
+
+    lastScrollTop = st <= 0 ? 0 : st * 0;
+
 });
 
 // Function to hide all sections
@@ -34,35 +81,5 @@ function hideAllSections() {
         section.style.display = 'none';
     });
 }
-
-let counter = 1;
-
-function slide() {
-    if (counter >= slider.children.length) {
-        counter = 0;
-    }
-    slider.style.transform = 'translateX(' + (-counter * 100) + '%)';
-    counter++;
-}
-
-function prevSlide() {
-    if (counter <= 0) {
-        counter = slider.children.length - 1;
-    } else {
-        counter--;
-    }
-    slider.style.transform = 'translateX(' + (-counter * 100) + '%)';
-}
-
-function nextSlide() {
-    if (counter >= slider.children.length - 1) {
-        counter = 0;
-    } else {
-        counter++;
-    }
-    slider.style.transform = 'translateX(' + (-counter * 100) + '%)';
-}
-
-    setInterval(slide, 8000); // Change slide every 3 seconds
 
 

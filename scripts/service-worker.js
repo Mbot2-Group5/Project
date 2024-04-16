@@ -6,16 +6,18 @@ let cacheVersion = 'my-cache';
 // Definition Versions-Dokumente
 const versionDocuments = [
     /* Stylesheets */
+    './css/about.css',
+    './css/about_feature.css',
     './css/controller.css',
+    './css/form.css',
+    './css/form-temp.css',
     './css/main.css',
+    './css/team.css',
     /* Bilder */
-    './images/about_left.png',
-    './images/about_right.png',
     './images/controller.png',
     './images/detect.png',
     './images/display.png',
     './images/downkey.png',
-    './images/DUCSetup_v4_1_1.exe',
     './images/feature.png',
     './images/leftkey.png',
     './images/login_background.png',
@@ -25,9 +27,6 @@ const versionDocuments = [
     './images/safety.png',
     './images/speed.png',
     './images/Stefan.jpg',
-    './images/team_1330.png',
-    './images/team_backimg.png',
-    './images/team_phone.png',
     './images/Tobias.jpg',
     './images/upkey.png',
     './images/wlan.png',
@@ -47,6 +46,7 @@ const versionDocuments = [
     './librarys/ionicons-lib.js',
     './librarys/ionicons-lib.esm.js',
     /* Skripte */
+    './scripts/about.js',
     './scripts/connection.js',
     './scripts/firebase.js',
     './scripts/login_button.js',
