@@ -71,7 +71,7 @@ const addToCache = async () => {
         await cache.addAll(versionDocuments);
         console.log("Added documents to Cache");
     } catch (error) {
-        console.log(`Error while adding Documents to Cache: ${error}`);
+        console.error(`Error while adding Documents to Cache: ${error}`);
     }
 };
 
@@ -107,11 +107,11 @@ self.addEventListener('fetch', (event) => {
                     await checkForUpdates();
                     console.log("Checked for Updates");
                 } catch (error) {
-                    console.log(`Error while checking for Updates: ${error}`);
+                    console.error(`Error while checking for Updates: ${error}`);
                 }
                 return response;
             }).catch(() => {
-                console.log("Failed to check for Updates, using existing version from cache");
+                console.error("Failed to check for Updates, using existing version from cache");
                 return caches.match(event.request);
             })
         );
@@ -124,7 +124,7 @@ setInterval(async () => {
         await checkForUpdates();
         console.log("Check for Updates (once every 24 hours)");
     } catch (error) {
-        console.log(`Error while checking for updates: ${error}`);
+        console.error(`Error while checking for updates: ${error}`);
     }
 }, 24 * 60 * 60 * 1000);   // Alle 24 Stunden
 
@@ -159,6 +159,6 @@ async function checkForUpdates() {
             console.log("No Updates found\nCache is up to date");
         }
     } catch (error) {
-        console.log(`Error while checking for updates: ${error}`);
+        console.error(`Error while checking for updates: ${error}`);
     }
 }

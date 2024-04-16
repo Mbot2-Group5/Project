@@ -3,3 +3,32 @@ Line Follower
 Suicide Prevention
 
 Service-Worker hat ein Problem (registriert richtig, aber macht keine Updates, etc
+
+
+
+Service-Worker Download (in irgendeine js datei schreiben)
+let installPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome 76 and later from showing the mini-infobar
+    e.preventDefault();
+    // Stash the event so it can be triggered later
+    installPrompt = e;
+    // Update UI to notify the user they can add to home screen
+    document.getElementById('installButton').style.display = 'block';
+});
+
+function downloadButton() {
+    // Show the install prompt
+    installPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    installPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+        } else {
+            console.log('User dismissed the install prompt');
+        }
+        // Reset the deferredPrompt variable, as it can only be used once
+        installPrompt = null;
+    });
+}
