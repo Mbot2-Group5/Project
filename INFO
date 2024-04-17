@@ -4,9 +4,8 @@ Suicide Prevention (müsste eigentlich schon funktionieren)
 
 Latenz noch irgendwie optimieren?
 
-Problem mit DownloadButton "beforeinstallprompt"-Event in download.js wird nicht aufgerufen (in TEST Program aber schon):
-Nirgends Fehler ersichtlich, auch in Console nichts zu sehen
-WO IST DAS PROBLEM???
+Das "beforeinstallprompt" wird nicht geworfen/aufgerufen
+(funktioniert aber in TEST und in der Produktion-Umgebung wird auch der EventListener initialisiert)
 
 
 

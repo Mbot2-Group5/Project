@@ -80,8 +80,7 @@ async function installWebApp() {
 }
 
 // Eventlistener zum Abfangen des "beforeinstallprompt"s
-window.addEventListener('beforeinstallprompt', (event) => {
-    console.log("TEST");                //DEBUG
+document.addEventListener('beforeinstallprompt', (event) => {
     // Prevent the default browser install prompt
     event.preventDefault();
 

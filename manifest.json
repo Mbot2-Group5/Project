@@ -1,8 +1,8 @@
 {
     "name": "MBot2 Controller",
     "short_name": "MBot2-CON.",
-    "description": "Controller for Controlling the MBot2",
-    "start_url": ":/start.html",
+    "description": "Controller zum kontrollieren eines MBot2s",
+    "start_url": "./start.html",
     "display": "standalone",
     "background_color": "#000000",
     "theme_color": "#ffffff",
@@ -14,7 +14,7 @@
         },
         {
             "src": "./images/icons/replacement_icon.png",
-            "sizes": "192x192",
+            "sizes": "512x512",
             "type": "image/png"
         }
     ]
