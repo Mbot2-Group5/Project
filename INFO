@@ -1,9 +1,8 @@
 Noch zu TESTEN (Daten werden richtig erhalten & Funktionen aufgerufen):
 Line Follower (geschwindigkeitsmäßig optimieren)
-Suicide Prevention
+Suicide Prevention (müsste eigentlich schon funktionieren)
 
-Controller hat irgendein Problem (Auswahl sollte auf 1 Eingabe pro Druck limitiert sein, controller speed funktioniert auch nicht richtig (wird aber richtig gemappt))
-Latenz nu irgendwie optimieren?
+Latenz noch irgendwie optimieren?
 
 Problem mit DownloadButton "beforeinstallprompt"-Event in download.js wird nicht aufgerufen (in TEST Program aber schon):
 Nirgends Fehler ersichtlich, auch in Console nichts zu sehen
@@ -11,8 +10,9 @@ WO IST DAS PROBLEM???
 
 
 
-Info für Haas zum stylen der angezeigten MBots in mittlerem Fenster:
 
+
+Info für Haas zum stylen der MBots in den Listen:
 klassen anderer MBots:
 connected
 connection-li

@@ -30,7 +30,7 @@ window.addEventListener('beforeinstallprompt', (event) => {
     deferredPrompt = event;
 
     // Show the install button
-    document.getElementById('installButton').style.display = 'block';
+    document.getElementById('installButton').style.visibility = 'visible';
 });
 
 //Wartezeit für Download-Button setzen

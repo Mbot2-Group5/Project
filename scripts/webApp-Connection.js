@@ -259,27 +259,15 @@ async function communicating() {
 function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleRight, lightSensorRight) {
     try {
         if (lightSensorLeft !== "white" && lightSensorRight !== "white") {
-            if (lineFollowerSpeedRight < 0) {
-                lineFollowerSpeedRight = 0;
-            }
-            if(lineFollowerSpeedLeft < 0) {
-                lineFollowerSpeedLeft = 0;
-            }
             lineFollowerSpeedLeft = lineFollowerSpeed;
             lineFollowerSpeedRight = lineFollowerSpeed;
         } else if (lightSensorLeft !== "white" && lightSensorRight === "white") {
-            lineFollowerSpeedLeft += + addedSpeedForCurve;
+            lineFollowerSpeedLeft += addedSpeedForCurve;
             lineFollowerSpeedRight -= addedSpeedForCurve;
         } else if (lightSensorLeft === "white" && lightSensorRight !== "white") {
             lineFollowerSpeedLeft -= addedSpeedForCurve;
             lineFollowerSpeedRight += addedSpeedForCurve;
         } else if (lightSensorLeft === "white" && lightSensorRight === "white") {
-            if (lineFollowerSpeedLeft > 0) {
-                lineFollowerSpeedLeft = 0;
-            }
-            if (lineFollowerSpeedRight > 0) {
-                lineFollowerSpeedRight = 0;
-            }
             lineFollowerSpeedLeft = -lineFollowerSpeed;
             lineFollowerSpeedRight = -lineFollowerSpeed;
         }
@@ -498,12 +486,22 @@ function checkGamepadInput() {
                     const stickY = gamepad.axes[3];
 
                     // Druckstärke (links & rechts) ausrechnen (zwischen 1 & -1)
-                    let leftRaw = stickY + stickX;
+                    let leftRaw = stickY - stickX;
                     let rightRaw = stickY - stickX;
 
                     //-1 bis 1 auf maxReverseSpeed bis maxForwardSpeed mappen
-                    left = (leftRaw - -1) * (maxForwardSpeed - maxReverseSpeed) / (1 - -1) + maxReverseSpeed;
-                    right = (rightRaw - -1) * (maxForwardSpeed - maxReverseSpeed) / (1 - -1) + maxReverseSpeed;
+                    left = -Math.round((leftRaw - -1) * (maxForwardSpeed - maxReverseSpeed) / (1 - -1) + maxReverseSpeed);
+                    right = -Math.round((rightRaw - -1) * (maxForwardSpeed - maxReverseSpeed) / (1 - -1) + maxReverseSpeed);
+
+                    if(left === -0) {
+                        left = 0;
+                    }
+                    if(right === -0 ) {
+                        right = 0;
+                    }
+
+                    console.log(left);
+                    console.log(right);
 
                     // Linker Trigger (SuicidePrevention)
                     if (!gamepad.buttons[5].pressed) {
@@ -549,12 +547,6 @@ function checkGamepadInput() {
 //Nachricht an Server senden
 async function sendToMBot2() {
     try {
-        //LineFollower
-        if(document.getElementById("lineFollower").checked) {
-            left = lineFollowerSpeedLeft;
-            right = lineFollowerSpeedRight;
-        }
-
         //Linken Motor limitieren
         if (left > maxForwardSpeed) {
             left = maxForwardSpeed - 1;
@@ -569,6 +561,13 @@ async function sendToMBot2() {
             right = maxReverseSpeed - 1;
         }
 
+        //LineFollower
+        if (document.getElementById("lineFollower").checked) {
+            left = lineFollowerSpeedLeft;
+            right = lineFollowerSpeedRight;
+        }
+
+        //Suicide Prevention
         if (underMinDistanceToWall) {
             left = 0;
             right = 0;
@@ -579,7 +578,7 @@ async function sendToMBot2() {
             links: left,
             rechts: right
         }
-        //Daten durch WebSocket über Server zu MBot2 senden
+        //Daten durch WebSocket über Server an MBot2 senden
         const json = JSON.stringify(data);
         socket.send(encoder.encode(json));
 
