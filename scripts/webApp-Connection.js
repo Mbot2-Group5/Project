@@ -13,6 +13,11 @@ let initialized = false;
 //Controller-Trigger-Variablen
 let lineFollowerPressed = false;
 let suicidePreventionPressed = false;
+const lineFollowerSpeed = 40;
+
+//Speed für den LineFollower
+let lineFollowerSpeedLeft = 0;
+let lineFollowerSpeedRight = 0;
 
 setInterval(async () => {     //DEBUG
     await checkGamepadInput();                      //DEBUG
@@ -233,6 +238,9 @@ async function makeListElementsForArray(mBots, myList) {
         //Listenelement ID zuweisen
         listElement.id = `${i}`;
 
+        //Klasse zum Stylen der Elemente
+        listElement.classList.add("connection-li");
+
         //Listenelement stylen
         listElement.style.whiteSpace = "pre-line";
 
@@ -251,25 +259,29 @@ async function communicating() {
 function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleRight, lightSensorRight) {
     try {
         if (lightSensorLeft !== "white" && lightSensorRight !== "white") {
-            if (speed < 0) {
-                speed = 0;
+            if (lineFollowerSpeedRight < 0) {
+                lineFollowerSpeedRight = 0;
             }
-            speed += 1;
-            left = speed;
-            right = speed;
+            if(lineFollowerSpeedLeft < 0) {
+                lineFollowerSpeedLeft = 0;
+            }
+            lineFollowerSpeedLeft = lineFollowerSpeed;
+            lineFollowerSpeedRight = lineFollowerSpeed;
         } else if (lightSensorLeft !== "white" && lightSensorRight === "white") {
-            left = speed + addedSpeedForCurve;
-            right = speed - addedSpeedForCurve;
+            lineFollowerSpeedLeft += + addedSpeedForCurve;
+            lineFollowerSpeedRight -= addedSpeedForCurve;
         } else if (lightSensorLeft === "white" && lightSensorRight !== "white") {
-            left = speed - addedSpeedForCurve;
-            right = speed + addedSpeedForCurve;
+            lineFollowerSpeedLeft -= addedSpeedForCurve;
+            lineFollowerSpeedRight += addedSpeedForCurve;
         } else if (lightSensorLeft === "white" && lightSensorRight === "white") {
-            if (speed > 0) {
-                speed = 0;
+            if (lineFollowerSpeedLeft > 0) {
+                lineFollowerSpeedLeft = 0;
             }
-            speed -= 1;
-            left = speed;
-            right = speed;
+            if (lineFollowerSpeedRight > 0) {
+                lineFollowerSpeedRight = 0;
+            }
+            lineFollowerSpeedLeft = -lineFollowerSpeed;
+            lineFollowerSpeedRight = -lineFollowerSpeed;
         }
 
         //Farbflächen des LineFollower setzen
@@ -493,7 +505,7 @@ function checkGamepadInput() {
                     left = (leftRaw - -1) * (maxForwardSpeed - maxReverseSpeed) / (1 - -1) + maxReverseSpeed;
                     right = (rightRaw - -1) * (maxForwardSpeed - maxReverseSpeed) / (1 - -1) + maxReverseSpeed;
 
-                    // Linker Trigger (SuicidePrevention), begrenzt auf 1 Eingabe pro 250 ms
+                    // Linker Trigger (SuicidePrevention)
                     if (!gamepad.buttons[5].pressed) {
                         suicidePreventionPressed = false;
                     }
@@ -537,6 +549,12 @@ function checkGamepadInput() {
 //Nachricht an Server senden
 async function sendToMBot2() {
     try {
+        //LineFollower
+        if(document.getElementById("lineFollower").checked) {
+            left = lineFollowerSpeedLeft;
+            right = lineFollowerSpeedRight;
+        }
+
         //Linken Motor limitieren
         if (left > maxForwardSpeed) {
             left = maxForwardSpeed - 1;
@@ -614,6 +632,9 @@ async function connectToMBot2() {
         //Kommunikation mit MBot2 freigeben
         initialized = true;
 
+        const connectedListelement = document.getElementById(mBotID);
+        connectedListelement.classList.add("connected");
+
         //Verbindung des ausgewählten MBots senden
         formerConnectedMBots.push(possibleMBot2sToConnect[mBotID]);
         socket.send(possibleMBot2sToConnect[mBotID]);
@@ -628,6 +649,9 @@ async function connectToMBot2() {
 //Von MBot2 trennen
 function disconnectFromMBot2() {
     try {
+        const connectedListelement = document.getElementById(mBotID);
+        connectedListelement.classList.remove("connected");
+
         //Kommunikation beenden
         initialized = false;
 

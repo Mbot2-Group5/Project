@@ -1,7 +1,9 @@
 const label = document.querySelector(".button__text");
 const progress = document.querySelector(".download-progress");
 let update = false;
-let count = 0, updateprogress = 0;
+let count = 0
+let updateprogress = 0;
+let deferredPrompt = null;
 
 document.addEventListener("DOMContentLoaded", function () {
     const button = document.querySelector(".button--hoo");
@@ -31,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
             update = false;
             count = 0;
             updateprogress = 0;
-        }, 5000); // Adjust the time to match the duration of your animation
+        }, 5000); // Zeitspanne der Animation festlegen
     });
 });
 
@@ -42,7 +44,6 @@ function updateProgressLabel() {
     if (update) {
         updateprogress += 10;
         progress.textContent = updateprogress + "%";
-        console.log("test");
     }
 }
 
@@ -58,13 +59,10 @@ function updateLabel() {
     }
 }
 
-//Funktionalität hinter dem Download-Button
-let deferredPrompt;
-
-// Function to handle the installation prompt
+// Function um das Install-Prompt aufzurufen
 async function installWebApp() {
     if (deferredPrompt) {
-        await sleep(4000);
+        await sleep(5000);
         // Show the install prompt
         deferredPrompt.prompt();
 
@@ -81,7 +79,7 @@ async function installWebApp() {
     }
 }
 
-// Event listener for the beforeinstallprompt event
+// Eventlistener zum Abfangen des "beforeinstallprompt"s
 window.addEventListener('beforeinstallprompt', (event) => {
     // Prevent the default browser install prompt
     event.preventDefault();
@@ -90,8 +88,8 @@ window.addEventListener('beforeinstallprompt', (event) => {
     deferredPrompt = event;
 
     // Show the install button
-    document.getElementById('installButton').style.display = 'block';
+    document.getElementById('installButton').style.visibility = 'visible';
 });
 
-//Wartezeit für Download-Button setzen
+//Wartezeit für Download-Button
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));

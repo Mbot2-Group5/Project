@@ -1,6 +1,6 @@
 # Autor: Stefan Rautner
 
-# imports
+#imports
 import time
 import json
 import usocket
@@ -26,8 +26,11 @@ port = 5431
 
 # WLAN-Verbindung initialisieren
 wifi = network.WLAN(network.STA_IF)
-wifi.active(True)
-wifi.connect('htljoh-public', 'joh12345')
+try:
+    wifi.active(True)
+    wifi.connect('htljoh-public', 'joh12345')
+except Exception as e:
+    cyberpi.console.print("Error at initializing Connection to WLAN: " + str(e))
 
 try:
     # Warten auf Verbindung mit Netzwerk

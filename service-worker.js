@@ -3,6 +3,9 @@
 // Definition Cache-Version
 let cacheVersion = 'my-cache';
 
+// Überprüfen ob service-worker schon einmal gefetched wurde
+let checkedForUpdatesAtOpening = false;
+
 // Definition Versions-Dokumente
 const versionDocuments = [
     /* Stylesheets */
@@ -110,12 +113,13 @@ self.addEventListener('activate', (event) => {
 
 // Beim Öffnen der App auf Updates prüfen
 self.addEventListener('fetch', (event) => {
-    if (event.request.mode === 'navigate') {
+    if (!checkedForUpdatesAtOpening && event.request.mode === 'navigate') {
         event.respondWith(
             fetch(event.request).then(async (response) => {
                 try {
                     await checkForUpdates();
                     console.log("Checked for Updates");
+                    checkedForUpdatesAtOpening = true;
                 } catch (error) {
                     console.error(`Error while checking for Updates: ${error}`);
                 }

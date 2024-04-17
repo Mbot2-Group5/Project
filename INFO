@@ -1,11 +1,21 @@
 Noch zu TESTEN (Daten werden richtig erhalten & Funktionen aufgerufen):
-Line Follower
+Line Follower (geschwindigkeitsmäßig optimieren)
 Suicide Prevention
 
-Problem mit DownloadButton "beforeinstallprompt"-Event in download.js wird nicht aufgefufen (in TEST Program aber schon):
+Controller hat irgendein Problem (Auswahl sollte auf 1 Eingabe pro Druck limitiert sein, controller speed funktioniert auch nicht richtig (wird aber richtig gemappt))
+Latenz nu irgendwie optimieren?
+
+Problem mit DownloadButton "beforeinstallprompt"-Event in download.js wird nicht aufgerufen (in TEST Program aber schon):
 Nirgends Fehler ersichtlich, auch in Console nichts zu sehen
 WO IST DAS PROBLEM???
 
 
-Este Zeile in download.js scheißt den Fehler: Uncaught TypeError: Cannot read properties of null (reading 'style') at HTMLDivElement.<anonymous> (download.js:19:15 === label.style.fontSize = '15px';)
-Wahrscheinlich wird gleicher Fehler be i2ter zeile auftreten
+
+Info für Haas zum stylen der angezeigten MBots in mittlerem Fenster:
+
+klassen anderer MBots:
+connected
+connection-li
+
+Klassen anderer MBots:
+connection-li

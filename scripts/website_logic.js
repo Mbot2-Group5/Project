@@ -81,5 +81,3 @@ function hideAllSections() {
         section.style.display = 'none';
     });
 }
-
-
