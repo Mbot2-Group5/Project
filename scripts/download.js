@@ -62,7 +62,7 @@ function updateLabel() {
 // Function um das Install-Prompt aufzurufen
 async function installWebApp() {
     if (deferredPrompt) {
-        await sleep(5000);
+        await sleep(4750);
         // Show the install prompt
         deferredPrompt.prompt();
 
@@ -80,7 +80,7 @@ async function installWebApp() {
 }
 
 // Eventlistener zum Abfangen des "beforeinstallprompt"s
-document.addEventListener('beforeinstallprompt', (event) => {
+window.addEventListener('beforeinstallprompt', (event) => {
     // Prevent the default browser install prompt
     event.preventDefault();
 

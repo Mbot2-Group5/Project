@@ -10,6 +10,21 @@
     <link rel="stylesheet" href="./css/form.css">
     <link rel="stylesheet" href="./css/team.css">
     <link rel="stylesheet" href="./css/download.css">
+    <!-- Manifest einbinden -->
+    <link rel="manifest" href="./manifest.json">
+
+    <!-- Service-Worker registrieren-->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js')
+                .then((registration) => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch((error) => {
+                    console.error('Service Worker registration failed:', error);
+                });
+        }
+    </script>
 </head>
 <body>
 <header>
@@ -26,22 +41,6 @@
         <a class="anav" href="index.html">Controller</a>
         <button  class="btnLogin-popup" id="one-login">Login</button>
     </nav>
-
-    <!-- Manifest einbinden -->
-    <link rel="manifest" href="./manifest.json">
-
-    <!-- Service-Worker registrieren-->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./service-worker.js')
-                .then((registration) => {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                })
-                .catch((error) => {
-                    console.error('Service Worker registration failed:', error);
-                });
-        }
-    </script>
 </header>
 
 <div class="main">

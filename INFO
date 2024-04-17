@@ -4,9 +4,6 @@ Suicide Prevention (müsste eigentlich schon funktionieren)
 
 Latenz noch irgendwie optimieren?
 
-Das "beforeinstallprompt" wird nicht geworfen/aufgerufen
-(funktioniert aber in TEST und in der Produktion-Umgebung wird auch der EventListener initialisiert)
-
 
 
 
