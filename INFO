@@ -1,11 +1,17 @@
-Noch zu TESTEN (Daten werden richtig erhalten & Funktionen aufgerufen):
-Line Follower (geschwindigkeitsmäßig optimieren)
-Suicide Prevention (müsste eigentlich schon funktionieren)
+Latenz noch optimieren?
 
-Latenz noch irgendwie optimieren?
+SuicidePrevention-Speed einstellen, sodass sich der MBot um 180 Grad dreht (Zeilen 295 & 296 in webApp-Connection.js)
+LineFollower Geschwindigkeit einstellen, sodass er verlässlich funktioniert (Zeile 16 in webApp-Connection.js)
+
+3D-Model Anzeige nicht richtig???
+
+wenn zu lang rückwärts gefahren wird, geht der rechte blinker statt dem rückwärts-Program ein
 
 
 
+
+
+Style-Probleme:
 Überschrift erscheint zu hoch oben beim Starten
 Login & Register müssen zentriert werden (Problem bei .wrapper in form.css)
 

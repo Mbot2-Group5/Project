@@ -19,10 +19,6 @@ const lineFollowerSpeed = 40;
 let lineFollowerSpeedLeft = 0;
 let lineFollowerSpeedRight = 0;
 
-setInterval(async () => {     //DEBUG
-    await checkGamepadInput();                      //DEBUG
-});                                                 //DEBUG
-
 //Geschwindigkeiten (max 998, wenn mehr gebraucht, dann Zeile 193 in NetworkConnection_MBot2.py 28 --> 29 ändern)
 let speed = 0;
 const addedSpeedForCurve = 20;
@@ -166,11 +162,20 @@ socket.onmessage = async function (event) {
             //Überprüfen, ob der LineFollower eingeschalten ist (wenn ja, Daten verarbeiten)
             if (document.getElementById("lineFollower").checked) {
                 lineFollower(data.rgbSensorLeft, data.rgbSensorMiddleLeft, data.rgbSensorMiddleRight, data.rgbSensorRight);
+            } else if(lineFollowerSpeedLeft !== 0 || lineFollowerSpeedRight !== 0) {
+                left = 0;
+                right = 0;
+                lineFollowerSpeedLeft = 0;
+                lineFollowerSpeedRight = 0;
             }
 
             //Überprüfen, ob die SuicidePrevention eingeschalten ist (wenn ja, Daten verarbeiten)
             if (document.getElementById("suicidePrev").checked) {
                 suicidePrevention(data.ultrasonicSensor);
+            } else {
+                underMinDistanceToWall = false;
+                left = 0;
+                right = 0;
             }
 
             console.log("Got Message from the TCP-Server");
@@ -251,8 +256,8 @@ async function makeListElementsForArray(mBots, myList) {
 
 //Funktion zur Kommunikation mit dem MBot
 async function communicating() {
-    await sendToMBot2();
     await checkGamepadInput();
+    await sendToMBot2();
 }
 
 //Funktion für die Berechnungen des LineFollowers
@@ -262,11 +267,11 @@ function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleR
             lineFollowerSpeedLeft = lineFollowerSpeed;
             lineFollowerSpeedRight = lineFollowerSpeed;
         } else if (lightSensorLeft !== "white" && lightSensorRight === "white") {
-            lineFollowerSpeedLeft += addedSpeedForCurve;
-            lineFollowerSpeedRight -= addedSpeedForCurve;
+            lineFollowerSpeedLeft = addedSpeedForCurve;
+            lineFollowerSpeedRight = -addedSpeedForCurve;
         } else if (lightSensorLeft === "white" && lightSensorRight !== "white") {
-            lineFollowerSpeedLeft -= addedSpeedForCurve;
-            lineFollowerSpeedRight += addedSpeedForCurve;
+            lineFollowerSpeedLeft = -addedSpeedForCurve;
+            lineFollowerSpeedRight = addedSpeedForCurve;
         } else if (lightSensorLeft === "white" && lightSensorRight === "white") {
             lineFollowerSpeedLeft = -lineFollowerSpeed;
             lineFollowerSpeedRight = -lineFollowerSpeed;
@@ -282,11 +287,13 @@ function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleR
     }
 }
 
-//SuicidePrevention, sodass der MBot2 nicht gegen die Wand fährt
+//SuicidePrevention, sodass der MBot2 nicht gegen die Wand fährt & sich automatisch umdreht
 function suicidePrevention(distanceToObject) {
     try {
         if (distanceToObject < minDistanceToWall) {
             underMinDistanceToWall = true;
+            left = 60;
+            right = -60;
         }
     } catch (error) {
         console.error(`Error in SuicidePrevention: ${error}`);
