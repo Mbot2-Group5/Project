@@ -1,11 +1,10 @@
-Latenz noch optimieren?
+Latenz noch optimieren (wie?, überhaupt möglich?)
 
-SuicidePrevention-Speed einstellen, sodass sich der MBot um 180 Grad dreht (Zeilen 295 & 296 in webApp-Connection.js)
-LineFollower Geschwindigkeit einstellen, sodass er verlässlich funktioniert (Zeile 16 in webApp-Connection.js)
+Geschwindigkeiten für SuicidePrevention & LineFollower noch anpassen (Zeilen 18, 21 & 22 in webApp-Connection.js)
 
 3D-Model Anzeige nicht richtig???
 
-wenn zu lang rückwärts gefahren wird, geht der rechte blinker statt dem rückwärts-Program ein
+Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm (Problem in MBot Script, aber warum?)
 
 
 
@@ -13,14 +12,14 @@ wenn zu lang rückwärts gefahren wird, geht der rechte blinker statt dem rückw
 
 Style-Probleme:
 Überschrift erscheint zu hoch oben beim Starten
-Login & Register müssen zentriert werden (Problem bei .wrapper in form.css)
+Login & Register müssen zentriert werden (Problem bei .wrapper in form.css?)
 
 
 
 Info für Haas zum stylen der MBots in den Listen:
-klassen anderer MBots:
+klassen VERBUNDENER MBots:
 connected
 connection-li
 
-Klassen anderer MBots:
+Klassen NICHT VERBUNDENER MBots:
 connection-li

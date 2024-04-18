@@ -13,9 +13,13 @@ let initialized = false;
 //Controller-Trigger-Variablen
 let lineFollowerPressed = false;
 let suicidePreventionPressed = false;
-const lineFollowerSpeed = 40;
+
+//DrehSpeed für die SuicidePrevention
+const suicidePreventionSpeed = 60;          //NOCH ANZUPASSEN
 
 //Speed für den LineFollower
+const lineFollowerSpeed = 40;               //NOCH ANZUPASSEN
+const lineFollowerCurveSpeed = 20;          //NOCH ANZUPASSEN
 let lineFollowerSpeedLeft = 0;
 let lineFollowerSpeedRight = 0;
 
@@ -263,16 +267,16 @@ async function communicating() {
 //Funktion für die Berechnungen des LineFollowers
 function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleRight, lightSensorRight) {
     try {
-        if (lightSensorLeft !== "white" && lightSensorRight !== "white") {
+        if (lightSensorMiddleLeft !== "white" && lightSensorMiddleRight !== "white") {
             lineFollowerSpeedLeft = lineFollowerSpeed;
             lineFollowerSpeedRight = lineFollowerSpeed;
-        } else if (lightSensorLeft !== "white" && lightSensorRight === "white") {
-            lineFollowerSpeedLeft = addedSpeedForCurve;
-            lineFollowerSpeedRight = -addedSpeedForCurve;
-        } else if (lightSensorLeft === "white" && lightSensorRight !== "white") {
-            lineFollowerSpeedLeft = -addedSpeedForCurve;
-            lineFollowerSpeedRight = addedSpeedForCurve;
-        } else if (lightSensorLeft === "white" && lightSensorRight === "white") {
+        } else if (lightSensorMiddleLeft !== "white" && lightSensorMiddleRight === "white") {
+            lineFollowerSpeedLeft = lineFollowerCurveSpeed;
+            lineFollowerSpeedRight = -lineFollowerCurveSpeed;
+        } else if (lightSensorMiddleLeft === "white" && lightSensorMiddleRight !== "white") {
+            lineFollowerSpeedLeft = -lineFollowerCurveSpeed;
+            lineFollowerSpeedRight = lineFollowerCurveSpeed;
+        } else if (lightSensorMiddleLeft === "white" && lightSensorMiddleRight === "white") {
             lineFollowerSpeedLeft = -lineFollowerSpeed;
             lineFollowerSpeedRight = -lineFollowerSpeed;
         }
@@ -292,8 +296,8 @@ function suicidePrevention(distanceToObject) {
     try {
         if (distanceToObject < minDistanceToWall) {
             underMinDistanceToWall = true;
-            left = 60;
-            right = -60;
+            left = suicidePreventionSpeed;
+            right = -suicidePreventionSpeed;
         }
     } catch (error) {
         console.error(`Error in SuicidePrevention: ${error}`);
