@@ -15,7 +15,8 @@ let lineFollowerPressed = false;
 let suicidePreventionPressed = false;
 
 //DrehSpeed für die SuicidePrevention
-const suicidePreventionSpeed = 60;          //NOCH ANZUPASSEN
+const suicidePreventionSpeed = 35;          //NOCH ANZUPASSEN
+let suicidePreventionActive = false;
 
 //Speed für den LineFollower
 const lineFollowerSpeed = 40;               //NOCH ANZUPASSEN
@@ -30,7 +31,7 @@ const maxReverseSpeed = -100;
 const maxForwardSpeed = 100;
 
 //Minimaler Abstand zur Wand
-const minDistanceToWall = 10;
+const minDistanceToWall = 20;
 let underMinDistanceToWall = false;
 
 //Liste für alle Verfügbare MBots
@@ -156,7 +157,7 @@ socket.onmessage = async function (event) {
         } else {
             connected = true;
             //Daten des Gyrosensors erhalten & an ModelViewer übergeben
-            updateOrientation(data.gyroscopeRoll, data.gyroscopePitch, data.gyroscopeYaw);
+            updateOrientation(data.gyroscopeRoll, -data.gyroscopePitch, data.gyroscopeYaw + 150.45);
 
             //Andere Sensordaten
             document.getElementById("accelerometer").textContent = data.accelerometer;
@@ -176,10 +177,6 @@ socket.onmessage = async function (event) {
             //Überprüfen, ob die SuicidePrevention eingeschalten ist (wenn ja, Daten verarbeiten)
             if (document.getElementById("suicidePrev").checked) {
                 suicidePrevention(data.ultrasonicSensor);
-            } else {
-                underMinDistanceToWall = false;
-                left = 0;
-                right = 0;
             }
 
             console.log("Got Message from the TCP-Server");
@@ -271,11 +268,11 @@ function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleR
             lineFollowerSpeedLeft = lineFollowerSpeed;
             lineFollowerSpeedRight = lineFollowerSpeed;
         } else if (lightSensorMiddleLeft !== "white" && lightSensorMiddleRight === "white") {
-            lineFollowerSpeedLeft = lineFollowerCurveSpeed;
-            lineFollowerSpeedRight = -lineFollowerCurveSpeed;
-        } else if (lightSensorMiddleLeft === "white" && lightSensorMiddleRight !== "white") {
-            lineFollowerSpeedLeft = -lineFollowerCurveSpeed;
+            lineFollowerSpeedLeft = - lineFollowerCurveSpeed;
             lineFollowerSpeedRight = lineFollowerCurveSpeed;
+        } else if (lightSensorMiddleLeft === "white" && lightSensorMiddleRight !== "white") {
+            lineFollowerSpeedLeft = lineFollowerCurveSpeed;
+            lineFollowerSpeedRight = - lineFollowerCurveSpeed;
         } else if (lightSensorMiddleLeft === "white" && lightSensorMiddleRight === "white") {
             lineFollowerSpeedLeft = -lineFollowerSpeed;
             lineFollowerSpeedRight = -lineFollowerSpeed;
@@ -296,8 +293,8 @@ function suicidePrevention(distanceToObject) {
     try {
         if (distanceToObject < minDistanceToWall) {
             underMinDistanceToWall = true;
-            left = suicidePreventionSpeed;
-            right = -suicidePreventionSpeed;
+        } else {
+            underMinDistanceToWall = false;
         }
     } catch (error) {
         console.error(`Error in SuicidePrevention: ${error}`);
@@ -313,7 +310,7 @@ function startMoving(element) {
         element.style.transform = "scale(1.3)";
         moveInterval = setInterval(function () {
             move(element);
-        }, 100);
+        }, 1);
     } catch (error) {
         console.error(`Error while moving (with graphic interface): ${error}`);
     }
@@ -578,10 +575,18 @@ async function sendToMBot2() {
             right = lineFollowerSpeedRight;
         }
 
-        //Suicide Prevention
-        if (underMinDistanceToWall) {
+        //SuicidePrevention activated
+        if(suicidePreventionActive) {
             left = 0;
             right = 0;
+            suicidePreventionActive = false;
+        }
+
+        //Suicide Prevention
+        if (underMinDistanceToWall) {
+            left = suicidePreventionSpeed;
+            right = -suicidePreventionSpeed;
+            suicidePreventionActive = true;
         }
 
         //JSON für MBot (Motorengeschwindigkeit)

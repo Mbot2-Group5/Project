@@ -221,8 +221,8 @@ try:
             cyberpi.console.print("Error at sending message " + str(e))
             cyberpi.led.on(255, 0, 0)
 
-        # Timeout um jede 100 ms auf eingehende Nachrichten zu überprüfen & die Sensordaten zu senden
-        time.sleep(0.1)
+        # Timeout um jede millisekunde auf eingehende Nachrichten zu überprüfen & die Sensordaten zu senden
+        time.sleep(0.001)
 except Exception as e:
     cyberpi.console.clear()
     cyberpi.console.print("Error at sending/receiving a message: " + str(e))

@@ -1,10 +1,12 @@
-Latenz noch optimieren (wie?, überhaupt möglich?)
+Latenz noch optimieren (einfach interval verkürzen)
+
+
 
 Geschwindigkeiten für SuicidePrevention & LineFollower noch anpassen (Zeilen 18, 21 & 22 in webApp-Connection.js)
 
-3D-Model Anzeige nicht richtig???
-
 Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm (Problem in MBot Script, aber warum?)
+
+
 
 mbot script ist nur zum backup hier (muss beim upload gelöscht/entfernt werden)
 
