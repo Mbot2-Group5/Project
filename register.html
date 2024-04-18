@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="./css/form-temp.css">
 
     <style> body { background-image: url("images/login_background.png");}</style>
+
+    <!-- Firebase einbinden -->
+    <script src="./scripts/firebase.js"></script>
 </head>
 <body>
     <header>
@@ -35,11 +38,6 @@
             <h2>Registration</h2>
             <form id="registrationForm" action="#">
                 <div class="input-box">
-                    <span class="icon"><ion-icon name="person"></ion-icon></span>
-                    <input type="text" id="name_reg" required>
-                    <label>Username</label>
-                </div>
-                <div class="input-box">
                     <span class="icon"><ion-icon name="mail"></ion-icon></span>
                     <input type="email" id="email_reg" required>
                     <label>Email</label>
@@ -52,7 +50,7 @@
                 <div class="remember-forgot">
                     <label><input type="checkbox" class="acceptTerms" id="terms"> I agree to the terms & conditions</label>
                 </div>
-                <button type="submit" class="btn" id="register">Register</button>
+                <button type="submit" class="btn" id="register" onclick="registerWithFirebase()">Register</button>
                 <div class="login-register">
                     <p>Already have an account? <a href="login.html#login" class="login-link"> Login</a></p>
                 </div>

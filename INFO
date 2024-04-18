@@ -1,7 +1,3 @@
-Latenz noch optimieren (einfach interval verkürzen)
-
-
-
 Geschwindigkeiten für SuicidePrevention & LineFollower noch anpassen (Zeilen 18, 21 & 22 in webApp-Connection.js)
 
 Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm (Problem in MBot Script, aber warum?)
@@ -19,6 +15,7 @@ Zwischenserver muss irgendwo anders gehostet werden (oder irgendwie lokal)
 Style-Probleme:
 Überschrift erscheint zu hoch oben beim Starten
 Login & Register müssen zentriert werden (Problem bei .wrapper in form.css?)
+Firebase muss noch fertig eingebunden werden (firebase.js script)
 
 
 

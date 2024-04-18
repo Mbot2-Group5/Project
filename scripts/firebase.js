@@ -1,100 +1,55 @@
-//import bcrypt from '../node_modules/bcryptjs/src/bcrypt.js';
-// Import the functions you need from the SDKs you need
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import {getAnalytics} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import {initializeApp} from "../librarys/firebase/firebase-app.js";
+import {getAuth} from "../librarys/firebase/firebase-auth.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyCZ0u07mduZkIHqwCXJOw5pGRFcTVrXxSc",
-    authDomain: "sypgroup05.firebaseapp.com",
-    projectId: "sypgroup05",
-    storageBucket: "sypgroup05.appspot.com",
-    messagingSenderId: "803117364447",
-    appId: "1:803117364447:web:a367aeac3f8b570db3256a",
-    measurementId: "G-3C4R5ZM8ZX",
-    databaseURL: "https://sypgroup05-default-rtdb.europe-west1.firebasedatabase.app"
+    apiKey: "AIzaSyDhmFz-jAoBpjQ4DkLx_Uz-uzi17Qr0j-0",
+    authDomain: "syp-group5-4ahinf.firebaseapp.com",
+    projectId: "syp-group5-4ahinf",
+    storageBucket: "syp-group5-4ahinf.appspot.com",
+    messagingSenderId: "224277553804",
+    appId: "1:224277553804:web:48b9aa869c407655cd91a9",
+    measurementId: "G-E7VRTLQQHE"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const auth = getAuth(app);
 
-import {getDatabase, ref, set, child, update, remove, get, orderByChild, equalTo}
-    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"
 
-const db = getDatabase();
+//Login
+function logInWithFirebase() {
+    let email = document.getElementById("email_log").value();
+    let password = document.getElementById("passw_log").value();
 
-import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword}
-    from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+    if (email !== "" && password !== "") {
+        let result = auth./*HIER FUNKTION ZUM EINLOGEGEN AUFRUFEN*/(email, password);
 
-// Assuming you have already initialized your Firebase app and obtained the 'db' reference.
+        result.catch(function (error) {
+            let errorCode = error.code;
+            let errorMessage = error.message;
 
-export async function postUser(username, email, password) {
-    try {
-        if (!email || !password) {
-            console.error('Email and password are required for login.');
-            return false;
-        }
-        // Create user in Firebase Authentication
-        const auth = getAuth();
-        // Store additional user data in the Realtime Database
-        set(ref(db, "User/" + username), {
-            password: password,
-            username: username,
-            email: email
-        })
-        console.log('User registered successfully!');
-        return true;
-    } catch (error) {
-        console.error('Error registering user:', error.message);
-        return false;
+            document.getElementById("error1").text("Message: " + errorMessage + " Code: " + errorCode);
+        });
+    } else {
+        document.getElementById("error1").text("Bitte alle Felder ausfüllen");
     }
 }
 
-export async function checkUserAvailability(username, email) {
-    const usersRef = ref(db, 'User/' + username);
-    const usernameQuery = child(usersRef, 'username');
-    const emailQuery = child(usersRef, 'email');
+//Register
+function registerWithFirebase() {
+    let email = document.getElementById("email_reg").value();
+    let password = document.getElementById("passw_reg").value();
 
-    // Check if username already exists
-    const usernameSnapshot = await get(usernameQuery);
-    if (usernameSnapshot.exists()) {
-        return false;
+    if (email !== "" && password !== "") {
+        let result = auth./*HIER FUNKTION ZUM REGISTRIEREN AUFRUFEN*/(email, password);
+
+        result.catch(function (error) {
+            let errorCode = error.code;
+            let errorMessage = error.message;
+
+            document.getElementById("error2").text("Message: " + errorMessage + " Code: " + errorCode);
+        });
+    } else {
+        document.getElementById("error2").text("Bitte alle Felder ausfüllen");
     }
-
-    // Check if email already exists
-    const emailSnapshot = await get(emailQuery);
-    if (emailSnapshot.exists()) {
-        return false;
-    }
-
-    // If both username and email are available
-    return true;
-}
-
-//Function to hash a plaintext password during registration
-/*function hashPassword(plaintextPassword) {
-  const hash = bcrypt.hashSync(plaintextPassword, 10);
-  return hash;
-}
-
-// Function to verify a plaintext password during login
-function verifyPassword(enteredPassword, storedHashedPassword) {
-  return bcrypt.compareSync(enteredPassword, storedHashedPassword);
-}*/
-
-export async function loginUser() {
-    const dbRef = ref(getDatabase());
-    get(child(dbRef, `User/${username}`)).then((snapshot) => {
-        if (snapshot.exists()) {
-            console.log(snapshot.val());
-        } else {
-            console.log("No data available");
-        }
-    }).catch((error) => {
-        console.error(error);
-    });
 }
