@@ -103,7 +103,7 @@ def onMessage(receivedMessage):
                 cyberpi.led.on(255, 255, 255, id=5)
                 cyberpi.audio.add_vol(100)
                 cyberpi.audio.play_tone(1000, 0.3)
-            elif -left < right:
+            elif -left != right and -left < right:
                 cyberpi.led.on(255, 0, 0, id=1)
                 cyberpi.led.on(255, 255, 255, id=2)
                 cyberpi.led.on(255, 255, 255, id=3)
@@ -111,7 +111,7 @@ def onMessage(receivedMessage):
                 cyberpi.led.on(255, 255, 0, id=5)
                 time.sleep(0.05)
                 cyberpi.led.off(id=5)
-            elif right < -left:
+            elif -left != right and right < -left:
                 cyberpi.led.on(255, 255, 0, id=1)
                 cyberpi.led.on(255, 255, 255, id=2)
                 cyberpi.led.on(255, 255, 255, id=3)
