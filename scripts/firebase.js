@@ -1,5 +1,10 @@
+//Firebase
 import {initializeApp} from "../librarys/firebase/firebase-app.js";
 import {getAuth} from "../librarys/firebase/firebase-auth.js";
+import {getDatabase} from "../librarys/firebase/firebase-database.js"
+
+//Analytics
+import { getAnalytics } from "../librarys/firebase/firebase-analytics.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDhmFz-jAoBpjQ4DkLx_Uz-uzi17Qr0j-0",
@@ -13,7 +18,15 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+//Initialize Authentication
 const auth = getAuth(app);
+
+//Initialize Database
+const database = getDatabase(app);
+
+//Initialize Analytics
+const analytics = getAnalytics(app);
 
 
 //Login
