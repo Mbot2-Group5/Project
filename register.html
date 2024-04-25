@@ -12,7 +12,7 @@
     <style> body { background-image: url("images/login_background.png");}</style>
 
     <!-- Firebase einbinden -->
-    <script src="./scripts/firebase.js"></script>
+    <script type="module" src="./scripts/firebase.js"></script>
 </head>
 <body>
     <header>
@@ -50,7 +50,7 @@
                 <div class="remember-forgot">
                     <label><input type="checkbox" class="acceptTerms" id="terms"> I agree to the terms & conditions</label>
                 </div>
-                <button type="submit" class="btn" id="register" onclick="registerWithFirebase()">Register</button>
+                <button type="submit" class="btn" id="register" onclick="registerWithFirebase(event)">Register</button>
                 <div class="login-register">
                     <p>Already have an account? <a href="login.html#login" class="login-link"> Login</a></p>
                 </div>

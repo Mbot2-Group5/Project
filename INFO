@@ -5,16 +5,15 @@ Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm (Pro
 
 
 mbot script ist nur zum backup hier (muss beim upload gelöscht/entfernt werden)
-
 Zwischenserver muss irgendwo anders gehostet werden (oder irgendwie lokal)
 
 
-
+Ambiente Beleuchtung, wenn MBot steht (alle 5 Farben unterschiedlich senden)
 
 
 Style-Probleme:
 Überschrift erscheint zu hoch oben beim Starten
-Login & Register müssen zentriert werden (Problem bei .wrapper in form.css?)
+Login & Register müssen Vertical zentriert werden (Problem in form.css?)
 Firebase muss noch fertig eingebunden werden (firebase.js script)
 
 

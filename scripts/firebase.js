@@ -1,68 +1,68 @@
-//Firebase
+//import Firebase-Funktionen
 import {initializeApp} from "../librarys/firebase/firebase-app.js";
-import {getAuth} from "../librarys/firebase/firebase-auth.js";
-import {getDatabase} from "../librarys/firebase/firebase-database.js"
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from "../librarys/firebase/firebase-auth.js";
 
-//Analytics
+//import Firebase/Google-Analytics
 import { getAnalytics } from "../librarys/firebase/firebase-analytics.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDhmFz-jAoBpjQ4DkLx_Uz-uzi17Qr0j-0",
-    authDomain: "syp-group5-4ahinf.firebaseapp.com",
-    projectId: "syp-group5-4ahinf",
-    storageBucket: "syp-group5-4ahinf.appspot.com",
-    messagingSenderId: "224277553804",
-    appId: "1:224277553804:web:48b9aa869c407655cd91a9",
-    measurementId: "G-E7VRTLQQHE"
+    apiKey: "AIzaSyCuEMb5P46AJKw_poFaXjmJRz62FlFM1hM",
+    authDomain: "sypgroup5.firebaseapp.com",
+    projectId: "sypgroup5",
+    storageBucket: "sypgroup5.appspot.com",
+    messagingSenderId: "65548177393",
+    appId: "1:65548177393:web:31488286c5af20d1be7e50",
+    measurementId: "G-7DDBJX9VBT"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-//Initialize Authentication
-const auth = getAuth(app);
-
-//Initialize Database
-const database = getDatabase(app);
-
 //Initialize Analytics
 const analytics = getAnalytics(app);
 
-
-//Login
-function logInWithFirebase() {
-    let email = document.getElementById("email_log").value();
-    let password = document.getElementById("passw_log").value();
+// User einloggen & in Analytics aufnehmen
+export function logInWithFirebase(event) {
+    event.preventDefault();
+    let email = document.getElementById("email_log").value;
+    let password = document.getElementById("passw_log").value;
 
     if (email !== "" && password !== "") {
-        let result = auth./*HIER FUNKTION ZUM EINLOGEGEN AUFRUFEN*/(email, password);
+        signInWithEmailAndPassword(email, password)
+            .then(() => {
+                // Log successful login event
+                analytics.logEvent('login', { method: 'email' });
+            })
+            .catch(function (error) {
+                let errorCode = error.code;
+                let errorMessage = error.message;
 
-        result.catch(function (error) {
-            let errorCode = error.code;
-            let errorMessage = error.message;
-
-            document.getElementById("error1").text("Message: " + errorMessage + " Code: " + errorCode);
-        });
+                document.getElementById("error1").textContent = "Message: " + errorMessage + " Code: " + errorCode;
+            });
     } else {
-        document.getElementById("error1").text("Bitte alle Felder ausfüllen");
+        document.getElementById("error1").textContent = "Bitte alle Felder ausfüllen";
     }
 }
 
-//Register
-function registerWithFirebase() {
-    let email = document.getElementById("email_reg").value();
-    let password = document.getElementById("passw_reg").value();
+// User registrieren & in Analytics aufnehmen
+export function registerWithFirebase(event) {
+    event.preventDefault();
+    let email = document.getElementById("email_reg").value;
+    let password = document.getElementById("passw_reg").value;
 
     if (email !== "" && password !== "") {
-        let result = auth./*HIER FUNKTION ZUM REGISTRIEREN AUFRUFEN*/(email, password);
+        createUserWithEmailAndPassword(email, password)
+            .then(() => {
+                // Log successful registration event
+                analytics.logEvent('register', { method: 'email' });
+            })
+            .catch(function (error) {
+                let errorCode = error.code;
+                let errorMessage = error.message;
 
-        result.catch(function (error) {
-            let errorCode = error.code;
-            let errorMessage = error.message;
-
-            document.getElementById("error2").text("Message: " + errorMessage + " Code: " + errorCode);
-        });
+                document.getElementById("error2").textContent = "Message: " + errorMessage + " Code: " + errorCode;
+            });
     } else {
-        document.getElementById("error2").text("Bitte alle Felder ausfüllen");
+        document.getElementById("error2").textContent = "Bitte alle Felder ausfüllen";
     }
 }
