@@ -88,8 +88,15 @@ def onMessage(receivedMessage):
             left = data.get("links", 0)
             right = -data.get("rechts", 0)
 
-            # Rückleuchten & Ton entsprechend der Richtung (duplikate, weil delay beim Verarbeiten der Daten & dadurch kurz alles weiß)
-            if -left == right and left >= 0:
+            # Rückleuchten & Ton entsprechend der Richtung, wenn MBot stillsteht, dann Ambiente-Beleuchtung
+            # Duplikate, weil Delay beim Verarbeiten der Daten die Farben kurz auf weiß stellt
+            if -left == right and left == 0:
+                cyberpi.led.on(data.get("leftLED", 0), id=1)
+                cyberpi.led.on(data.get("leftMiddleLED", 0), id=2)
+                cyberpi.led.on(data.get("middleLED", 0), id=3)
+                cyberpi.led.on(data.get("rightMiddleLED", 0), id=4)
+                cyberpi.led.on(data.get("rightLED", 0), id=5)
+            elif -left == right and left > 0:
                 cyberpi.led.on(255, 0, 0, id=1)
                 cyberpi.led.on(255, 255, 255, id=2)
                 cyberpi.led.on(255, 255, 255, id=3)

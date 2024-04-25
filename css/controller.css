@@ -222,7 +222,7 @@ p {
     margin-top: 1rem;
     margin-left: 1rem;
 }
-.b1, .b2, .b3, .b4{
+.b1, .b2, .b3, .b4, .b5{
     margin-right: 1rem;
 }
 .colorb{
@@ -390,7 +390,7 @@ p {
     .bsm{
         margin-top: 2.5rem;
     }
-    .b1, .b2, .b3, .b4{
+    .b1, .b2, .b3, .b4, .b5{
         margin-right: 1rem;
     }
     .colorb{

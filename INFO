@@ -8,7 +8,7 @@ mbot script ist nur zum backup hier (muss beim upload gelöscht/entfernt werden)
 Zwischenserver muss irgendwo anders gehostet werden (oder irgendwie lokal)
 
 
-Ambiente Beleuchtung, wenn MBot steht (alle 5 Farben unterschiedlich senden)
+Ambiente Beleuchtung, öffnet sich bei jedem klick erneut (schließt sich nie)
 
 
 Style-Probleme:

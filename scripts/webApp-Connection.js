@@ -10,6 +10,13 @@ let mBotID = 999999999;
 //Variable für senden/Controller checken
 let initialized = false;
 
+//Variabldn für die MAbiente-Beleuchtung
+let linksLED = "";
+let linksMitteLED = "";
+let mitteLED = "";
+let rechtsMitteLED = "";
+let rechtsLED = "";
+
 //Controller-Trigger-Variablen
 let lineFollowerPressed = false;
 let suicidePreventionPressed = false;
@@ -82,7 +89,7 @@ socket.onerror = function (event) {
 }
 
 //Disconnected Funktion in Console schreiben
-function checkConnectionStatus() {
+async function checkConnectionStatus() {
     let state = "";
     let stateColor = "";
 
@@ -127,7 +134,7 @@ function checkConnectionStatus() {
 }
 
 //Alle MBots mit denen eine Verbindung hergestellt werden kann erhalten
-function getPossibleMBots() {
+async function getPossibleMBots() {
     try {
         if (Date.now() - lastExecutionTime >= duration) {
             socket.send("searchForMBots");
@@ -262,7 +269,7 @@ async function communicating() {
 }
 
 //Funktion für die Berechnungen des LineFollowers
-function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleRight, lightSensorRight) {
+async function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleRight, lightSensorRight) {
     try {
         if (lightSensorMiddleLeft !== "white" && lightSensorMiddleRight !== "white") {
             lineFollowerSpeedLeft = lineFollowerSpeed;
@@ -289,7 +296,7 @@ function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleR
 }
 
 //SuicidePrevention, sodass der MBot2 nicht gegen die Wand fährt & sich automatisch umdreht
-function suicidePrevention(distanceToObject) {
+async function suicidePrevention(distanceToObject) {
     try {
         if (distanceToObject < minDistanceToWall) {
             underMinDistanceToWall = true;
@@ -305,7 +312,7 @@ function suicidePrevention(distanceToObject) {
 let moveInterval;
 
 //Grafik-Bewegung beginnen
-function startMoving(element) {
+async function startMoving(element) {
     try {
         element.style.transform = "scale(1.3)";
         moveInterval = setInterval(function () {
@@ -317,7 +324,7 @@ function startMoving(element) {
 }
 
 //Grafik-Bewegung stoppen
-function stopMoving(element) {
+async function stopMoving(element) {
     try {
         element.style.transform = "scale(1)";
         clearInterval(moveInterval);
@@ -328,7 +335,7 @@ function stopMoving(element) {
 }
 
 //Überprüfen, ob der MBot2 fährt (Angezeigte Steuerelemente)
-function move(element) {
+async function move(element) {
     try {
         if (element.id === 'button-controll') {
             if (speed < 0) {
@@ -364,7 +371,7 @@ function move(element) {
 }
 
 //Überprüfen, ob der MBot2 stehen geblieben ist (Angezeigte Steuerelemente)
-function stopMove(element) {
+async function stopMove(element) {
     try {
         if (element.id === 'button-controll') {
             speed = 0;
@@ -423,7 +430,7 @@ document.addEventListener('keyup', (event) => {
 });
 
 //Auf Tasten reagieren
-function handleKeys() {
+async function handleKeys() {
     try {
         let keyPressed = false;
         // Check key state and update speed accordingly
@@ -478,7 +485,7 @@ window.addEventListener("gamepadconnected", () => console.log("Controller connec
 window.addEventListener("gamepaddisconnect", () => console.log("Controller disconnected"));
 
 //Überprüfen, ob Controller (PS & XBOX) zur Steuerung des MBot2 verwendet wird
-function checkGamepadInput() {
+async function checkGamepadInput() {
     try {
         //Alle Gamepads erhalten
         const gamepads = navigator.getGamepads();
@@ -592,7 +599,12 @@ async function sendToMBot2() {
         //JSON für MBot (Motorengeschwindigkeit)
         const data = {
             links: left,
-            rechts: right
+            rechts: right,
+            leftLED: linksLED,
+            leftMiddleLED: linksMitteLED,
+            middleLED: mitteLED,
+            rightMiddleLED: rechtsMitteLED,
+            rightLED: rechtsLED
         }
         //Daten durch WebSocket über Server an MBot2 senden
         const json = JSON.stringify(data);
@@ -601,6 +613,24 @@ async function sendToMBot2() {
     } catch (error) {
         console.error(`Error while sending Commands to TCP-Server: ${error}`);
     }
+}
+
+//Funktion um die Farben Ambiente-Beleuchtung einzustellen
+async function ambientColorPicker(id,) {
+    AColorPicker.from('#' + id)
+        .on('change', (picker, color) => {
+            if(id === "leftLED") {
+                linksLED = color;
+            } else if (id === "leftMiddleLED") {
+                linksMitteLED = color;
+            } else if (id === "middleLED") {
+                mitteLED = color;
+            } else if (id === "rightMiddleLED") {
+                rechtsMitteLED = color;
+            } else if (id === "rightLED") {
+                rechtsLED = color;
+            }
+        });
 }
 
 //Funktion um schon einmal verbundene MBots anzuzeigen
@@ -635,7 +665,7 @@ async function connectToFormerMBot() {
 }
 
 //Funktion zum Trennen von bereits verbundenen MBots
-function deleteFormerMBot() {
+async function deleteFormerMBot() {
     disconnectFromMBot2();
     formerConnectedMBots = formerConnectedMBots.filter(item => item !== formerConnectedMBots[mBotID]);
 }
@@ -662,7 +692,7 @@ async function connectToMBot2() {
 }
 
 //Von MBot2 trennen
-function disconnectFromMBot2() {
+async function disconnectFromMBot2() {
     try {
         const connectedListelement = document.getElementById(mBotID);
         connectedListelement.classList.remove("connected");
@@ -681,7 +711,7 @@ function disconnectFromMBot2() {
 }
 
 //Wenn Client WebApp verlässt/zumacht, dann Verbindung beenden
-window.addEventListener("beforeunload", function () {
+window.addEventListener("beforeunload", async function () {
     try {
         socket.send("Close");
         socket.close();
