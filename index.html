@@ -35,10 +35,6 @@
         <!-- 3D Model Viewer -->
         <script type="module" src="./scripts/modelViewer.js"></script>
 
-        <!-- ColorPicker -->
-        <script src="./librarys/acolorpicker/acolorpicker.min.js"></script>
-        <script src="./librarys/acolorpicker/acolorpicker.min.css"></script>
-
         <!-- Search for MBots -->
         <script>
             window.onload = function() {
@@ -115,11 +111,11 @@
                 <div class="lineFolowerContainer lf">
                     <p class="settings-p lfrf lft">Ambiente-Beleuchtung: </p>
                     <div class="colorbuttons">
-                        <button id="leftLED" onclick="ambientColorPicker(this.id)" class="colorb b1"></button>
-                        <button id="leftMiddleLED" onclick="ambientColorPicker(this.id)" class="colorb b2"></button>
-                        <button id="middleLED" onclick="ambientColorPicker(this.id)" class="colorb b3"></button>
-                        <button id="rightMiddleLED" onclick="ambientColorPicker(this.id)" class="colorb b4"></button>
-                        <button id="rightLED" onclick="ambientColorPicker(this.id)" class="colorb b5"></button>
+                        <input type="color" id="leftLED" onchange="ambientColorPicker(this.id)">
+                        <input type="color" id="leftMiddleLED" onchange="ambientColorPicker(this.id)">
+                        <input type="color" id="middleLED" onchange="ambientColorPicker(this.id)">
+                        <input type="color" id="rightMiddleLED" onchange="ambientColorPicker(this.id)">
+                        <input type="color" id="rightLED" onchange="ambientColorPicker(this.id)">
                     </div>
                 </div>
             </div>

@@ -3,7 +3,7 @@ import {initializeApp} from "../librarys/firebase/firebase-app.js";
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from "../librarys/firebase/firebase-auth.js";
 
 //import Firebase/Google-Analytics
-import { getAnalytics } from "../librarys/firebase/firebase-analytics.js";
+import {getAnalytics, initializeAnalytics} from "../librarys/firebase/firebase-analytics.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCuEMb5P46AJKw_poFaXjmJRz62FlFM1hM",
@@ -19,7 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 //Initialize Analytics
-const analytics = getAnalytics(app);
+const analytics = initializeAnalytics(app);
 
 // User einloggen & in Analytics aufnehmen
 export function logInWithFirebase(event) {
@@ -31,7 +31,7 @@ export function logInWithFirebase(event) {
         signInWithEmailAndPassword(email, password)
             .then(() => {
                 // Log successful login event
-                analytics.logEvent('login', { method: 'email' });
+                analytics.logEvent('login', {method: 'email'});
             })
             .catch(function (error) {
                 let errorCode = error.code;
@@ -54,7 +54,7 @@ export function registerWithFirebase(event) {
         createUserWithEmailAndPassword(email, password)
             .then(() => {
                 // Log successful registration event
-                analytics.logEvent('register', { method: 'email' });
+                analytics.logEvent('register', {method: 'email'});
             })
             .catch(function (error) {
                 let errorCode = error.code;

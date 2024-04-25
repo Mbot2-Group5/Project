@@ -174,7 +174,7 @@ socket.onmessage = async function (event) {
             //Überprüfen, ob der LineFollower eingeschalten ist (wenn ja, Daten verarbeiten)
             if (document.getElementById("lineFollower").checked) {
                 lineFollower(data.rgbSensorLeft, data.rgbSensorMiddleLeft, data.rgbSensorMiddleRight, data.rgbSensorRight);
-            } else if(lineFollowerSpeedLeft !== 0 || lineFollowerSpeedRight !== 0) {
+            } else if (lineFollowerSpeedLeft !== 0 || lineFollowerSpeedRight !== 0) {
                 left = 0;
                 right = 0;
                 lineFollowerSpeedLeft = 0;
@@ -275,11 +275,11 @@ async function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorM
             lineFollowerSpeedLeft = lineFollowerSpeed;
             lineFollowerSpeedRight = lineFollowerSpeed;
         } else if (lightSensorMiddleLeft !== "white" && lightSensorMiddleRight === "white") {
-            lineFollowerSpeedLeft = - lineFollowerCurveSpeed;
+            lineFollowerSpeedLeft = -lineFollowerCurveSpeed;
             lineFollowerSpeedRight = lineFollowerCurveSpeed;
         } else if (lightSensorMiddleLeft === "white" && lightSensorMiddleRight !== "white") {
             lineFollowerSpeedLeft = lineFollowerCurveSpeed;
-            lineFollowerSpeedRight = - lineFollowerCurveSpeed;
+            lineFollowerSpeedRight = -lineFollowerCurveSpeed;
         } else if (lightSensorMiddleLeft === "white" && lightSensorMiddleRight === "white") {
             lineFollowerSpeedLeft = -lineFollowerSpeed;
             lineFollowerSpeedRight = -lineFollowerSpeed;
@@ -508,10 +508,10 @@ async function checkGamepadInput() {
                     left = -Math.round((leftRaw - -1) * (maxForwardSpeed - maxReverseSpeed) / (1 - -1) + maxReverseSpeed);
                     right = -Math.round((rightRaw - -1) * (maxForwardSpeed - maxReverseSpeed) / (1 - -1) + maxReverseSpeed);
 
-                    if(left === -0) {
+                    if (left === -0) {
                         left = 0;
                     }
-                    if(right === -0 ) {
+                    if (right === -0) {
                         right = 0;
                     }
 
@@ -583,7 +583,7 @@ async function sendToMBot2() {
         }
 
         //SuicidePrevention activated
-        if(suicidePreventionActive) {
+        if (suicidePreventionActive) {
             left = 0;
             right = 0;
             suicidePreventionActive = false;
@@ -616,21 +616,28 @@ async function sendToMBot2() {
 }
 
 //Funktion um die Farben Ambiente-Beleuchtung einzustellen
-async function ambientColorPicker(id,) {
-    AColorPicker.from('#' + id)
-        .on('change', (picker, color) => {
-            if(id === "leftLED") {
-                linksLED = color;
-            } else if (id === "leftMiddleLED") {
-                linksMitteLED = color;
-            } else if (id === "middleLED") {
-                mitteLED = color;
-            } else if (id === "rightMiddleLED") {
-                rechtsMitteLED = color;
-            } else if (id === "rightLED") {
-                rechtsLED = color;
-            }
-        });
+async function ambientColorPicker(id) {
+    const colorPicker = document.getElementById(id);
+    const color = getRGBValues(colorPicker.value);
+
+    if (id === "leftLED") {
+        linksLED = color;
+    } else if (id === "leftMiddleLED") {
+        linksMitteLED = color;
+    } else if (id === "middleLED") {
+        mitteLED = color;
+    } else if (id === "rightMiddleLED") {
+        rechtsMitteLED = color;
+    } else if (id === "rightLED") {
+        rechtsLED = color;
+    }
+}
+
+//Funktion um den RGB-Wert für die Ambiente-Beleuchtung zu berechnen
+function getRGBValues(color) {
+    const hex = color.substring(1);
+    const bigint = parseInt(hex, 16);
+    return `(${(bigint >> 16) & 255}, ${(bigint >> 8) & 255}, ${bigint & 255})`;
 }
 
 //Funktion um schon einmal verbundene MBots anzuzeigen
