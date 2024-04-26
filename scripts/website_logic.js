@@ -1,4 +1,4 @@
-const iconClose = document.querySelector('.icon-close');
+let iconClose = document.querySelector('.icon-close');
 const acceptTerms = document.querySelector('.acceptTerms');
 const buttonLogin = document.querySelector('#login');
 const buttonRegister = document.querySelector('#register');

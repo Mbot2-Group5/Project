@@ -1,11 +1,12 @@
 # Autor: Stefan Rautner
 
-#imports
-import time
 import json
-import usocket
-import network
+# imports
+import time
+
 import cyberpi
+import network
+import usocket
 
 # Variablen definieren
 UDP_socket = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM)
@@ -148,10 +149,14 @@ def onMessage(receivedMessage):
 def sendMessage():
     try:
         response_data = {
-            "gyroscopePitch": cyberpi.get_pitch(),  # Daten des Gyrosensors (Vorwärts & Rückwärts), x-Achse
-            "gyroscopeYaw": cyberpi.get_yaw(),  # Daten des Gyrosensors (Links & Rechts), y-Achse
-            "gyroscopeRoll": cyberpi.get_roll(),  # Daten des Gyroscopesensors (Oben & Unten), z-Achse
-            "accelerometer": cyberpi.get_acc("y"),  # Daten des Beschleunigungsmessers
+            # Daten des Gyrosensors (Vorwärts & Rückwärts), x-Achse
+            "gyroscopePitch": cyberpi.get_pitch(),
+            # Daten des Gyrosensors (Links & Rechts), y-Achse
+            "gyroscopeYaw": cyberpi.get_yaw(),
+            # Daten des Gyroscopesensors (Oben & Unten), z-Achse
+            "gyroscopeRoll": cyberpi.get_roll(),
+            # Daten des Beschleunigungsmessers
+            "accelerometer": cyberpi.get_acc("y"),
             # Daten des RGB-Sensors(Lichtsensors), Links
             "rgbSensorLeft": cyberpi.quad_rgb_sensor.get_color_sta(4, index=1),
             # Daten des RGB-Sensors(Lichtsensors), Mitte Links
@@ -160,7 +165,8 @@ def sendMessage():
             "rgbSensorMiddleRight": cyberpi.quad_rgb_sensor.get_color_sta(2, index=1),
             # Daten des RGB-Sensors(Lichtsensors), Rechts
             "rgbSensorRight": cyberpi.quad_rgb_sensor.get_color_sta(1, index=1),
-            "ultrasonicSensor": cyberpi.ultrasonic2.get(index=1)  # Daten des Ultraschallsensors
+            # Daten des Ultraschallsensors
+            "ultrasonicSensor": cyberpi.ultrasonic2.get(index=1)
         }
         return json.dumps(response_data)
     except Exception as ex:
