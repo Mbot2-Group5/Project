@@ -10,12 +10,12 @@ let mBotID = 999999999;
 //Variable für senden/Controller checken
 let initialized = false;
 
-//Variabldn für die MAbiente-Beleuchtung
-let linksLED = "";
-let linksMitteLED = "";
-let mitteLED = "";
-let rechtsMitteLED = "";
-let rechtsLED = "";
+//Variablen für die Ambiente-Beleuchtung
+let linksLED = "ffffff";
+let linksMitteLED = "ffffff";
+let mitteLED = "ffffff";
+let rechtsMitteLED = "ffffff";
+let rechtsLED = "ffffff";
 
 //Controller-Trigger-Variablen
 let lineFollowerPressed = false;
@@ -618,7 +618,7 @@ async function sendToMBot2() {
 //Funktion um die Farben Ambiente-Beleuchtung einzustellen
 async function ambientColorPicker(id) {
     const colorPicker = document.getElementById(id);
-    const color = getRGBValues(colorPicker.value);
+    const color = colorPicker.value.substring(1);
 
     if (id === "leftLED") {
         linksLED = color;
@@ -631,13 +631,6 @@ async function ambientColorPicker(id) {
     } else if (id === "rightLED") {
         rechtsLED = color;
     }
-}
-
-//Funktion um den RGB-Wert für die Ambiente-Beleuchtung zu berechnen
-function getRGBValues(color) {
-    const hex = color.substring(1);
-    const bigint = parseInt(hex, 16);
-    return `(${(bigint >> 16) & 255}, ${(bigint >> 8) & 255}, ${bigint & 255})`;
 }
 
 //Funktion um schon einmal verbundene MBots anzuzeigen
