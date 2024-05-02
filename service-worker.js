@@ -54,17 +54,12 @@ const versionDocuments = [
     /* Skripte */
     './scripts/about.js',
     './scripts/connection.js',
-    './scripts/firebase.js',
-    './scripts/login_button.js',
     './scripts/modelViewer.js',
-    './scripts/register.js',
     './scripts/website_logic.js',
     /* Connection to WebSocket-Sever (MBot2) */
     './scripts/webApp-Connection.js',
     /* HTML Dokumente */
     './index.html',
-    './login.html',
-    './register.html',
     './start.html',
     /* Service-Worker & Manifest */
     './service-worker.js',

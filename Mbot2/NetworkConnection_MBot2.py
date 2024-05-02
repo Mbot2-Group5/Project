@@ -89,27 +89,35 @@ def onMessage(receivedMessage):
             left = data.get("links", 0)
             right = -data.get("rechts", 0)
 
-            leftLED = data.get("leftLED", 0)
-            middleLeftLED = data.get("middleRightLED", 0)
-            middleLED = data.get("middleLED", 0)
-            middleRightLED = data.get("middleLeftLED", 0)
-            rightLED = data.get("rightLED", 0)
+            leftLED = data.get("leftLED", "000000")
+            middleLeftLED = data.get("leftMiddleLED", "000000")
+            middleLED = data.get("middleLED", "000000")
+            middleRightLED = data.get("rightMiddleLED", "000000")
+            rightLED = data.get("rightLED", "000000")
+
+            suicidePrevention = data.get("suicidePrevention", False)
+
+            # SuicidePrevention
+            if suicidePrevention:
+                left = 0
+                right = 0
+                cyberpi.mbot2.drive_power(left, right)
 
             # Rückleuchten & Ton entsprechend der Richtung, wenn MBot stillsteht, dann Ambiente-Beleuchtung
             # Duplikate, weil Delay beim Verarbeiten der Daten die Farben kurz auf weiß stellt
-            if -left == right and left == 0:
-                cyberpi.led.on("0x" + leftLED[:2], "0x" + leftLED[2:4], "0x" + leftLED[:4], id=1)
-                cyberpi.led.on("0x" + middleLeftLED[:2], "0x" + middleLeftLED[2:4], "0x" + middleLeftLED[:4], id=2)
-                cyberpi.led.on("0x" + middleLED[:2], "0x" + middleLED[2:4], "0x" + middleLED[:4], id=3)
-                cyberpi.led.on("0x" + middleRightLED[:2], "0x" + middleRightLED[2:4], "0x" + middleRightLED[:4], id=4)
-                cyberpi.led.on("0x" + rightLED[:2], "0x" + rightLED[2:4], "0x" + rightLED[:4], id=5)
-            elif -left == right and left > 0:
+            if left == -right and left == 0:
+                cyberpi.led.on(int("0x" + leftLED[:2], 16), int("0x" + leftLED[2:4], 16), int("0x" + leftLED[4:6], 16), id=1)
+                cyberpi.led.on(int("0x" + middleLeftLED[:2], 16), int("0x" + middleLeftLED[2:4], 16), int("0x" + middleLeftLED[:4], 16), id=2)
+                cyberpi.led.on(int("0x" + middleLED[:2], 16), int("0x" + middleLED[2:4], 16), int("0x" + middleLED[4:6], 16), id=3)
+                cyberpi.led.on(int("0x" + middleRightLED[:2], 16), int("0x" + middleRightLED[2:4], 16), int("0x" + middleRightLED[4:6], 16), id=4)
+                cyberpi.led.on(int("0x" + rightLED[:2], 16), int("0x" + rightLED[2:4], 16), int("0x" + rightLED[4:6], ), id=5)
+            elif left == -right and left > 0:
                 cyberpi.led.on(255, 0, 0, id=1)
                 cyberpi.led.on(255, 255, 255, id=2)
                 cyberpi.led.on(255, 255, 255, id=3)
                 cyberpi.led.on(255, 255, 255, id=4)
                 cyberpi.led.on(255, 0, 0, id=5)
-            elif -left == right and left < 0:
+            elif left == -right and left < 0:
                 cyberpi.led.on(255, 255, 255, id=1)
                 cyberpi.led.on(255, 0, 0, id=2)
                 cyberpi.led.on(255, 0, 0, id=3)
@@ -117,7 +125,7 @@ def onMessage(receivedMessage):
                 cyberpi.led.on(255, 255, 255, id=5)
                 cyberpi.audio.add_vol(100)
                 cyberpi.audio.play_tone(1000, 0.3)
-            elif -left != right and -left < right:
+            elif left != -right and left > -right:
                 cyberpi.led.on(255, 0, 0, id=1)
                 cyberpi.led.on(255, 255, 255, id=2)
                 cyberpi.led.on(255, 255, 255, id=3)
@@ -125,7 +133,7 @@ def onMessage(receivedMessage):
                 cyberpi.led.on(255, 255, 0, id=5)
                 time.sleep(0.05)
                 cyberpi.led.off(id=5)
-            elif -left != right and right < -left:
+            elif left != -right and right < -left:
                 cyberpi.led.on(255, 255, 0, id=1)
                 cyberpi.led.on(255, 255, 255, id=2)
                 cyberpi.led.on(255, 255, 255, id=3)
@@ -211,21 +219,18 @@ try:
         # Nachricht empfangen
         try:
             message = TCP_socket.recv(4096).decode('utf-8')
-            length = len(message)
-            if 22 <= length <= 28:
-                closed = onMessage(message)
-                cyberpi.console.clear()
-                cyberpi.console.print("Message received from WebApp")
+            closed = onMessage(message)
+            cyberpi.console.clear()
+            cyberpi.console.print("Message received from WebApp")
         except OSError:
             cyberpi.console.clear()
             cyberpi.console.print("No message received")
 
         # Überprüfen ob Verbindung getrennt wurde
         if closed:
-            TCP_socket.close()
+            TCP_socket.shutdown(usocket.SHUT_RDWR)
             cyberpi.console.clear()
             cyberpi.console.print("Disconnected")
-            TCP_socket.shutdown(usocket.SHUT_RDWR)
             break
 
         # Antwort senden

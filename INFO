@@ -1,4 +1,4 @@
-Geschwindigkeiten für SuicidePrevention & LineFollower noch anpassen (Zeilen 18, 21 & 22 in webApp-Connection.js)
+Geschwindigkeiten für SuicidePrevention & LineFollower noch anpassen (Zeilen 26, 30 & 31 in webApp-Connection.js)
 
 Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm (Problem in MBot Script, aber warum?)
 
@@ -7,16 +7,11 @@ Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm (Pro
 MBot script & Zwischenserver sind nur für Testzwecke hier!!!
 Zwischenserver muss noch irgendwie irgendwo gehostet werden
 
-Firebase muss noch fertig eingebunden werden (firebase.js script)
-
 
 
 Style-Probleme:
 Überschrift erscheint zu hoch oben beim Starten
-Login & Register müssen Vertical zentriert werden (Problem in form.css?)
 Ambiente Beleuchtung stylen
-
-
 
 Info für Haas zum stylen der MBots in den Listen:
 klassen VERBUNDENER MBots:

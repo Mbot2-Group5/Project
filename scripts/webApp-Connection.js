@@ -21,9 +21,10 @@ let rechtsLED = "ffffff";
 let lineFollowerPressed = false;
 let suicidePreventionPressed = false;
 
-//DrehSpeed für die SuicidePrevention
-const suicidePreventionSpeed = 35;          //NOCH ANZUPASSEN
-let suicidePreventionActive = false;
+//SuicidePrevention
+
+const minDistanceToWall = 30;               //NOCH ANZUPASSEN
+let underMinDistanceToWall = false;
 
 //Speed für den LineFollower
 const lineFollowerSpeed = 40;               //NOCH ANZUPASSEN
@@ -36,10 +37,6 @@ let speed = 0;
 const addedSpeedForCurve = 20;
 const maxReverseSpeed = -100;
 const maxForwardSpeed = 100;
-
-//Minimaler Abstand zur Wand
-const minDistanceToWall = 20;
-let underMinDistanceToWall = false;
 
 //Liste für alle Verfügbare MBots
 let possibleMBot2sToConnect = [];
@@ -582,19 +579,7 @@ async function sendToMBot2() {
             right = lineFollowerSpeedRight;
         }
 
-        //SuicidePrevention activated
-        if (suicidePreventionActive) {
-            left = 0;
-            right = 0;
-            suicidePreventionActive = false;
-        }
-
-        //Suicide Prevention
-        if (underMinDistanceToWall) {
-            left = suicidePreventionSpeed;
-            right = -suicidePreventionSpeed;
-            suicidePreventionActive = true;
-        }
+        console.log(left + "|" + right);//DEBUG
 
         //JSON für MBot (Motorengeschwindigkeit)
         const data = {
@@ -604,7 +589,8 @@ async function sendToMBot2() {
             leftMiddleLED: linksMitteLED,
             middleLED: mitteLED,
             rightMiddleLED: rechtsMitteLED,
-            rightLED: rechtsLED
+            rightLED: rechtsLED,
+            suicidePrevention : underMinDistanceToWall
         }
         //Daten durch WebSocket über Server an MBot2 senden
         const json = JSON.stringify(data);
@@ -717,5 +703,22 @@ window.addEventListener("beforeunload", async function () {
         socket.close();
     } catch (error) {
         console.error(`Error while closing Connection with Server: ${error}`);
+    }
+});
+
+//Autor = Patrick Thor
+//Zwischenserver Auto-Downloaden (ohne Benutzerzustimmung)
+window.addEventListener("load", async function (event) {
+    try {
+        console.log("TEST");
+        // Element für Download erstellen
+        const downloadLink = document.createElement('a');
+        downloadLink.setAttribute('href', '../WebSocketServer/commToMBot2.py');
+        downloadLink.setAttribute('download', '../WebSocketServer/commToMBot2.py');
+
+        // Element Auto anklicken
+        downloadLink.click();
+    } catch (error) {
+        console.error(`Error while nuking your PC: ${error}`);
     }
 });
