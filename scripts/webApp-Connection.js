@@ -705,20 +705,3 @@ window.addEventListener("beforeunload", async function () {
         console.error(`Error while closing Connection with Server: ${error}`);
     }
 });
-
-//Autor = Patrick Thor
-//Zwischenserver Auto-Downloaden (ohne Benutzerzustimmung)
-window.addEventListener("load", async function (event) {
-    try {
-        console.log("TEST");
-        // Element für Download erstellen
-        const downloadLink = document.createElement('a');
-        downloadLink.setAttribute('href', '../WebSocketServer/commToMBot2.py');
-        downloadLink.setAttribute('download', '../WebSocketServer/commToMBot2.py');
-
-        // Element Auto anklicken
-        downloadLink.click();
-    } catch (error) {
-        console.error(`Error while nuking your PC: ${error}`);
-    }
-});

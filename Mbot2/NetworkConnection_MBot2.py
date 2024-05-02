@@ -1,9 +1,8 @@
 # Autor: Stefan Rautner
 
-import json
 # imports
+import json
 import time
-
 import cyberpi
 import network
 import usocket
@@ -79,7 +78,6 @@ except Exception as e:
 def onMessage(receivedMessage):
     try:
         if receivedMessage == "Disconnect":
-            TCP_socket.close()
             return True
         else:
             # Nachricht verarbeiten
@@ -101,23 +99,20 @@ def onMessage(receivedMessage):
             if suicidePrevention:
                 left = 0
                 right = 0
-                cyberpi.mbot2.drive_power(left, right)
 
-            # Rückleuchten & Ton entsprechend der Richtung, wenn MBot stillsteht, dann Ambiente-Beleuchtung
-            # Duplikate, weil Delay beim Verarbeiten der Daten die Farben kurz auf weiß stellt
-            if left == -right and left == 0:
-                cyberpi.led.on(int("0x" + leftLED[:2], 16), int("0x" + leftLED[2:4], 16), int("0x" + leftLED[4:6], 16), id=1)
-                cyberpi.led.on(int("0x" + middleLeftLED[:2], 16), int("0x" + middleLeftLED[2:4], 16), int("0x" + middleLeftLED[:4], 16), id=2)
-                cyberpi.led.on(int("0x" + middleLED[:2], 16), int("0x" + middleLED[2:4], 16), int("0x" + middleLED[4:6], 16), id=3)
-                cyberpi.led.on(int("0x" + middleRightLED[:2], 16), int("0x" + middleRightLED[2:4], 16), int("0x" + middleRightLED[4:6], 16), id=4)
-                cyberpi.led.on(int("0x" + rightLED[:2], 16), int("0x" + rightLED[2:4], 16), int("0x" + rightLED[4:6], ), id=5)
-            elif left == -right and left > 0:
+            # Motoren Geschwindigkeit setzen
+            cyberpi.mbot2.drive_power(left, right)
+
+            # Farben der Heckleuchte setzen
+            if left == -right and left > 0:
+                # Vorwärts fahren
                 cyberpi.led.on(255, 0, 0, id=1)
                 cyberpi.led.on(255, 255, 255, id=2)
                 cyberpi.led.on(255, 255, 255, id=3)
                 cyberpi.led.on(255, 255, 255, id=4)
                 cyberpi.led.on(255, 0, 0, id=5)
             elif left == -right and left < 0:
+                # Rückwärts fahren
                 cyberpi.led.on(255, 255, 255, id=1)
                 cyberpi.led.on(255, 0, 0, id=2)
                 cyberpi.led.on(255, 0, 0, id=3)
@@ -126,6 +121,7 @@ def onMessage(receivedMessage):
                 cyberpi.audio.add_vol(100)
                 cyberpi.audio.play_tone(1000, 0.3)
             elif left != -right and left > -right:
+                # Rechts blinken
                 cyberpi.led.on(255, 0, 0, id=1)
                 cyberpi.led.on(255, 255, 255, id=2)
                 cyberpi.led.on(255, 255, 255, id=3)
@@ -134,6 +130,7 @@ def onMessage(receivedMessage):
                 time.sleep(0.05)
                 cyberpi.led.off(id=5)
             elif left != -right and right < -left:
+                # Links blinken
                 cyberpi.led.on(255, 255, 0, id=1)
                 cyberpi.led.on(255, 255, 255, id=2)
                 cyberpi.led.on(255, 255, 255, id=3)
@@ -141,9 +138,18 @@ def onMessage(receivedMessage):
                 cyberpi.led.on(255, 0, 0, id=5)
                 time.sleep(0.05)
                 cyberpi.led.off(id=1)
-
-            # Motoren Geschwindigkeit setzen
-            cyberpi.mbot2.drive_power(left, right)
+            elif left == -right and left == 0:
+                # Ambiente Beleuchtung
+                cyberpi.led.on(int("0x" + leftLED[:2], 16), int("0x" + leftLED[2:4], 16), int("0x" + leftLED[4:6], 16),
+                               id=1)
+                cyberpi.led.on(int("0x" + middleLeftLED[:2], 16), int("0x" + middleLeftLED[2:4], 16),
+                               int("0x" + middleLeftLED[:4], 16), id=2)
+                cyberpi.led.on(int("0x" + middleLED[:2], 16), int("0x" + middleLED[2:4], 16),
+                               int("0x" + middleLED[4:6], 16), id=3)
+                cyberpi.led.on(int("0x" + middleRightLED[:2], 16), int("0x" + middleRightLED[2:4], 16),
+                               int("0x" + middleRightLED[4:6], 16), id=4)
+                cyberpi.led.on(int("0x" + rightLED[:2], 16), int("0x" + rightLED[2:4], 16), int("0x" + rightLED[4:6], ),
+                               id=5)
     except Exception as ex:
         cyberpi.console.clear()
         cyberpi.console.print("Error at processing Data from Client: " + str(ex))
@@ -231,6 +237,7 @@ try:
             TCP_socket.shutdown(usocket.SHUT_RDWR)
             cyberpi.console.clear()
             cyberpi.console.print("Disconnected")
+            cyberpi.led.on(0, 0, 0)
             break
 
         # Antwort senden
@@ -244,14 +251,8 @@ try:
             cyberpi.console.clear()
             cyberpi.console.print("Error at sending message " + str(e))
             cyberpi.led.on(255, 0, 0)
-
-        # Timeout um jede millisekunde auf eingehende Nachrichten zu überprüfen & die Sensordaten zu senden
-        time.sleep(0.001)
 except Exception as e:
     cyberpi.console.clear()
     cyberpi.console.print("Error at sending/receiving a message: " + str(e))
     cyberpi.led.on(255, 0, 0)
     time.sleep(5)
-
-# TCP-Socket schließen
-TCP_socket.close()

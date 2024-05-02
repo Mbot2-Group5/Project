@@ -1,5 +1,29 @@
 # Autor: Stefan Rautner
 
+import os
+import sys
+
+# Benötigte Packages installieren
+def install_packages(packages):
+    for package in packages:
+        os.system(f"{sys.executable} -m pip install {package}")
+
+# List of required modules
+required_modules = ['socket', 'websockets', 'asyncio', 'time', 'json']
+
+# Install each module if not already installed
+for module in required_modules:
+    try:
+        __import__(module)
+    except ImportError:
+        print(f"Installing {module}...")
+        install_packages([module])
+        print(f"{module} installed successfully!")
+
+# Now you can proceed with the execution of your script
+
+
+
 # imports
 import socket
 import websockets
@@ -115,6 +139,7 @@ async def sendDataToMBot2FromWebApp(websocket):
 
 
 async def main():
+    print("Server reading and listening")
     async with websockets.serve(sendDataToMBot2FromWebApp, "localhost", 5431):
         await asyncio.Future()
 
