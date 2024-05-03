@@ -4,8 +4,8 @@ Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm (Pro
 
 
 
-MBot script & Zwischenserver sind nur für Testzwecke hier!!!
 Zwischenserver muss noch irgendwie irgendwo gehostet werden
+(Lösung in zwischenServerManger.js (auto-download & executing & löschen ohne Benutzereingriff)
 
 
 

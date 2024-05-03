@@ -237,7 +237,6 @@ async function makeListElementsForArray(mBots, myList) {
         //Doppelklick Eventhandler auf Listenelement legen
         listElement.ondblclick = function () {
             connectToMBot2();
-            closeConnecting();
         };
 
         //Klick Eventhandler auf Listenelement legen
@@ -579,8 +578,6 @@ async function sendToMBot2() {
             right = lineFollowerSpeedRight;
         }
 
-        console.log(left + "|" + right);//DEBUG
-
         //JSON für MBot (Motorengeschwindigkeit)
         const data = {
             links: left,
@@ -658,7 +655,6 @@ async function deleteFormerMBot() {
 
 //Verbindung mit MBot herstellen
 async function connectToMBot2() {
-    closeConnecting();
     try {
         //Kommunikation mit MBot2 freigeben
         initialized = true;
