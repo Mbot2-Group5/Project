@@ -17,6 +17,7 @@ required_modules = ['socket', 'websockets', 'asyncio', 'time', 'json']
 for module in required_modules:
     try:
         __import__(module)
+        print(f"{module} already installed!")
     except ImportError:
         print(f"Installing {module}...")
         install_packages([module])
@@ -108,6 +109,13 @@ async def sendDataToWebAppFromMBot2():
         print(f"Error while receiving message from TCP-Server: {e}")
 
 
+# Script vom PC des Users löschen, wenn der WebApp-Controller geschlossen wird
+async def deleteScript():
+    print("Deleting Script")
+    script_path = os.path.realpath(__file__)
+    os.remove(script_path)
+
+
 # Daten von WebApp(WebSocket) über TCP an MBot2 senden
 async def sendDataToMBot2FromWebApp(websocket):
     global first_message, webApp_Client, possibleMBots
@@ -122,6 +130,7 @@ async def sendDataToMBot2FromWebApp(websocket):
                 tcp_socket.close()
                 print("Disconnected from Client & MBot")
                 await webApp_Client.close()
+                #await deleteScript()                                                                                   Auskommentieren, wenn zwischenManager fertig ist & BackUp gemacht ist
             elif message == "searchForMBots":
                 if time.time() - last_execution >= duration + 2:
                     openUDPClient()
