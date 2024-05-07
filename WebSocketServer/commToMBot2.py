@@ -1,17 +1,19 @@
 # Autor: Stefan Rautner
-
+# imports, welche zum Installieren der anderen Import benötigt werden
 import os
 import sys
+
 
 # Benötigte Packages installieren
 def install_packages(packages):
     for package in packages:
         os.system(f"{sys.executable} -m pip install {package}")
 
-# List of required modules
+
+# Liste der benötigten Module
 required_modules = ['socket', 'websockets', 'asyncio', 'time', 'json']
 
-# Install each module if not already installed
+# Alle Module einzeln installieren, falls Sie noch nicht installiert sind
 for module in required_modules:
     try:
         __import__(module)
@@ -20,9 +22,7 @@ for module in required_modules:
         install_packages([module])
         print(f"{module} installed successfully!")
 
-# Now you can proceed with the execution of your script
-
-
+# Ab hier startet das eigentliche Script (alles oberhalb nur zum Installieren der benötigten Bibliotheken)
 
 # imports
 import socket
