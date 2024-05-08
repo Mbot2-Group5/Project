@@ -1,5 +1,7 @@
 Geschwindigkeit für LineFollower noch anpassen (Zeilen 30 & 31 in webApp-Connection.js)
-Abstand/Latenz wegen SuicidePrevention noch ändern (Hängt imit Latenz zusammen) (Zeile 26 in webapp-Connection.js)
+Abstand/Latenz wegen SuicidePrevention noch ändern (Zeile 26 in webapp-Connection.js)
+
+
 
 Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm (Problem in MBot Script, aber warum?)
 
@@ -14,10 +16,11 @@ Charts (Frontend wird nur geupdated, wenn Devtools geöffnet oder geschlossen we
 
 
 
-Style-Probleme:
+Style-Probleme(HAAS):
 Überschrift erscheint zu hoch oben beim Starten
 Stylen der Charts
 Stylen der Controls (weiter unten)
+Stylen der großen MBot-Auswahl (zu weit links)
 
 Infos für Style der MBot-Listen:
 klassen VERBUNDENER MBots:
@@ -25,4 +28,4 @@ connected
 connection-li
 
 Klassen NICHT VERBUNDENER MBots:
-connection-liy
+connection-li

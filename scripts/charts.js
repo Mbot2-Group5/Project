@@ -1,16 +1,13 @@
-// Labels (der x-Achse) setzen
-const labels = ['-5', '-4', '-3', '-2', '-1', '0'];
-
 /* Geschwindigkeit-CHART*/
 
 //Daten in den Beschleunigungs-Chart einfügen
 const dataBeschleunigung = {
-    labels: labels,
+    labels: ['-5', '-4', '-3', '-2', '-1', '0'],
     datasets: [{
         label: 'Geschwindigkeit [m/s^2]',
         backgroundColor: 'rgb(0,0,0)',
         borderColor: 'rgb(0,0,0)',
-        data: localStorage.getItem('beschleunigungsChartData'),
+        data: localStorage.getItem('beschleunigungsChartData').split(',').map(Number),
         fill: false,
     }]
 };
@@ -61,12 +58,12 @@ new Chart(
 
 //Daten in den Abstand-Chart einfügen
 const dataAbstand = {
-    labels: labels,
+    labels: ['-5', '-4', '-3', '-2', '-1', '0'],
     datasets: [{
         label: 'Abstand zu Wand',
         backgroundColor: 'rgb(0,0,0)',
         borderColor: 'rgb(0,0,0)',
-        data: localStorage.getItem('abstandChartData'),
+        data: localStorage.getItem('abstandChartData').split(',').map(Number),
         fill: false,
     }]
 };
