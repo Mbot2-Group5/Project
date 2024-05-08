@@ -99,6 +99,7 @@ def onMessage(receivedMessage):
             if suicidePrevention:
                 left = 0
                 right = 0
+                cyberpi.mbot2.turn(180)
 
             # Motoren Geschwindigkeit setzen
             cyberpi.mbot2.drive_power(left, right)
@@ -160,9 +161,9 @@ def sendMessage():
         response_data = {
             # Daten des Gyrosensors (Vorwärts & Rückwärts), x-Achse
             "gyroscopePitch": cyberpi.get_pitch(),
-            # Daten des Gyrosensors (Links & Rechts), y-Achse
+            # Daten des Gyrosensors (Links & Rechts), z-Achse
             "gyroscopeYaw": cyberpi.get_yaw(),
-            # Daten des Gyroscopesensors (Oben & Unten), z-Achse
+            # Daten des Gyroscopesensors (Oben & Unten), y-Achse
             "gyroscopeRoll": cyberpi.get_roll(),
             # Daten des Beschleunigungsmessers
             "accelerometer": cyberpi.get_acc("y"),
@@ -202,7 +203,7 @@ while True:
             TCP_socket = connection
             cyberpi.console.clear()
             cyberpi.console.print("Mit Steuerung" + str(address) + "verbunden")
-            time.sleep(5)
+            time.sleep(2)
             cyberpi.console.clear()
             UDP_socket.close()
             break

@@ -21,8 +21,14 @@ let rechtsLED = "ffffff";
 let lineFollowerPressed = false;
 let suicidePreventionPressed = false;
 
-//SuicidePrevention
+//Daten vom Beschleunigungssensor & UltrasonicSensor der letzten 10 sekunden
+let lastExecutionTimeSaveUltrasonicSensorData = 0;
+let lastExecutionTimeSaveAccelerometerData = 0;
+const timeToSaveData = 10;
+let ultrasonicSensorData = [];
+let accelerometerData = [];
 
+//SuicidePrevention
 const minDistanceToWall = 30;               //NOCH ANZUPASSEN
 let underMinDistanceToWall = false;
 
@@ -163,10 +169,30 @@ socket.onmessage = async function (event) {
             //Daten des Gyrosensors erhalten & an ModelViewer übergeben
             updateOrientation(data.gyroscopeRoll, -data.gyroscopePitch, data.gyroscopeYaw + 150.45);
 
-            //Andere Sensordaten
-            document.getElementById("accelerometer").textContent = data.accelerometer;
+            //Farbe unter dem MBot
             document.getElementById("rgbSensor").style.background = data.rgbSensorMiddleRight;
-            document.getElementById("ultrasonicSensor").textContent = data.ultrasonicSensor;
+
+            //Zeitdaten des Ultrasonic-Sensors updaten
+            if(lastExecutionTimeSaveUltrasonicSensorData + 1 <= Date.now()) {
+                ultrasonicSensorData.push(data.ultrasonicSensor);
+                if(ultrasonicSensorData.length > timeToSaveData) {
+                    ultrasonicSensorData.shift();
+                }
+                lastExecutionTimeSaveUltrasonicSensorData = Date.now();
+            }
+
+            //Zeitdaten des Beschleunigungs-Sensors updaten
+            if(lastExecutionTimeSaveAccelerometerData + 1 <= Date.now()) {
+                accelerometerData.push(data.accelerometer);
+                if(accelerometerData.length > timeToSaveData) {
+                    accelerometerData.shift();
+                }
+                lastExecutionTimeSaveAccelerometerData = Date.now();
+            }
+
+            //LocalStorage Variablen setzen
+            localStorage.setItem('beschleunigungsChartData', accelerometerData.join(','));
+            localStorage.setItem('abstandChartData', ultrasonicSensorData.join(','));
 
             //Überprüfen, ob der LineFollower eingeschalten ist (wenn ja, Daten verarbeiten)
             if (document.getElementById("lineFollower").checked) {
@@ -649,7 +675,7 @@ async function connectToFormerMBot() {
 
 //Funktion zum Trennen von bereits verbundenen MBots
 async function deleteFormerMBot() {
-    disconnectFromMBot2();
+    await disconnectFromMBot2();
     formerConnectedMBots = formerConnectedMBots.filter(item => item !== formerConnectedMBots[mBotID]);
 }
 
@@ -700,4 +726,6 @@ window.addEventListener("beforeunload", async function () {
     } catch (error) {
         console.error(`Error while closing Connection with Server: ${error}`);
     }
+    localStorage.remove('beschleunigungsChartData');
+    localStorage.remove('abstandChartData');
 });

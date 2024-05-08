@@ -1,21 +1,23 @@
-Geschwindigkeiten für SuicidePrevention & LineFollower noch anpassen (Zeilen 26, 30 & 31 in webApp-Connection.js)
+Geschwindigkeit für LineFollower noch anpassen (Zeilen 30 & 31 in webApp-Connection.js)
+Abstand/Latenz wegen SuicidePrevention noch ändern (Hängt imit Latenz zusammen) (Zeile 26 in webapp-Connection.js)
 
 Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm (Problem in MBot Script, aber warum?)
 
 
 
-Zwischenserver muss noch irgendwie irgendwo gehostet werden
-(Lösung in zwischenServerManger.js (auto-download & executing & löschen ohne Benutzereingriff)
+Executing des Zwischenserver funktioniert nicht
+Download muss noch als "save" gekennzeichnet werden
 
 
 
-Dino-Game (Haas)
+Charts (Frontend wird nur geupdated, wenn Devtools geöffnet oder geschlossen werden (gleicher Fehler bei ChatProgramm))
 
 
 
 Style-Probleme:
 Überschrift erscheint zu hoch oben beim Starten
-Ambiente Beleuchtung stylen
+Stylen der Charts
+Stylen der Controls (weiter unten)
 
 Infos für Style der MBot-Listen:
 klassen VERBUNDENER MBots:
@@ -23,4 +25,4 @@ connected
 connection-li
 
 Klassen NICHT VERBUNDENER MBots:
-connection-li
+connection-liy
