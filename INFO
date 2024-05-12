@@ -1,5 +1,5 @@
 Geschwindigkeit für LineFollower noch anpassen (Zeilen 30 & 31 in webApp-Connection.js)
-Abstand/Latenz wegen SuicidePrevention noch ändern (Zeile 26 in webapp-Connection.js)
+Abstand der SuicidePrevention noch ändern (Zeile 26 in webapp-Connection.js)
 
 
 
@@ -12,7 +12,9 @@ Download muss noch als "save" gekennzeichnet werden
 
 
 
-Charts (Frontend wird nur geupdated, wenn Devtools geöffnet oder geschlossen werden (gleicher Fehler bei ChatProgramm))
+Charts (Frontend wird nur geupdated, wenn Devtools geöffnet oder geschlossen werden)                                    Behoben?
+
+
 
 
 
@@ -22,7 +24,10 @@ Stylen der Charts
 Stylen der Controls (weiter unten)
 Stylen der großen MBot-Auswahl (zu weit links)
 
+
+
 Infos für Style der MBot-Listen:
+
 klassen VERBUNDENER MBots:
 connected
 connection-li

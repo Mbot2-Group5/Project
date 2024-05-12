@@ -1,5 +1,4 @@
 # Autor: Stefan Rautner
-
 # imports
 import json
 import time

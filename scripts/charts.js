@@ -1,3 +1,8 @@
+/*Autor: Stefan Rautner*/
+const demoData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+localStorage.setItem('beschleunigungsChartData', demoData.join(','));
+localStorage.setItem('abstandChartData', demoData.join(','));
+
 /* Geschwindigkeit-CHART*/
 
 //Daten in den Beschleunigungs-Chart einfügen

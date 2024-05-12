@@ -29,16 +29,16 @@ let ultrasonicSensorData = [];
 let accelerometerData = [];
 
 //SuicidePrevention
-const minDistanceToWall = 30;               //NOCH ANZUPASSEN
+const minDistanceToWall = 30; //Minimaler Abstand zur Wand                                                     NOCH ANZUPASSEN
 let underMinDistanceToWall = false;
 
-//Speed für den LineFollower
-const lineFollowerSpeed = 40;               //NOCH ANZUPASSEN
-const lineFollowerCurveSpeed = 20;          //NOCH ANZUPASSEN
+//geschwindigkeit für den LineFollower
+const lineFollowerSpeed = 40; //Line-Follower Geschwindigkeit                                                  NOCH ANZUPASSEN
+const lineFollowerCurveSpeed = 20; //Zusätzliche Geschwindigkeit für Kurven des Line-Followers                 NOCH ANZUPASSEN
 let lineFollowerSpeedLeft = 0;
 let lineFollowerSpeedRight = 0;
 
-//Geschwindigkeiten (max 998, wenn mehr gebraucht, dann Zeile 193 in NetworkConnection_MBot2.py 28 --> 29 ändern)
+//Geschwindigkeiten
 let speed = 0;
 const addedSpeedForCurve = 20;
 const maxReverseSpeed = -100;
@@ -173,18 +173,18 @@ socket.onmessage = async function (event) {
             document.getElementById("rgbSensor").style.background = data.rgbSensorMiddleRight;
 
             //Zeitdaten des Ultrasonic-Sensors updaten
-            if(lastExecutionTimeSaveUltrasonicSensorData + 1 <= Date.now()) {
+            if (lastExecutionTimeSaveUltrasonicSensorData + 1 <= Date.now()) {
                 ultrasonicSensorData.push(data.ultrasonicSensor);
-                if(ultrasonicSensorData.length > timeToSaveData) {
+                if (ultrasonicSensorData.length > timeToSaveData) {
                     ultrasonicSensorData.shift();
                 }
                 lastExecutionTimeSaveUltrasonicSensorData = Date.now();
             }
 
             //Zeitdaten des Beschleunigungs-Sensors updaten
-            if(lastExecutionTimeSaveAccelerometerData + 1 <= Date.now()) {
+            if (lastExecutionTimeSaveAccelerometerData + 1 <= Date.now()) {
                 accelerometerData.push(data.accelerometer);
-                if(accelerometerData.length > timeToSaveData) {
+                if (accelerometerData.length > timeToSaveData) {
                     accelerometerData.shift();
                 }
                 lastExecutionTimeSaveAccelerometerData = Date.now();
@@ -196,7 +196,7 @@ socket.onmessage = async function (event) {
 
             //Überprüfen, ob der LineFollower eingeschalten ist (wenn ja, Daten verarbeiten)
             if (document.getElementById("lineFollower").checked) {
-                lineFollower(data.rgbSensorLeft, data.rgbSensorMiddleLeft, data.rgbSensorMiddleRight, data.rgbSensorRight);
+                await lineFollower(data.rgbSensorLeft, data.rgbSensorMiddleLeft, data.rgbSensorMiddleRight, data.rgbSensorRight);
             } else if (lineFollowerSpeedLeft !== 0 || lineFollowerSpeedRight !== 0) {
                 left = 0;
                 right = 0;
@@ -206,7 +206,7 @@ socket.onmessage = async function (event) {
 
             //Überprüfen, ob die SuicidePrevention eingeschalten ist (wenn ja, Daten verarbeiten)
             if (document.getElementById("suicidePrev").checked) {
-                suicidePrevention(data.ultrasonicSensor);
+                await suicidePrevention(data.ultrasonicSensor);
             }
 
             console.log("Got Message from the TCP-Server");
@@ -350,7 +350,7 @@ async function stopMoving(element) {
     try {
         element.style.transform = "scale(1)";
         clearInterval(moveInterval);
-        stopMove(element);
+        await stopMove(element);
     } catch (error) {
         console.error(`Error while stopping (with graphic interface): ${error}`);
     }
@@ -430,22 +430,22 @@ let keyState = {
 };
 
 //Listener für KeyDown-Event
-document.addEventListener('keydown', (event) => {
+document.addEventListener('keydown', async function (event) {
     try {
         // Key-State updaten
         keyState[event.key] = true;
-        handleKeys();
+        await handleKeys();
     } catch (error) {
         console.error(`Error while moving (with keyboard): ${error}`);
     }
 });
 
 //Listener für KeyUp-Event
-document.addEventListener('keyup', (event) => {
+document.addEventListener('keyup', async function (event) {
     try {
         // Key-State updaten
         keyState[event.key] = false;
-        handleKeys();
+        await handleKeys();
     } catch (error) {
         console.error(`Error while stopping (with keyboard): ${error}`);
     }
@@ -501,10 +501,14 @@ async function handleKeys() {
 
 
 //Listener für Ausgabe, ob Controller verbunden wurde
-window.addEventListener("gamepadconnected", () => console.log("Controller connected"));
+window.addEventListener("gamepadconnected", async function () {
+    console.log("Controller connected");
+});
 
 //Listener für Ausgabe, on Controller getrennt wurde
-window.addEventListener("gamepaddisconnect", () => console.log("Controller disconnected"));
+window.addEventListener("gamepaddisconnect", async function () {
+    console.log("Controller disconnected");
+});
 
 //Überprüfen, ob Controller (PS & XBOX) zur Steuerung des MBot2 verwendet wird
 async function checkGamepadInput() {
@@ -613,7 +617,7 @@ async function sendToMBot2() {
             middleLED: mitteLED,
             rightMiddleLED: rechtsMitteLED,
             rightLED: rechtsLED,
-            suicidePrevention : underMinDistanceToWall
+            suicidePrevention: underMinDistanceToWall
         }
         //Daten durch WebSocket über Server an MBot2 senden
         const json = JSON.stringify(data);
@@ -657,9 +661,16 @@ async function showFormerMBots() {
     await makeListElementsForArray(formerConnectedMBots, myList);
 }
 
-//Funktion zum Hinzufügen von MBots zur Liste
+//Funktion zum Hinzufügen von MBots zur Liste der zuvor verbundenen MBots
 async function addToFormerConnected() {
     formerConnectedMBots.push(possibleMBot2sToConnect[mBotID]);
+}
+
+//Funktion zum Löschen von MBots von der Liste der zuvor verbundenen MBots
+async function removeFromFormerConnected() {
+    if (formerConnectedMBots.contains(possibleMBot2sToConnect[mBotID])) {
+        formerConnectedMBots.remove(possibleMBot2sToConnect[mBotID]);
+    }
 }
 
 //Funktion zum Anzeigen von bereits verbundenen MBots
@@ -674,9 +685,8 @@ async function connectToFormerMBot() {
 }
 
 //Funktion zum Trennen von bereits verbundenen MBots
-async function deleteFormerMBot() {
+async function disconnectFromFormerMBot() {
     await disconnectFromMBot2();
-    formerConnectedMBots = formerConnectedMBots.filter(item => item !== formerConnectedMBots[mBotID]);
 }
 
 //Verbindung mit MBot herstellen

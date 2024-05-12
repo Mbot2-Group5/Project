@@ -129,7 +129,8 @@
                 </div>
             </div>
             <button class="Connect" onclick="connectToFormerMBot()">Connect</button>
-            <button class="Disconnect" onclick="deleteFormerMBot()">Disconnect</button>
+            <button class="Disconnect" onclick="disconnectFromFormerMBot()">Disconnect</button>
+            <button onclick="removeFromFormerConnected()">Entfernen</button>
         </div>
         <div>
             <canvas id="beschleunigungsChart"></canvas>
@@ -147,13 +148,10 @@
 
 <script>
     window.addEventListener("resize", function () {
-        const label = document.querySelector(".uss");
         const label1 = document.querySelector(".fum");
         if (window.innerWidth < 610) {
-            label.textContent = "U-Sensor:";
             label1.textContent = "Farbe:";
         } else {
-            label.textContent = "Ultrasonic Sensor:";
             label1.textContent = "Farbe unter MBOT:";
         }
     });
