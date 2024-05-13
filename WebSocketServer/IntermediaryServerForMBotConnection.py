@@ -130,11 +130,12 @@ async def sendDataToMBot2FromWebApp(websocket):
                 tcp_socket.close()
                 print("Disconnected from Client & MBot")
                 await webApp_Client.close()
-                #await deleteScript()                                                                                   Auskommentieren, wenn zwischenManager fertig ist & BackUp gemacht ist
+                # await deleteScript()                                                                                   Auskommentieren, wenn zwischenManager fertig ist & BackUp gemacht ist
             elif message == "searchForMBots":
                 if time.time() - last_execution >= duration + 2:
                     openUDPClient()
                     await webApp_Client.send(json.dumps(possibleMBots).encode('utf-8'))
+                    print("Send possible MBots")
                 possibleMBots = []
             elif not first_message:
                 first_message = True
@@ -148,7 +149,7 @@ async def sendDataToMBot2FromWebApp(websocket):
 
 
 async def main():
-    print("Server reading and listening")
+    print("Server reading and listening on 'ws://localhost:5431'")
     async with websockets.serve(sendDataToMBot2FromWebApp, "localhost", 5431):
         await asyncio.Future()
 

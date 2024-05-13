@@ -68,93 +68,26 @@ try {
     console.error(`Error while creating UTF-8 Encoder & Decoder ${error}`);
 }
 
-//WebSocket
 let socket = null;
 
-//Websocket verbunden
-if (socket !== null) {
+//WebSocket
+function createWebSocketConnection() {
+    //Websocket verbunden
     socket.onopen = function () {
         console.log("WebSocket connected");
     };
-}
 
-//WebSocket getrennt
-if (socket !== null) {
+    //WebSocket getrennt
     socket.onclose = function () {
         console.log("WebSocket disconnected");
     };
-}
 
-//WebSocket Error
-if (socket !== null) {
+    //WebSocket Error
     socket.onerror = function (event) {
         console.error(`WebSocket error: ${event.data}`);
-    }
-}
+    };
 
-//Disconnected Funktion in Console schreiben
-async function checkConnectionStatus() {
-    let state = "";
-    let stateColor = "";
-
-    if (!connected) {
-        state = "Getrennt";
-        stateColor = "red";
-        connected = false;
-    } else {
-        state = "Verbunden";
-        stateColor = "green";
-        connected = true;
-    }
-
-    if (mBotID !== 999999999) {
-        try {
-            //Listenelement erhalten
-            const listElement = document.getElementById(mBotID);
-
-            //Derzeitigen Text aus Listenelement erhalten & ändern
-            const content = listElement.innerHTML;
-            const currentHTML = content.split("<br>");
-            currentHTML[2] = `Status: ${state}`;
-
-            //Neuen Status auf GUI anzeigen
-            listElement.innerHTML = currentHTML.join("<br>");
-
-            //Statusanzeige (Kreis erstellen & Farbe zuweisen)
-            const stateCycle = document.createElement("div");
-
-            //Statusanzeigen stylen (Größe, Farbe & Kreis)
-            stateCycle.style.backgroundColor = stateColor;
-            stateCycle.style.width = "10px";
-            stateCycle.style.height = "10px";
-            stateCycle.style.borderRadius = "50%";
-
-            //Statusanzeige zum Listenelement hinzufügen
-            listElement.appendChild(stateCycle);
-        } catch (error) {
-            console.error(`Couldn't change the Connection-State of the MBot: ${error}`);
-        }
-    }
-}
-
-//Alle MBots mit denen eine Verbindung hergestellt werden kann erhalten
-async function getPossibleMBots() {
-    try {
-        if (socket !== null) {
-            if (Date.now() - lastExecutionTime >= duration) {
-                socket.send("searchForMBots");
-                lastExecutionTime = Date.now();
-            }
-        } else {
-            alert("Bitte starten Sie zuerst den Zwischenserver");
-        }
-    } catch (error) {
-        console.error(`Looking for MBots failed: ${error}`);
-    }
-}
-
-//WebSocket Verbindung zum Empfangen einer Nachricht vom MBot2 über Server
-if (socket !== null) {
+    //WebSocket Verbindung zum Empfangen einer Nachricht vom MBot2 über Server
     socket.onmessage = async function (event) {
         try {
             let receivedData = decoder.decode(await event.data.arrayBuffer());
@@ -225,6 +158,68 @@ if (socket !== null) {
         if (initialized) {
             await communicating();
         }
+    }
+}
+
+
+//Disconnected Funktion in Console schreiben
+async function checkConnectionStatus() {
+    let state = "";
+    let stateColor = "";
+
+    if (!connected) {
+        state = "Getrennt";
+        stateColor = "red";
+        connected = false;
+    } else {
+        state = "Verbunden";
+        stateColor = "green";
+        connected = true;
+    }
+
+    if (mBotID !== 999999999) {
+        try {
+            //Listenelement erhalten
+            const listElement = document.getElementById(mBotID);
+
+            //Derzeitigen Text aus Listenelement erhalten & ändern
+            const content = listElement.innerHTML;
+            const currentHTML = content.split("<br>");
+            currentHTML[2] = `Status: ${state}`;
+
+            //Neuen Status auf GUI anzeigen
+            listElement.innerHTML = currentHTML.join("<br>");
+
+            //Statusanzeige (Kreis erstellen & Farbe zuweisen)
+            const stateCycle = document.createElement("div");
+
+            //Statusanzeigen stylen (Größe, Farbe & Kreis)
+            stateCycle.style.backgroundColor = stateColor;
+            stateCycle.style.width = "10px";
+            stateCycle.style.height = "10px";
+            stateCycle.style.borderRadius = "50%";
+
+            //Statusanzeige zum Listenelement hinzufügen
+            listElement.appendChild(stateCycle);
+        } catch (error) {
+            console.error(`Couldn't change the Connection-State of the MBot: ${error}`);
+        }
+    }
+}
+
+//Alle MBots mit denen eine Verbindung hergestellt werden kann erhalten
+async function getPossibleMBots() {
+    try {
+        if (socket !== null) {
+            if (Date.now() - lastExecutionTime >= duration) {
+                socket.send("searchForMBots");
+                lastExecutionTime = Date.now();
+            }
+        } else {
+            alert("Bitte starten Sie zuerst den Zwischenserver");
+        }
+    } catch (error) {
+        console.error(`Looking for MBots failed: ${error}`);
     }
 }
 
@@ -671,7 +666,11 @@ async function showFormerMBots() {
 
 //Funktion zum Hinzufügen von MBots zur Liste der zuvor verbundenen MBots
 async function addToFormerConnected() {
-    formerConnectedMBots.push(possibleMBot2sToConnect[mBotID]);
+    if (mBotID !== 999999999) {
+        formerConnectedMBots.push(possibleMBot2sToConnect[mBotID]);
+    } else {
+        alert("Bitte wählen Sie einen MBot aus");
+    }
 }
 
 //Funktion zum Löschen von MBots von der Liste der zuvor verbundenen MBots
@@ -740,13 +739,30 @@ async function disconnectFromMBot2() {
     }
 }
 
-//Benutzer anweisen den Zwischenserver zu starten
+//Zwischenserver downloaden & Benutzer anweisen den Zwischenserver zu starten
 window.addEventListener("DOMContentLoaded", async function () {
+    //Zwischenserver downloaden
+    try {
+        //Iframe erstellen, konfigurieren & dadurch ZwischenServer Downloaden
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        iframe.src = '../WebSocketServer/IntermediaryServerForMBotConnection.py';
+
+        //Debug Ausgabe, wenn Zwischenserver heruntergeladen wurde
+        console.log("Intermediary Server downloaded");
+    } catch (error) {
+        console.error(`Error while downloading the Intermediary Server: ${error}`);
+    }
+
+    //Benutzer Zwischenserver ausführen lassen
     try {
         alert("Bitte führen Sie das gerade Heruntergeladene Python-Skript 'IntermediaryServerFromBotConnection.py' in ihrem Download-Ordner aus");
     } catch (error) {
         console.error(`Error while giving User Instructions to execute Intermediary Server locally: ${error}`);
     }
+
+    //Überprüfen, ob Benutzer mitteilt, dass er den Zwischenserver gestartet hat
     try {
         //Überprüfen, ob der Benutzer bestätigt hat, dass er den ZwischenServer gestartet hat
         while (!document.getElementById("zwischenserverGestartet").checked) {
@@ -757,8 +773,9 @@ window.addEventListener("DOMContentLoaded", async function () {
 
         //Socket verbinden
         socket = new WebSocket('ws://localhost:5431');
+        createWebSocketConnection();
 
-        //100 ms warten /um sicher zu gehen, das der WebSocket verbunden ist)
+        //100 ms warten, um sicherzugehen, das der WebSocket verbunden ist)
         await new Promise(resolve => setTimeout(resolve, 100));
 
         //MBots vom Zwischenserver holen

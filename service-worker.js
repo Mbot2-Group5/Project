@@ -9,6 +9,7 @@ let checkedForUpdatesAtOpening = false;
 // Definition Versions-Dokumente
 const versionDocuments = [
     /* Stylesheets */
+    './css/dino.css',
     './css/about.css',
     './css/controller.css',
     './css/download.css',
@@ -43,6 +44,8 @@ const versionDocuments = [
     './librarys/modelViewer/model-viewer-lib.js',
     /* ionicons */
     './librarys/ionicons/svg/close.svg',
+    './librarys/ionicons/svg/lock-closed.svg',
+    './librarys/ionicons/svg/mail.svg',
     './librarys/ionicons/p-d15ec307.js',
     './librarys/ionicons/p-40ae2aa7.js',
     './librarys/ionicons/p-1c0b2c47.entry.js',
@@ -51,9 +54,17 @@ const versionDocuments = [
     /* gsap */
     './librarys/gsap/gsap.min.js',
     './librarys/gsap/ScrollTrigger.min.js',
+    /* DinoGame */
+    './librarys/dinoGame/platform.js',
+    /* chart */
+    './librarys/chart/chart.js',
     /* Skripte */
     './scripts/about.js',
+    './scripts/charts.js',
     './scripts/connection.js',
+    './scripts/dinoGame.js',
+    './scripts/download.js',
+    './scripts/gamebutton.js',
     './scripts/modelViewer.js',
     './scripts/website_logic.js',
     /* Connection to WebSocket-Sever (MBot2) */
@@ -61,6 +72,11 @@ const versionDocuments = [
     /* HTML Dokumente */
     './index.html',
     './start.html',
+    './dino-Game.html',
+    /* Zwischenserver */
+    './WebSocketServer/IntermediaryServerForMBotConnection.py',
+    /* MBot2-Script */
+    './MBot2/NetworkConnection_MBot2.py',
     /* Service-Worker & Manifest */
     './service-worker.js',
     './manifest.json'
