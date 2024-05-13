@@ -130,7 +130,7 @@ async def sendDataToMBot2FromWebApp(websocket):
                 tcp_socket.close()
                 print("Disconnected from Client & MBot")
                 await webApp_Client.close()
-                # await deleteScript()                                                                                   Auskommentieren, wenn zwischenManager fertig ist & BackUp gemacht ist
+                await deleteScript()
             elif message == "searchForMBots":
                 if time.time() - last_execution >= duration + 2:
                     openUDPClient()
