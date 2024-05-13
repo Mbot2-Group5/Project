@@ -69,26 +69,27 @@ try {
 }
 
 //WebSocket
-let socket;
-try {
-    socket = new WebSocket('ws://localhost:5431');
-} catch (error) {
-    console.error(`Can't connect to Websocket: ${error}`);
-}
+let socket = null;
 
 //Websocket verbunden
-socket.onopen = function () {
-    console.log("WebSocket connected");
-};
+if (socket !== null) {
+    socket.onopen = function () {
+        console.log("WebSocket connected");
+    };
+}
 
 //WebSocket getrennt
-socket.onclose = function () {
-    console.log("WebSocket disconnected");
-};
+if (socket !== null) {
+    socket.onclose = function () {
+        console.log("WebSocket disconnected");
+    };
+}
 
 //WebSocket Error
-socket.onerror = function (event) {
-    console.error(`WebSocket error: ${event.data}`);
+if (socket !== null) {
+    socket.onerror = function (event) {
+        console.error(`WebSocket error: ${event.data}`);
+    }
 }
 
 //Disconnected Funktion in Console schreiben
@@ -139,9 +140,13 @@ async function checkConnectionStatus() {
 //Alle MBots mit denen eine Verbindung hergestellt werden kann erhalten
 async function getPossibleMBots() {
     try {
-        if (Date.now() - lastExecutionTime >= duration) {
-            socket.send("searchForMBots");
-            lastExecutionTime = Date.now();
+        if (socket !== null) {
+            if (Date.now() - lastExecutionTime >= duration) {
+                socket.send("searchForMBots");
+                lastExecutionTime = Date.now();
+            }
+        } else {
+            alert("Bitte starten Sie zuerst den Zwischenserver");
         }
     } catch (error) {
         console.error(`Looking for MBots failed: ${error}`);
@@ -149,75 +154,77 @@ async function getPossibleMBots() {
 }
 
 //WebSocket Verbindung zum Empfangen einer Nachricht vom MBot2 über Server
-socket.onmessage = async function (event) {
-    try {
-        let receivedData = decoder.decode(await event.data.arrayBuffer());
-        let data = JSON.parse(receivedData);
+if (socket !== null) {
+    socket.onmessage = async function (event) {
+        try {
+            let receivedData = decoder.decode(await event.data.arrayBuffer());
+            let data = JSON.parse(receivedData);
 
-        //Liste an möglichen MBots erhalten
-        if (Array.isArray(data) && data.length > 0 && data[0] === "MBots:") {
-            const mbots = data.slice(1);
-            document.getElementById("textForWhileSearchingMBot").style.display = "none";
+            //Liste an möglichen MBots erhalten
+            if (Array.isArray(data) && data.length > 0 && data[0] === "MBots:") {
+                const mbots = data.slice(1);
+                document.getElementById("textForWhileSearchingMBot").style.display = "none";
 
-            //Liste in HTML anzeigen
-            const myList = document.getElementById("showPossibleMBots");
-            myList.innerHTML = "";
+                //Liste in HTML anzeigen
+                const myList = document.getElementById("showPossibleMBots");
+                myList.innerHTML = "";
 
-            await makeListElementsForArray(mbots, myList);
-        } else {
-            connected = true;
-            //Daten des Gyrosensors erhalten & an ModelViewer übergeben
-            updateOrientation(data.gyroscopeRoll, -data.gyroscopePitch, data.gyroscopeYaw + 150.45);
+                await makeListElementsForArray(mbots, myList);
+            } else {
+                connected = true;
+                //Daten des Gyrosensors erhalten & an ModelViewer übergeben
+                updateOrientation(data.gyroscopeRoll, -data.gyroscopePitch, data.gyroscopeYaw + 150.45);
 
-            //Farbe unter dem MBot
-            document.getElementById("rgbSensor").style.background = data.rgbSensorMiddleRight;
+                //Farbe unter dem MBot
+                document.getElementById("rgbSensor").style.background = data.rgbSensorMiddleRight;
 
-            //Zeitdaten des Ultrasonic-Sensors updaten
-            if (lastExecutionTimeSaveUltrasonicSensorData + 1 <= Date.now()) {
-                ultrasonicSensorData.push(data.ultrasonicSensor);
-                if (ultrasonicSensorData.length > timeToSaveData) {
-                    ultrasonicSensorData.shift();
+                //Zeitdaten des Ultrasonic-Sensors updaten
+                if (lastExecutionTimeSaveUltrasonicSensorData + 1 <= Date.now()) {
+                    ultrasonicSensorData.push(data.ultrasonicSensor);
+                    if (ultrasonicSensorData.length > timeToSaveData) {
+                        ultrasonicSensorData.shift();
+                    }
+                    lastExecutionTimeSaveUltrasonicSensorData = Date.now();
                 }
-                lastExecutionTimeSaveUltrasonicSensorData = Date.now();
-            }
 
-            //Zeitdaten des Beschleunigungs-Sensors updaten
-            if (lastExecutionTimeSaveAccelerometerData + 1 <= Date.now()) {
-                accelerometerData.push(data.accelerometer);
-                if (accelerometerData.length > timeToSaveData) {
-                    accelerometerData.shift();
+                //Zeitdaten des Beschleunigungs-Sensors updaten
+                if (lastExecutionTimeSaveAccelerometerData + 1 <= Date.now()) {
+                    accelerometerData.push(data.accelerometer);
+                    if (accelerometerData.length > timeToSaveData) {
+                        accelerometerData.shift();
+                    }
+                    lastExecutionTimeSaveAccelerometerData = Date.now();
                 }
-                lastExecutionTimeSaveAccelerometerData = Date.now();
+
+                //LocalStorage Variablen setzen
+                localStorage.setItem('beschleunigungsChartData', accelerometerData.join(','));
+                localStorage.setItem('abstandChartData', ultrasonicSensorData.join(','));
+
+                //Überprüfen, ob der LineFollower eingeschalten ist (wenn ja, Daten verarbeiten)
+                if (document.getElementById("lineFollower").checked) {
+                    await lineFollower(data.rgbSensorLeft, data.rgbSensorMiddleLeft, data.rgbSensorMiddleRight, data.rgbSensorRight);
+                } else if (lineFollowerSpeedLeft !== 0 || lineFollowerSpeedRight !== 0) {
+                    left = 0;
+                    right = 0;
+                    lineFollowerSpeedLeft = 0;
+                    lineFollowerSpeedRight = 0;
+                }
+
+                //Überprüfen, ob die SuicidePrevention eingeschalten ist (wenn ja, Daten verarbeiten)
+                if (document.getElementById("suicidePrev").checked) {
+                    await suicidePrevention(data.ultrasonicSensor);
+                }
+
+                console.log("Got Message from the TCP-Server");
+                connected = true;
             }
-
-            //LocalStorage Variablen setzen
-            localStorage.setItem('beschleunigungsChartData', accelerometerData.join(','));
-            localStorage.setItem('abstandChartData', ultrasonicSensorData.join(','));
-
-            //Überprüfen, ob der LineFollower eingeschalten ist (wenn ja, Daten verarbeiten)
-            if (document.getElementById("lineFollower").checked) {
-                await lineFollower(data.rgbSensorLeft, data.rgbSensorMiddleLeft, data.rgbSensorMiddleRight, data.rgbSensorRight);
-            } else if (lineFollowerSpeedLeft !== 0 || lineFollowerSpeedRight !== 0) {
-                left = 0;
-                right = 0;
-                lineFollowerSpeedLeft = 0;
-                lineFollowerSpeedRight = 0;
-            }
-
-            //Überprüfen, ob die SuicidePrevention eingeschalten ist (wenn ja, Daten verarbeiten)
-            if (document.getElementById("suicidePrev").checked) {
-                await suicidePrevention(data.ultrasonicSensor);
-            }
-
-            console.log("Got Message from the TCP-Server");
-            connected = true;
+        } catch (error) {
+            console.error(`Error while receiving Message from MBot: ${error}`);
         }
-    } catch (error) {
-        console.error(`Error while receiving Message from MBot: ${error}`);
-    }
 
-    if (initialized) {
-        await communicating();
+        if (initialized) {
+            await communicating();
+        }
     }
 }
 
@@ -693,18 +700,22 @@ async function disconnectFromFormerMBot() {
 //Verbindung mit MBot herstellen
 async function connectToMBot2() {
     try {
-        //Kommunikation mit MBot2 freigeben
-        initialized = true;
+        if (socket !== null) {
+            //Kommunikation mit MBot2 freigeben
+            initialized = true;
 
-        const connectedListelement = document.getElementById(mBotID);
-        connectedListelement.classList.add("connected");
+            const connectedListelement = document.getElementById(mBotID);
+            connectedListelement.classList.add("connected");
 
-        //Verbindung des ausgewählten MBots senden
-        formerConnectedMBots.push(possibleMBot2sToConnect[mBotID]);
-        socket.send(possibleMBot2sToConnect[mBotID]);
-        await communicating();
+            //Verbindung des ausgewählten MBots senden
+            formerConnectedMBots.push(possibleMBot2sToConnect[mBotID]);
+            socket.send(possibleMBot2sToConnect[mBotID]);
+            await communicating();
 
-        console.log("MBot2 connected & communicating");
+            console.log("MBot2 connected & communicating");
+        } else {
+            alert("Bitte starten Sie zuerst den Zwischenserver");
+        }
     } catch (error) {
         console.error(`Error while connecting to MBot: ${error}`);
     }
@@ -728,6 +739,34 @@ async function disconnectFromMBot2() {
         console.error(`Error while disconnecting from MBot: ${error}`);
     }
 }
+
+//Benutzer anweisen den Zwischenserver zu starten
+window.addEventListener("DOMContentLoaded", async function () {
+    try {
+        alert("Bitte führen Sie das gerade Heruntergeladene Python-Skript 'IntermediaryServerFromBotConnection.py' in ihrem Download-Ordner aus");
+    } catch (error) {
+        console.error(`Error while giving User Instructions to execute Intermediary Server locally: ${error}`);
+    }
+    try {
+        //Überprüfen, ob der Benutzer bestätigt hat, dass er den ZwischenServer gestartet hat
+        while (!document.getElementById("zwischenserverGestartet").checked) {
+            //50 ms warten
+            await new Promise(resolve => setTimeout(resolve, 50));
+        }
+        console.log("Intermediary Server started");
+
+        //Socket verbinden
+        socket = new WebSocket('ws://localhost:5431');
+
+        //100 ms warten /um sicher zu gehen, das der WebSocket verbunden ist)
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        //MBots vom Zwischenserver holen
+        await getPossibleMBots();
+    } catch (error) {
+        console.error(`Can't connect to Websocket: ${error}`);
+    }
+});
 
 //Wenn Client WebApp verlässt/zumacht, dann Verbindung beenden
 window.addEventListener("beforeunload", async function () {

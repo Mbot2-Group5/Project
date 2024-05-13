@@ -28,19 +28,12 @@
         <a class="anav" href="start.html#about">About</a>
         <a class="anav" href="start.html#team">Team</a>
         <a class="anav" href="start.html#log">Log</a>
-        <a class="anav" href="index.html" onclick="getPossibleMBots()">Controller</a>
+        <a class="anav" href="index.html">Controller</a>
         <button class="btnLogin-popup" id="one-login">Dino-Game</button>
     </nav>
 
     <!-- 3D Model Viewer -->
     <script type="module" src="./scripts/modelViewer.js"></script>
-
-    <!-- Search for MBots -->
-    <script>
-        window.onload = function () {
-            getPossibleMBots();
-        }
-    </script>
 
     <!-- Zwischenserver-Manager einbinden -->
     <script src="./scripts/zwischenServerManager.js" type="module"></script>
@@ -59,6 +52,10 @@
             </div>
         </form>
         <div class="buttons-container">
+            <label for="zwischenserverGestartet">
+                Zwischenserver gestartet
+                <input type="checkbox" id="zwischenserverGestartet" onclick="">
+            </label>
             <button class="button" onclick="getPossibleMBots()">Reload</button>
             <button class="button" onclick="connectToMBot2()">Connect</button>
             <button class="button" onclick="addToFormerConnected()">Save</button>
