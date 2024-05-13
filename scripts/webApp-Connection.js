@@ -494,6 +494,7 @@ async function handleKeys() {
             right = speed
             console.log("Stopped moving");
         }
+
     } catch (error) {
         console.error(`Error while handling keyboard keys: ${error}`);
     }

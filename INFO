@@ -3,7 +3,9 @@ Abstand der SuicidePrevention noch ändern (Zeile 26 in webapp-Connection.js)
 
 
 
-Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm (Problem in MBot Script, aber warum?)
+Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm (Problem in MBot Script, aber warum?)            Behoben?
+Konsolen-Eingabe in webApp-Connection.js gibt auf beiden motoren die gleichen Werte aus (Also funktioniert)
+Also Problem auf MBot Seite?
 
 
 
