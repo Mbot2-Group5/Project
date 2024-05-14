@@ -13,6 +13,9 @@ def install_packages(packages):
 # Liste der benötigten Module
 required_modules = ['socket', 'websockets', 'asyncio', 'time', 'json']
 
+# Ausgabe für Benutzer
+print("Installing required modules")
+
 # Alle Module einzeln installieren, falls Sie noch nicht installiert sind
 for module in required_modules:
     try:
@@ -22,6 +25,9 @@ for module in required_modules:
         print(f"Installing {module}...")
         install_packages([module])
         print(f"{module} installed successfully!")
+
+# Ausgabe für Benutzer
+print("All required modules installed successfully!")
 
 # Ab hier startet das eigentliche Script (alles oberhalb nur zum Installieren der benötigten Bibliotheken)
 
