@@ -22,8 +22,7 @@ let lineFollowerPressed = false;
 let suicidePreventionPressed = false;
 
 //Daten vom Beschleunigungssensor & UltrasonicSensor der letzten 10 sekunden
-let lastExecutionTimeSaveUltrasonicSensorData = 0;
-let lastExecutionTimeSaveAccelerometerData = 0;
+let lastExecutionTimeUpdateCharts = 0;
 const timeToSaveData = 10;
 let ultrasonicSensorData = [];
 let accelerometerData = [];
@@ -111,25 +110,22 @@ function createWebSocketConnection() {
                 //Farbe unter dem MBot
                 document.getElementById("rgbSensor").style.background = data.rgbSensorMiddleRight;
 
-                //Zeitdaten des Ultrasonic-Sensors updaten
-                if (lastExecutionTimeSaveUltrasonicSensorData + 1 <= Date.now()) {
+                //Zeitdaten des Ultrasonic-Sensors & Beschleunigungssensors updaten
+                if (Date.now() >= lastExecutionTimeUpdateCharts + 500) {
+                    //Ultraschal-Sensor
                     ultrasonicSensorData.push(data.ultrasonicSensor);
                     if (ultrasonicSensorData.length > timeToSaveData) {
                         ultrasonicSensorData.shift();
                     }
-                    lastExecutionTimeSaveUltrasonicSensorData = Date.now();
-                }
-
-                //Zeitdaten des Beschleunigungs-Sensors updaten
-                if (lastExecutionTimeSaveAccelerometerData + 1 <= Date.now()) {
+                    //Beschleunigungssensor
                     accelerometerData.push(data.accelerometer);
                     if (accelerometerData.length > timeToSaveData) {
                         accelerometerData.shift();
                     }
-                    lastExecutionTimeSaveAccelerometerData = Date.now();
+                    lastExecutionTimeUpdateCharts = Date.now();
                 }
 
-                //LocalStorage Variablen setzen
+                //LocalStorage Variablen der Charts setzen
                 localStorage.setItem('beschleunigungsChartData', accelerometerData.join(','));
                 localStorage.setItem('abstandChartData', ultrasonicSensorData.join(','));
 

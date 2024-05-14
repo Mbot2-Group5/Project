@@ -1,15 +1,11 @@
 Geschwindigkeit für LineFollower noch anpassen (Zeilen 30 & 31 in webApp-Connection.js)
 Abstand der SuicidePrevention noch ändern (Zeile 26 in webapp-Connection.js)
 
-
+Latenz noch irgendwie verbessern?
 
 Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm (Problem in MBot Script, aber warum?)            Behoben?
 Konsolen-Eingabe in webApp-Connection.js gibt auf beiden motoren die gleichen Werte aus (Also funktioniert)
 Also Problem auf MBot Seite?
-
-
-
-Charts (Frontend wird nur geupdated, wenn Devtools geöffnet oder geschlossen werden)                                    Behoben?
 
 
 
@@ -18,8 +14,8 @@ Charts (Frontend wird nur geupdated, wenn Devtools geöffnet oder geschlossen we
 Style-Probleme(HAAS):
 Überschrift erscheint zu hoch oben beim Starten
 Stylen der Charts
-Stylen der Controls (weiter unten)
-Stylen der großen MBot-Auswahl (zu weit links)
+Stylen der Controls (zu weit oben)
+Stylen der großen MBot-Auswahl (zu weit links & innere Border zu weit unten(zu groß?))
 
 
 

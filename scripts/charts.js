@@ -7,8 +7,7 @@ localStorage.setItem('abstandChartData', demoData.join(','));
 
 //Daten in den Beschleunigungs-Chart einfügen
 const dataBeschleunigung = {
-    labels: ['-5', '-4', '-3', '-2', '-1', '0'],
-    datasets: [{
+    labels: ['-5', '-4', '-3', '-2', '-1', '0'], datasets: [{
         label: 'Geschwindigkeit [m/s^2]',
         backgroundColor: 'rgb(0,0,0)',
         borderColor: 'rgb(0,0,0)',
@@ -19,33 +18,21 @@ const dataBeschleunigung = {
 
 // Konfiguration des Beschleunigung-Charts
 const configBeschleunigung = {
-    type: 'line',
-    data: dataBeschleunigung,
-    options: {
-        responsive: true,
-        plugins: {
+    type: 'line', data: dataBeschleunigung, options: {
+        responsive: true, plugins: {
             title: {
-                display: true,
-                text: 'Beschleunigung'
-            },
-            tooltip: {
-                mode: 'index',
-                intersect: false,
+                display: true, text: 'Beschleunigung'
+            }, tooltip: {
+                mode: 'index', intersect: false,
             }
-        },
-        scales: {
+        }, scales: {
             x: {
-                display: true,
-                title: {
-                    display: true,
-                    text: 'Zeit'
+                display: true, title: {
+                    display: true, text: 'Zeit'
                 }
-            },
-            y: {
-                display: true,
-                title: {
-                    display: true,
-                    text: 'm/s^2'
+            }, y: {
+                display: true, title: {
+                    display: true, text: 'm/s^2'
                 }
             }
         }
@@ -53,18 +40,14 @@ const configBeschleunigung = {
 };
 
 // Beschleunigungs-Chart erstellen
-new Chart(
-    document.getElementById('beschleunigungsChart'),
-    configBeschleunigung
-);
+const beschleunigungsChart = new Chart(document.getElementById('beschleunigungsChart'), configBeschleunigung);
 
 
 /* ABSTAND ZUR WAND-CHART*/
 
 //Daten in den Abstand-Chart einfügen
 const dataAbstand = {
-    labels: ['-5', '-4', '-3', '-2', '-1', '0'],
-    datasets: [{
+    labels: ['-5', '-4', '-3', '-2', '-1', '0'], datasets: [{
         label: 'Abstand zu Wand',
         backgroundColor: 'rgb(0,0,0)',
         borderColor: 'rgb(0,0,0)',
@@ -75,33 +58,21 @@ const dataAbstand = {
 
 // Konfiguration des Abstand-Charts
 const configAbstand = {
-    type: 'line',
-    data: dataAbstand,
-    options: {
-        responsive: true,
-        plugins: {
+    type: 'line', data: dataAbstand, options: {
+        responsive: true, plugins: {
             title: {
-                display: true,
-                text: 'Abstand'
-            },
-            tooltip: {
-                mode: 'index',
-                intersect: false,
+                display: true, text: 'Abstand'
+            }, tooltip: {
+                mode: 'index', intersect: false,
             }
-        },
-        scales: {
+        }, scales: {
             x: {
-                display: true,
-                title: {
-                    display: true,
-                    text: 'Zeit'
+                display: true, title: {
+                    display: true, text: 'Zeit'
                 }
-            },
-            y: {
-                display: true,
-                title: {
-                    display: true,
-                    text: 'cm'
+            }, y: {
+                display: true, title: {
+                    display: true, text: 'cm'
                 }
             }
         }
@@ -109,16 +80,15 @@ const configAbstand = {
 };
 
 // Abstand-Chart erstellen
-new Chart(
-    document.getElementById('abstandsChart'),
-    configAbstand
-);
+const abstandsChart = new Chart(document.getElementById('abstandsChart'), configAbstand);
 
-//Chart updaten
+//Charts updaten
 setInterval(async function () {
-    //Beschleunigungsdaten erhalten/auslesen
+    //Beschleunigungsdaten erhalten/auslesen & Chart updaten
     configBeschleunigung.data.datasets[0].data = localStorage.getItem('beschleunigungsChartData').split(',').map(Number);
+    beschleunigungsChart.update();
 
-    //Abstanddaten erhalten/auslesen
+    //Abstanddaten erhalten/auslesen & Chart updaten
     configAbstand.data.datasets[0].data = localStorage.getItem('abstandChartData').split(',').map(Number);
-}, 500);
+    abstandsChart.update();
+}, 100);
