@@ -12,6 +12,7 @@ WebApp-Seite funktioniert, also Problem in MBot-Script
 
 
 Style-Probleme(HAAS):
+Problem mit Style der start.html (einige Objekte erscheinend links außerhalb des Bildschirms)
 Überschrift erscheint zu hoch oben beim Starten
 Stylen der Charts
 Stylen der Controls (zu weit oben)
