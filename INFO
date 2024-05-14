@@ -4,7 +4,7 @@ Abstand der SuicidePrevention noch ändern (Zeile 26 in webapp-Connection.js)
 Latenz noch irgendwie verbessern?
 
 Länger Rückwärts fahren, dann rechter Blinker statt Rückwärts-Programm
-Konsolen-Ausgabe der WebApp ist richtig (Geschwindigkeiten immer gleich)                                        BEHOBEN?
+Konsolen-Ausgabe der WebApp ist richtig (Geschwindigkeiten immer gleich hoch/niedrig)                                   BEHOBEN?
 WebApp-Seite funktioniert, also Problem in MBot-Script
 
 
