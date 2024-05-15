@@ -128,15 +128,18 @@ async def sendDataToMBot2FromWebApp(websocket):
     webApp_Client = websocket
     try:
         async for message in websocket:
+            print(message)
             if message == "Disconnect":
                 tcp_socket.send("Disconnect".encode('utf-8'))
-                tcp_socket.shutdown(socket.SHUT_RDWR)
+                print("MBot disconnected")
+                tcp_socket.close()
             elif message == "Close":
                 tcp_socket.send("Disconnect".encode('utf-8'))
                 tcp_socket.close()
                 print("Disconnected from Client & MBot")
                 await webApp_Client.close()
-                await deleteScript()
+                await websocket.close()
+                #await deleteScript()
             elif message == "searchForMBots":
                 if time.time() - last_execution >= duration + 2:
                     openUDPClient()

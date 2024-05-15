@@ -84,7 +84,7 @@ def onMessage(receivedMessage):
 
             # Variablen aus JSON extrahieren
             left = data.get("links", 0)
-            right = -data.get("rechts", 0)
+            right = data.get("rechts", 0)
 
             leftLED = data.get("leftLED", "000000")
             middleLeftLED = data.get("leftMiddleLED", "000000")
@@ -95,13 +95,13 @@ def onMessage(receivedMessage):
             suicidePrevention = data.get("suicidePrevention", False)
 
             # SuicidePrevention
-            if suicidePrevention:
+            if suicidePrevention and cyberpi.ultrasonic2.get(index=1) < 30:
                 left = 0
                 right = 0
                 cyberpi.mbot2.turn(180)
 
             # Motoren Geschwindigkeit setzen
-            cyberpi.mbot2.drive_power(-left, right)
+            cyberpi.mbot2.drive_power(left, -right)
 
             # Farben der Heckleuchte setzen
             if left == 0 and right == 0:
@@ -127,7 +127,7 @@ def onMessage(receivedMessage):
                 cyberpi.led.on(255, 255, 255, id=5)
                 cyberpi.audio.add_vol(100)
                 cyberpi.audio.play_tone(1000, 0.3)
-            elif right > left:
+            elif right < left:
                 # Rechts blinken
                 cyberpi.led.on(255, 0, 0, id=1)
                 cyberpi.led.on(255, 255, 255, id=2)
@@ -136,7 +136,7 @@ def onMessage(receivedMessage):
                 cyberpi.led.on(255, 255, 0, id=5)
                 time.sleep(0.05)
                 cyberpi.led.off(id=5)
-            elif left > right:
+            elif left < right:
                 # Links blinken
                 cyberpi.led.on(255, 255, 0, id=1)
                 cyberpi.led.on(255, 255, 255, id=2)
@@ -229,7 +229,7 @@ try:
 
         # Überprüfen ob Verbindung getrennt wurde
         if closed:
-            TCP_socket.shutdown(usocket.SHUT_RDWR)
+            TCP_socket.close()
             cyberpi.console.clear()
             cyberpi.console.print("Disconnected")
             cyberpi.led.on(0, 0, 0)

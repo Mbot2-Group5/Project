@@ -27,10 +27,6 @@ const timeToSaveData = 10;
 let ultrasonicSensorData = [];
 let accelerometerData = [];
 
-//SuicidePrevention
-const minDistanceToWall = 30; //Minimaler Abstand zur Wand                                                     NOCH ANZUPASSEN
-let underMinDistanceToWall = false;
-
 //geschwindigkeit für den LineFollower
 const lineFollowerSpeed = 40; //Line-Follower Geschwindigkeit                                                  NOCH ANZUPASSEN
 const lineFollowerCurveSpeed = 20; //Zusätzliche Geschwindigkeit für Kurven des Line-Followers                 NOCH ANZUPASSEN
@@ -139,9 +135,10 @@ function createWebSocketConnection() {
                     lineFollowerSpeedRight = 0;
                 }
 
-                //Überprüfen, ob die SuicidePrevention eingeschalten ist (wenn ja, Daten verarbeiten)
-                if (document.getElementById("suicidePrev").checked) {
-                    await suicidePrevention(data.ultrasonicSensor);
+                if(document.getElementById("suicidePrev").checked) {
+                    suicidePreventionPressed = true;
+                } else {
+                    suicidePreventionPressed = false;
                 }
 
                 console.log("Got Message from the TCP-Server");
@@ -206,6 +203,8 @@ async function checkConnectionStatus() {
 //Alle MBots mit denen eine Verbindung hergestellt werden kann erhalten
 async function getPossibleMBots() {
     try {
+        document.getElementById("showPossibleMBots").innerHTML = "";
+        document.getElementById("textForWhileSearchingMBot").style.display = "block";
         if (socket !== null) {
             if (Date.now() - lastExecutionTime >= duration) {
                 socket.send("searchForMBots");
@@ -312,19 +311,6 @@ async function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorM
         document.getElementById("lightSensorRight").style.background = lightSensorRight;
     } catch (error) {
         console.error(`Error while calculating commands in LineFollower: ${error}`);
-    }
-}
-
-//SuicidePrevention, sodass der MBot2 nicht gegen die Wand fährt & sich automatisch umdreht
-async function suicidePrevention(distanceToObject) {
-    try {
-        if (distanceToObject < minDistanceToWall) {
-            underMinDistanceToWall = true;
-        } else {
-            underMinDistanceToWall = false;
-        }
-    } catch (error) {
-        console.error(`Error in SuicidePrevention: ${error}`);
     }
 }
 
@@ -598,7 +584,7 @@ async function sendToMBot2() {
         if (right > maxForwardSpeed) {
             right = maxForwardSpeed - 1;
         } else if (right < maxReverseSpeed) {
-            right = maxReverseSpeed - 1;
+            right = maxReverseSpeed + 1;
         }
 
         //LineFollower
@@ -616,7 +602,7 @@ async function sendToMBot2() {
             middleLED: mitteLED,
             rightMiddleLED: rechtsMitteLED,
             rightLED: rechtsLED,
-            suicidePrevention: underMinDistanceToWall
+            suicidePrevention: suicidePreventionPressed
         }
         //Daten durch WebSocket über Server an MBot2 senden
         const json = JSON.stringify(data);
@@ -687,17 +673,16 @@ async function connectToFormerMBot() {
     }
 }
 
-//Funktion zum Trennen von bereits verbundenen MBots
-async function disconnectFromFormerMBot() {
-    await disconnectFromMBot2();
-}
-
 //Verbindung mit MBot herstellen
 async function connectToMBot2() {
     try {
+        window.closeConnecting();
         if (socket !== null) {
             //Kommunikation mit MBot2 freigeben
             initialized = true;
+
+            const form = document.getElementsByClassName("wrapper");
+            form[0].style.display = "none";
 
             const connectedListelement = document.getElementById(mBotID);
             connectedListelement.classList.add("connected");
@@ -726,7 +711,7 @@ async function disconnectFromMBot2() {
         initialized = false;
 
         //Trennen nachricht senden
-        socket.send("Disconnect");
+        socket.send(encoder.encode("Disconnect"));
         connected = false;
 
         console.log("MBot2 disconnected");
@@ -760,6 +745,9 @@ window.addEventListener("DOMContentLoaded", async function () {
 
     //Überprüfen, ob Benutzer mitteilt, dass er den Zwischenserver gestartet hat
     try {
+        //Search-text ausblenden
+        document.getElementById("textForWhileSearchingMBot").style.display = "none";
+
         //Überprüfen, ob der Benutzer bestätigt hat, dass er den ZwischenServer gestartet hat
         while (!document.getElementById("zwischenserverGestartet").checked) {
             //50 ms warten
@@ -784,7 +772,7 @@ window.addEventListener("DOMContentLoaded", async function () {
 //Wenn Client WebApp verlässt/zumacht, dann Verbindung beenden
 window.addEventListener("beforeunload", async function () {
     try {
-        socket.send("Close");
+        socket.send(encoder.encode("Close"));
         socket.close();
     } catch (error) {
         console.error(`Error while closing Connection with Server: ${error}`);
