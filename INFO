@@ -3,11 +3,10 @@ Geschwindigkeit für LineFollower noch anpassen (Zeilen 30 & 31 in webApp-Connec
 Von MBot disconnecten geht, aber nicht bei "close" obwohl doch eigentlich der code der selbe ist?
 
 
-
+beforeinstallprompt-Event wird nicht geschmissen/aufgerufen
 
 
 Style-Probleme(HAAS):
-Problem mit Style der start.html (einige Objekte erscheinend links außerhalb des Bildschirms)
 Überschrift erscheint zu hoch oben beim Starten
 Stylen der Charts
 Stylen der Controls (zu weit oben)
