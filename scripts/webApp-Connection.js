@@ -21,7 +21,7 @@ let rechtsLED = "ffffff";
 let lineFollowerPressed = false;
 let suicidePreventionPressed = false;
 
-//Daten vom Beschleunigungssensor & UltrasonicSensor der letzten 10 sekunden
+//Daten vom Beschleunigungssensor & UltrasonicSensor der letzten 10 Sekunden
 let lastExecutionTimeUpdateCharts = 0;
 const timeToSaveData = 10;
 let ultrasonicSensorData = [];

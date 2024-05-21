@@ -137,8 +137,8 @@ async def sendDataToMBot2FromWebApp(websocket):
                 tcp_socket.send("Disconnect".encode('utf-8'))
                 print("Disconnected from Client & MBot")
                 tcp_socket.close()
-                await webApp_Client.close()
-                await websocket.close()
+                webApp_Client.close()
+                websocket.close()
                 #await deleteScript()      Auskommentieren, wenn Script durch WebApp und nicht hier local gestartet wird
             elif message == "searchForMBots":
                 if time.time() - last_execution >= duration + 2:
