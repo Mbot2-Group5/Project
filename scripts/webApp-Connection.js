@@ -27,9 +27,9 @@ const timeToSaveData = 10;
 let ultrasonicSensorData = [];
 let accelerometerData = [];
 
-//geschwindigkeit für den LineFollower
-const lineFollowerSpeed = 40; //Line-Follower Geschwindigkeit                                                  NOCH ANZUPASSEN
-const lineFollowerCurveSpeed = 20; //Zusätzliche Geschwindigkeit für Kurven des Line-Followers                 NOCH ANZUPASSEN
+//Geschwindigkeiten für den LineFollower
+const lineFollowerSpeed = 40; //Line-Follower Geschwindigkeit (muss noch angepasst & getestet werden)
+const lineFollowerCurveSpeed = 20; //Kurvengeschwindigkeit des Line-Followers (muss noch angepasst & getestet werden)
 let lineFollowerSpeedLeft = 0;
 let lineFollowerSpeedRight = 0;
 
@@ -710,7 +710,7 @@ async function disconnectFromMBot2() {
         //Kommunikation beenden
         initialized = false;
 
-        //Trennen nachricht senden
+        //Trennen Nachricht senden
         socket.send(encoder.encode("Disconnect"));
         connected = false;
 
@@ -772,6 +772,10 @@ window.addEventListener("DOMContentLoaded", async function () {
 //Wenn Client WebApp verlässt/zumacht, dann Verbindung beenden
 window.addEventListener("beforeunload", async function () {
     try {
+        //Kommunikation beenden
+        initialized = false;
+
+        //Schließen-Nachricht senden
         socket.send(encoder.encode("Close"));
         socket.close();
     } catch (error) {

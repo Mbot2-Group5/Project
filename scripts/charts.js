@@ -1,5 +1,5 @@
 /*Autor: Stefan Rautner*/
-const demoData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const demoData = [];
 localStorage.setItem('beschleunigungsChartData', demoData.join(','));
 localStorage.setItem('abstandChartData', demoData.join(','));
 
