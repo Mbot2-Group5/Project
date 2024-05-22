@@ -2,6 +2,9 @@ Geschwindigkeiten für LineFollower noch anpassen (Zeilen 30 & 31 in webApp-Conn
 
 Von MBot disconnecten geht, aber nicht bei "close" obwohl doch eigentlich der code der selbe ist? (webApp-Connection.js)
 (dadurch auch löschen nicht möglich)
+gefixt?
+
+Neues MBot-Script testen & debuggen (dadurch kein Restart des MBot nach trennen nötig?)
 
 
 

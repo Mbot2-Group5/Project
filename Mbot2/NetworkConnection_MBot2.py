@@ -165,7 +165,7 @@ def sendMessage():
             "gyroscopePitch": cyberpi.get_pitch(),
             # Daten des Gyrosensors (Links & Rechts), z-Achse
             "gyroscopeYaw": cyberpi.get_yaw(),
-            # Daten des Gyroscopesensors (Oben & Unten), y-Achse
+            # Daten des Gyrosensors (Oben & Unten), y-Achse
             "gyroscopeRoll": cyberpi.get_roll(),
             # Daten des Beschleunigungsmessers
             "accelerometer": cyberpi.get_acc("y"),
