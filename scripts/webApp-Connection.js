@@ -121,6 +121,11 @@ function createWebSocketConnection() {
                     lastExecutionTimeUpdateCharts = Date.now();
                 }
 
+                if (data.suicideActivated) {
+                    left = 0;
+                    right = 0;
+                }
+
                 //LocalStorage Variablen der Charts setzen
                 localStorage.setItem('beschleunigungsChartData', accelerometerData.join(','));
                 localStorage.setItem('abstandChartData', ultrasonicSensorData.join(','));
@@ -135,7 +140,7 @@ function createWebSocketConnection() {
                     lineFollowerSpeedRight = 0;
                 }
 
-                if(document.getElementById("suicidePrev").checked) {
+                if (document.getElementById("suicidePrev").checked) {
                     suicidePreventionPressed = true;
                 } else {
                     suicidePreventionPressed = false;
@@ -777,7 +782,7 @@ window.addEventListener("beforeunload", async function () {
 
         //Schließen-Nachricht senden
         socket.send(encoder.encode("Close"));
-        socket.close();
+        setTimeout(socket.close(), 5000);
     } catch (error) {
         console.error(`Error while closing Connection with Server: ${error}`);
     }

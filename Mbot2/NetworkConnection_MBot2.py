@@ -23,6 +23,9 @@ cyberpi.led.on(0, 0, 255)
 host = ""
 port = 5431
 
+# Variable für SuicidePrevention
+suicidePrevention  = False
+
 # WLAN-Verbindung initialisieren
 wifi = network.WLAN(network.STA_IF)
 try:

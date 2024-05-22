@@ -128,7 +128,6 @@ async def sendDataToMBot2FromWebApp(websocket):
     webApp_Client = websocket
     try:
         async for message in websocket:
-            print(message)
             if message == "Disconnect":
                 tcp_socket.send("Disconnect".encode('utf-8'))
                 print("MBot disconnected")
@@ -137,9 +136,10 @@ async def sendDataToMBot2FromWebApp(websocket):
                 tcp_socket.send("Disconnect".encode('utf-8'))
                 print("Disconnected from Client & MBot")
                 tcp_socket.close()
-                webApp_Client.close()
-                websocket.close()
-                #await deleteScript()      Auskommentieren, wenn Script durch WebApp und nicht hier local gestartet wird
+                await webApp_Client.close()
+                await websocket.close()
+                await deleteScript()
+                asyncio.get_event_loop().stop()
             elif message == "searchForMBots":
                 if time.time() - last_execution >= duration + 2:
                     openUDPClient()
@@ -157,10 +157,12 @@ async def sendDataToMBot2FromWebApp(websocket):
         print(f"Error while sending message to TCP-Server: {e}")
 
 
+# Main
 async def main():
     print("Server reading and listening on 'ws://localhost:5431'")
     async with websockets.serve(sendDataToMBot2FromWebApp, "localhost", 5431):
         await asyncio.Future()
 
 
+# Main async starten
 asyncio.run(main())
