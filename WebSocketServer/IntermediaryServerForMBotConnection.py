@@ -134,10 +134,9 @@ async def sendDataToMBot2FromWebApp(websocket):
                 tcp_socket.close()
             elif message == "Close":
                 tcp_socket.send("Disconnect".encode('utf-8'))
+                print("Client closed")
                 print("Disconnected from Client & MBot")
                 tcp_socket.close()
-                await webApp_Client.close()
-                await websocket.close()
                 await deleteScript()
                 asyncio.get_event_loop().stop()
             elif message == "searchForMBots":
