@@ -12,7 +12,8 @@ function hideClass(name) {
  // found in the LICENSE file.
  (function() {
  'use strict';
- /**
+
+  /**
  * T-Rex runner.
  * @param {string} outerContainerId Outer containing element id.
  * @param {object} opt_config
