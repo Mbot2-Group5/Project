@@ -5,6 +5,7 @@ Von MBot disconnecten geht, aber nicht bei "close" obwohl doch eigentlich der co
 gefixt?
 
 Neues MBot-Script testen & debuggen (dadurch kein Restart des MBot nach trennen nötig?)
+(wird die main mehrere male aufgerufen, benötigt fü resetten des mbot?)
 
 
 
