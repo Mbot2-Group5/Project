@@ -16,73 +16,74 @@ class MBotController:
 
     # "Main" der Klasse
     def start(self):
-        while True:
+        try:
+            # Benutzer zum Starten auffordern
+            cyberpi.console.print("Press A to start")
+            while not cyberpi.controller.is_press('a'):
+                pass
+            cyberpi.console.clear()
+            cyberpi.led.on(0, 0, 255)
+
+            # WLAN-Verbindung herstellen
+            wifi = network.WLAN(network.STA_IF)
             try:
-                # Benutzer zum Starten auffordern
-                cyberpi.console.print("Press A to start")
-                while not cyberpi.controller.is_press('a'):
-                    pass
-                cyberpi.console.clear()
-                cyberpi.led.on(0, 0, 255)
-
-                # WLAN-Verbindung herstellen
-                wifi = network.WLAN(network.STA_IF)
-                try:
-                    wifi.active(True)
-                    wifi.connect('htljoh-public', 'joh12345')
-                except Exception as exception:
-                    cyberpi.console.print("Error at initializing Connection to WLAN: " + str(exception))
-
-                # Netzwerk-Variablen initialisieren
-                host = ""
-                port = 5431
-
-                # Auf Verbindung mit Netzwerk warten
-                try:
-                    while not wifi.isconnected():
-                        cyberpi.console.clear()
-                        cyberpi.console.print("Getting IP-Address")
-                        time.sleep(1)
-                        cyberpi.led.on(0, 255, 0)
-                        host = wifi.ifconfig()[0]
-                        cyberpi.console.clear()
-                        cyberpi.console.print(host)
-                        time.sleep(1)
-                except Exception as exception:
-                    cyberpi.console.clear()
-                    cyberpi.console.print("Error connecting to the network: " + str(exception))
-                    cyberpi.led.on(255, 0, 0)
-                    time.sleep(5)
-
-                # TCP-Server erstellen (max. 1 Verbindung)
-                try:
-                    self.TCP_socket.bind((host, port))
-                    self.TCP_socket.listen(1)
-                    self.TCP_socket.settimeout(0.1)
-                except Exception as exception:
-                    cyberpi.console.clear()
-                    cyberpi.console.print("Error creating TCP-Server: " + str(exception))
-                    cyberpi.led.on(255, 0, 0)
-                    time.sleep(5)
-
-                # UDP Socket erstellen
-                try:
-                    # UDP-Socket erstellen
-                    self.UDP_socket.bind((host, port))
-                except Exception as exception:
-                    cyberpi.console.clear()
-                    cyberpi.console.print("Error creating UDP-Server: " + str(exception))
-                    cyberpi.led.on(255, 0, 0)
-                    time.sleep(5)
-
-                # Broadcast senden-Funktion aufrufen
-                self.handle_connections()
-                break
+                wifi.active(True)
+                wifi.connect('htljoh-public', 'joh12345')
             except Exception as exception:
                 cyberpi.console.clear()
-                cyberpi.console.print("Error:", str(exception))
+                cyberpi.console.print("Error at initializing Connection to WLAN: " + str(exception))
                 cyberpi.led.on(255, 0, 0)
-                time.sleep(5)
+                return None
+
+            # Netzwerk-Variablen initialisieren
+            host = ""
+            port = 5431
+
+            # Auf Verbindung mit Netzwerk warten
+            try:
+                while not wifi.isconnected():
+                    cyberpi.console.clear()
+                    cyberpi.console.print("Getting IP-Address")
+                    time.sleep(1)
+                    cyberpi.led.on(0, 255, 0)
+                    host = wifi.ifconfig()[0]
+                    cyberpi.console.clear()
+                    cyberpi.console.print(host)
+                    time.sleep(1)
+            except Exception as exception:
+                cyberpi.console.clear()
+                cyberpi.console.print("Error connecting to the network: " + str(exception))
+                cyberpi.led.on(255, 0, 0)
+                return None
+
+            # TCP-Server erstellen (max. 1 Verbindung)
+            try:
+                self.TCP_socket.bind((host, port))
+                self.TCP_socket.listen(1)
+                self.TCP_socket.settimeout(0.1)
+            except Exception as exception:
+                cyberpi.console.clear()
+                cyberpi.console.print("Error creating TCP-Server: " + str(exception))
+                cyberpi.led.on(255, 0, 0)
+                return None
+
+            # UDP Socket erstellen
+            try:
+                # UDP-Socket erstellen
+                self.UDP_socket.bind((host, port))
+            except Exception as exception:
+                cyberpi.console.clear()
+                cyberpi.console.print("Error creating UDP-Server: " + str(exception))
+                cyberpi.led.on(255, 0, 0)
+                return None
+
+            # Broadcast senden-Funktion aufrufen
+            self.handle_connections()
+        except Exception as exception:
+            cyberpi.console.clear()
+            cyberpi.console.print("Error:", str(exception))
+            cyberpi.led.on(255, 0, 0)
+            return None
 
     # Funktion um die Verbindung eines Clients mit dem TCP-Socket über den Broadcast des UDP-Sockets herzustellen
     def handle_connections(self):
@@ -101,14 +102,15 @@ class MBotController:
                     cyberpi.console.print("Connected to controller: ", address)
                     self.UDP_socket.close()
                     self.handle_messages()
-                    break
+                    self.__init__()
+                    self.start()
             except OSError:
                 time.sleep(1)
             except Exception as exception:
                 cyberpi.console.clear()
                 cyberpi.console.print("Error at connecting to Client: " + str(exception))
                 cyberpi.led.on(255, 0, 0)
-                time.sleep(5)
+                return None
 
     # Funktion, um TCP-Socket auf eingehende Nachrichten abhören
     def handle_messages(self):
@@ -134,6 +136,8 @@ class MBotController:
             except Exception as exception:
                 cyberpi.console.clear()
                 cyberpi.console.print("Error:", str(exception))
+                cyberpi.led.on(255, 0, 0)
+                return None
 
     # Statische Funktion zum Verarbeiten der vom TCP-Socket empfangenen Daten
     @staticmethod
@@ -222,6 +226,8 @@ class MBotController:
         except Exception as exception:
             cyberpi.console.clear()
             cyberpi.console.print("Error processing message:", str(exception))
+            cyberpi.led.on(255, 0, 0)
+            return None
         return False
 
     # Statische Funktion, um Daten über den TCP-Socket zurückzusenden
@@ -262,6 +268,7 @@ class MBotController:
             cyberpi.console.clear()
             cyberpi.console.print("Error at sending message: ", str(exception))
             cyberpi.led.on(255, 0, 0)
+            return None
 
 
 # Main des Scripts

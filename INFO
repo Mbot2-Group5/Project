@@ -1,7 +1,7 @@
 Geschwindigkeiten für LineFollower noch anpassen (Zeilen 30 & 31 in webApp-Connection.js)
 
-Neues MBot-Script testen & debuggen (dadurch kein Restart des MBot nach trennen nötig?)
-(wird die main mehrere male aufgerufen, benötigt für resetten des mbot?)
+Neues MBot-Script testen & debuggen
+Funktionieren Zeilen 105 & 106 so richtig (sollten die complete Klasse "neu aufsetzen")?
 
 
 
