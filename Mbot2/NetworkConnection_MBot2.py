@@ -24,7 +24,7 @@ host = ""
 port = 5431
 
 # Variable für SuicidePrevention
-suicidePrevention  = False
+suicidePrevention = False
 
 # WLAN-Verbindung initialisieren
 wifi = network.WLAN(network.STA_IF)
@@ -109,11 +109,16 @@ def onMessage(receivedMessage):
             # Farben der Heckleuchte setzen
             if left == 0 and right == 0:
                 # Ambiente Beleuchtung
-                cyberpi.led.on(int("0x" + leftLED[:2], 16), int("0x" + leftLED[2:4], 16), int("0x" + leftLED[4:6], 16), id=1)
-                cyberpi.led.on(int("0x" + middleLeftLED[:2], 16), int("0x" + middleLeftLED[2:4], 16), int("0x" + middleLeftLED[:4], 16), id=2)
-                cyberpi.led.on(int("0x" + middleLED[:2], 16), int("0x" + middleLED[2:4], 16), int("0x" + middleLED[4:6], 16), id=3)
-                cyberpi.led.on(int("0x" + middleRightLED[:2], 16), int("0x" + middleRightLED[2:4], 16), int("0x" + middleRightLED[4:6], 16), id=4)
-                cyberpi.led.on(int("0x" + rightLED[:2], 16), int("0x" + rightLED[2:4], 16), int("0x" + rightLED[4:6], 16), id=5)
+                cyberpi.led.on(int("0x" + leftLED[:2], 16), int("0x" + leftLED[2:4], 16), int("0x" + leftLED[4:6], 16),
+                               id=1)
+                cyberpi.led.on(int("0x" + middleLeftLED[:2], 16), int("0x" + middleLeftLED[2:4], 16),
+                               int("0x" + middleLeftLED[:4], 16), id=2)
+                cyberpi.led.on(int("0x" + middleLED[:2], 16), int("0x" + middleLED[2:4], 16),
+                               int("0x" + middleLED[4:6], 16), id=3)
+                cyberpi.led.on(int("0x" + middleRightLED[:2], 16), int("0x" + middleRightLED[2:4], 16),
+                               int("0x" + middleRightLED[4:6], 16), id=4)
+                cyberpi.led.on(int("0x" + rightLED[:2], 16), int("0x" + rightLED[2:4], 16),
+                               int("0x" + rightLED[4:6], 16), id=5)
             elif left == right and right > 0:
                 # Vorwärts fahren
                 cyberpi.led.on(255, 0, 0, id=1)

@@ -12,7 +12,6 @@ class MBotController:
     def __init__(self):
         self.UDP_socket = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM)
         self.TCP_socket = usocket.socket(usocket.AF_INET, usocket.SOCK_STREAM)
-        self.closed = False
         self.suicidePrevention = False
 
     # "Main" der Klasse
@@ -70,9 +69,9 @@ class MBotController:
                 try:
                     # UDP-Socket erstellen
                     self.UDP_socket.bind((host, port))
-                except Exception as e:
+                except Exception as exception:
                     cyberpi.console.clear()
-                    cyberpi.console.print("Error creating UDP-Server: " + str(e))
+                    cyberpi.console.print("Error creating UDP-Server: " + str(exception))
                     cyberpi.led.on(255, 0, 0)
                     time.sleep(5)
 
@@ -81,7 +80,7 @@ class MBotController:
                 break
             except Exception as exception:
                 cyberpi.console.clear()
-                cyberpi.console.print("Error:", exception)
+                cyberpi.console.print("Error:", str(exception))
                 cyberpi.led.on(255, 0, 0)
                 time.sleep(5)
 
@@ -124,7 +123,6 @@ class MBotController:
                         self.TCP_socket.close()
                         cyberpi.console.clear()
                         cyberpi.console.print("Disconnected")
-                        self.closed = True
                         break
                     else:
                         self.send_message(self)
@@ -133,9 +131,9 @@ class MBotController:
             except OSError:
                 cyberpi.console.clear()
                 cyberpi.console.print("No message received")
-            except Exception as e:
+            except Exception as exception:
                 cyberpi.console.clear()
-                cyberpi.console.print("Error:", e)
+                cyberpi.console.print("Error:", str(exception))
 
     # Statische Funktion zum Verarbeiten der vom TCP-Socket empfangenen Daten
     @staticmethod
@@ -176,7 +174,7 @@ class MBotController:
 
                 # Farben der Heckleuchte setzen
                 if left == 0 and right == 0:
-                    # Ambiente Beleuchtung
+                    # Ambientebeleuchtung
                     cyberpi.led.on(int("0x" + leftLED[:2], 16), int("0x" + leftLED[2:4], 16),
                                    int("0x" + leftLED[4:6], 16), id=1)
                     cyberpi.led.on(int("0x" + middleLeftLED[:2], 16), int("0x" + middleLeftLED[2:4], 16),
@@ -221,10 +219,9 @@ class MBotController:
                     cyberpi.led.on(255, 0, 0, id=5)
                     time.sleep(0.05)
                     cyberpi.led.off(id=1)
-        except Exception as ex:
+        except Exception as exception:
             cyberpi.console.clear()
-            cyberpi.console.print("Error processing message:", ex)
-
+            cyberpi.console.print("Error processing message:", str(exception))
         return False
 
     # Statische Funktion, um Daten über den TCP-Socket zurückzusenden
@@ -263,7 +260,7 @@ class MBotController:
                 cyberpi.console.print("Message sent to controller")
         except Exception as exception:
             cyberpi.console.clear()
-            cyberpi.console.print("Error at sending message: ", exception)
+            cyberpi.console.print("Error at sending message: ", str(exception))
             cyberpi.led.on(255, 0, 0)
 
 
