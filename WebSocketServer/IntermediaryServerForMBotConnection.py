@@ -57,7 +57,7 @@ last_execution = 0
 
 
 # Verbindung zum UDP-Server herstellen
-def openUDPClient():
+async def openUDPClient():
     global last_execution
     last_execution = time.time()
     try:
@@ -66,13 +66,13 @@ def openUDPClient():
         udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         udp_socket.bind(("0.0.0.0", 1900))
         udp_socket.settimeout(1)
-        listenToBroadcast(udp_socket)
+        await listenToBroadcast(udp_socket)
     except Exception as e:
         print(f"Error while opening UDP-Client: {e}")
 
 
 # Broadcast nach der vordefinierten Nachricht "absuchen"
-def listenToBroadcast(udp_socket):
+async def listenToBroadcast(udp_socket):
     global broadcast, possibleMBots
     start_time = time.time()
     possibleMBots.append("MBots:")
@@ -94,6 +94,7 @@ def listenToBroadcast(udp_socket):
 
 # Verbindung zum TCP-Server herstellen
 def openTCPClient(address):
+    global tcp_socket
     try:
         address = address.split(",")
         tcp_socket.connect((address[0], int(address[1])))
@@ -115,33 +116,37 @@ async def sendDataToWebAppFromMBot2():
         print(f"Error while receiving message from TCP-Server: {e}")
 
 
-# Script vom PC des Users löschen, wenn der WebApp-Controller geschlossen wird
+# Script vom PC des Users löschen & Console schließen, wenn der WebApp-Controller geschlossen wird
 async def deleteScript():
     print("Deleting Script")
     script_path = os.path.realpath(__file__)
     os.remove(script_path)
+    sys.exit()
 
 
 # Daten von WebApp(WebSocket) über TCP an MBot2 senden
 async def sendDataToMBot2FromWebApp(websocket):
-    global first_message, webApp_Client, possibleMBots
+    global first_message, webApp_Client, possibleMBots, tcp_socket
     webApp_Client = websocket
     try:
         async for message in websocket:
             if message == "Disconnect":
-                tcp_socket.send("Disconnect".encode('utf-8'))
+                if await checkTCPSocketStatus():
+                    tcp_socket.send("Disconnect".encode('utf-8'))
+                    tcp_socket.close()
                 print("MBot disconnected")
-                tcp_socket.close()
             elif message == "Close":
-                tcp_socket.send("Disconnect".encode('utf-8'))
+                if await checkTCPSocketStatus():
+                    tcp_socket.send("Disconnect".encode('utf-8'))
+                    tcp_socket.close()
                 print("Client closed")
                 print("Disconnected from Client & MBot")
-                tcp_socket.close()
                 await deleteScript()
-                asyncio.get_event_loop().stop()
+                await websocket.close()
+                break
             elif message == "searchForMBots":
                 if time.time() - last_execution >= duration + 2:
-                    openUDPClient()
+                    await openUDPClient()
                     await webApp_Client.send(json.dumps(possibleMBots).encode('utf-8'))
                     print("Send possible MBots")
                 possibleMBots = []
@@ -154,6 +159,25 @@ async def sendDataToMBot2FromWebApp(websocket):
                 await sendDataToWebAppFromMBot2()
     except Exception as e:
         print(f"Error while sending message to TCP-Server: {e}")
+
+
+# Funktion um zu Überprüfen, ob der Websocket verbunden ist
+async def checkWebSocketStatus(websocket):
+    try:
+        await websocket.close()
+        return True
+    except Exception:
+        return False
+
+
+# Funktion um zu Überprüfen, ob der TCP-Socket verbunden ist
+async def checkTCPSocketStatus():
+    global tcp_socket
+    try:
+        await tcp_socket.close()
+        return True
+    except Exception:
+        return False
 
 
 # Main

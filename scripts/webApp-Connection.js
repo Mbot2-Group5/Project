@@ -724,6 +724,9 @@ async function disconnectFromMBot2() {
         connected = false;
 
         console.log("MBot2 disconnected");
+
+        localStorage.setItem('beschleunigungsChartData', JSON.stringify([]));
+        localStorage.setItem('abstandChartData', JSON.stringify([]));
     } catch (error) {
         console.error(`Error while disconnecting from MBot: ${error}`);
     }
@@ -781,15 +784,19 @@ window.addEventListener("DOMContentLoaded", async function () {
 //Wenn Client WebApp verlässt/zumacht, dann Verbindung beenden
 window.addEventListener("beforeunload", async function () {
     try {
-        //Kommunikation beenden
+        // Kommunikation beenden
         initialized = false;
 
-        //Schließen-Nachricht senden
-        socket.send(encoder.encode("Close"));
-        setTimeout(socket.close(), 5000);
+        // Schließen-Nachricht senden
+        if(socket.readyState === WebSocket.OPEN) {
+            socket.send("Close");
+            socket.close();
+        }
     } catch (error) {
         console.error(`Error while closing Connection with Server: ${error}`);
     }
+
+    // Localstorage-Variablen löschen
     localStorage.remove('beschleunigungsChartData');
     localStorage.remove('abstandChartData');
 });
