@@ -1,4 +1,5 @@
 Geschwindigkeiten für LineFollower noch anpassen (Zeilen 30 & 31 in webApp-Connection.js)
+Möglicherweise Funktionalität in webApp-Connection.js zerstört (muss schauen, ob mit den hex werten Vergleich so möglich ist)
 
 Von MBot disconnecten geht, aber nicht bei "close" obwohl doch eigentlich der code der selbe ist? (webApp-Connection.js)
 (dadurch auch löschen nicht möglich)

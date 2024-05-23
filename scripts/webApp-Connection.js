@@ -299,16 +299,16 @@ async function communicating() {
 //Funktion für die Berechnungen des LineFollowers
 async function lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleRight, lightSensorRight) {
     try {
-        if (lightSensorMiddleLeft !== "white" && lightSensorMiddleRight !== "white") {
+        if (lightSensorMiddleLeft !== "#ffffff" && lightSensorMiddleRight !== "#ffffff") {
             lineFollowerSpeedLeft = lineFollowerSpeed;
             lineFollowerSpeedRight = lineFollowerSpeed;
-        } else if (lightSensorMiddleLeft !== "white" && lightSensorMiddleRight === "white") {
+        } else if (lightSensorMiddleLeft !== "#ffffff" && lightSensorMiddleRight === "#ffffff") {
             lineFollowerSpeedLeft = -lineFollowerCurveSpeed;
             lineFollowerSpeedRight = lineFollowerCurveSpeed;
-        } else if (lightSensorMiddleLeft === "white" && lightSensorMiddleRight !== "white") {
+        } else if (lightSensorMiddleLeft === "#ffffff" && lightSensorMiddleRight !== "#ffffff") {
             lineFollowerSpeedLeft = lineFollowerCurveSpeed;
             lineFollowerSpeedRight = -lineFollowerCurveSpeed;
-        } else if (lightSensorMiddleLeft === "white" && lightSensorMiddleRight === "white") {
+        } else if (lightSensorMiddleLeft === "#ffffff" && lightSensorMiddleRight === "#ffffff") {
             lineFollowerSpeedLeft = -lineFollowerSpeed;
             lineFollowerSpeedRight = -lineFollowerSpeed;
         }
