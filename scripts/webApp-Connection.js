@@ -104,7 +104,7 @@ function createWebSocketConnection() {
                 updateOrientation(data.gyroscopeRoll, -data.gyroscopePitch, data.gyroscopeYaw + 150.45);
 
                 //Farbe unter dem MBot
-                document.getElementById("rgbSensor").style.background = data.rgbSensorMiddleRight;
+                document.getElementById("rgbSensor").style.background = "#" + (data.rgbSensorMiddleRight).slice(2);
 
                 //Zeitdaten des Ultrasonic-Sensors & Beschleunigungssensors updaten
                 if (Date.now() >= lastExecutionTimeUpdateCharts + 500) {
@@ -132,7 +132,11 @@ function createWebSocketConnection() {
 
                 //Überprüfen, ob der LineFollower eingeschalten ist (wenn ja, Daten verarbeiten)
                 if (document.getElementById("lineFollower").checked) {
-                    await lineFollower(data.rgbSensorLeft, data.rgbSensorMiddleLeft, data.rgbSensorMiddleRight, data.rgbSensorRight);
+                    const lightSensorLeft = "#" + (data.rgbSensorLeft).slice(2);
+                    const lightSensorMiddleLeft = "#" + (data.rgbSensorMiddleLeft).slice(2);
+                    const lightSensorMiddleRight = "#" + (data.rgbSensorMiddleRight).slice(2);
+                    const lightSensorRight = "#" + (data.rgbSensorRight).slice(2);
+                    await lineFollower(lightSensorLeft, lightSensorMiddleLeft, lightSensorMiddleRight, lightSensorRight);
                 } else if (lineFollowerSpeedLeft !== 0 || lineFollowerSpeedRight !== 0) {
                     left = 0;
                     right = 0;

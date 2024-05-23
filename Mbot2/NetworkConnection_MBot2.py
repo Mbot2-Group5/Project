@@ -24,7 +24,8 @@ host = ""
 port = 5431
 
 # Variable für SuicidePrevention
-suicidePrevention = False
+suicidePrevention  = False
+suicideActivated = False
 
 # WLAN-Verbindung initialisieren
 wifi = network.WLAN(network.STA_IF)
@@ -102,6 +103,9 @@ def onMessage(receivedMessage):
                 left = 0
                 right = 0
                 cyberpi.mbot2.turn(180)
+                suicideActivated = True
+            else:
+                suicideActivated = False
 
             # Motoren Geschwindigkeit setzen
             cyberpi.mbot2.drive_power(left, -right)
@@ -109,16 +113,11 @@ def onMessage(receivedMessage):
             # Farben der Heckleuchte setzen
             if left == 0 and right == 0:
                 # Ambiente Beleuchtung
-                cyberpi.led.on(int("0x" + leftLED[:2], 16), int("0x" + leftLED[2:4], 16), int("0x" + leftLED[4:6], 16),
-                               id=1)
-                cyberpi.led.on(int("0x" + middleLeftLED[:2], 16), int("0x" + middleLeftLED[2:4], 16),
-                               int("0x" + middleLeftLED[:4], 16), id=2)
-                cyberpi.led.on(int("0x" + middleLED[:2], 16), int("0x" + middleLED[2:4], 16),
-                               int("0x" + middleLED[4:6], 16), id=3)
-                cyberpi.led.on(int("0x" + middleRightLED[:2], 16), int("0x" + middleRightLED[2:4], 16),
-                               int("0x" + middleRightLED[4:6], 16), id=4)
-                cyberpi.led.on(int("0x" + rightLED[:2], 16), int("0x" + rightLED[2:4], 16),
-                               int("0x" + rightLED[4:6], 16), id=5)
+                cyberpi.led.on(int("0x" + leftLED[:2], 16), int("0x" + leftLED[2:4], 16), int("0x" + leftLED[4:6], 16), id=1)
+                cyberpi.led.on(int("0x" + middleLeftLED[:2], 16), int("0x" + middleLeftLED[2:4], 16), int("0x" + middleLeftLED[:4], 16), id=2)
+                cyberpi.led.on(int("0x" + middleLED[:2], 16), int("0x" + middleLED[2:4], 16), int("0x" + middleLED[4:6], 16), id=3)
+                cyberpi.led.on(int("0x" + middleRightLED[:2], 16), int("0x" + middleRightLED[2:4], 16), int("0x" + middleRightLED[4:6], 16), id=4)
+                cyberpi.led.on(int("0x" + rightLED[:2], 16), int("0x" + rightLED[2:4], 16), int("0x" + rightLED[4:6], 16), id=5)
             elif left == right and right > 0:
                 # Vorwärts fahren
                 cyberpi.led.on(255, 0, 0, id=1)
@@ -170,20 +169,21 @@ def sendMessage():
             "gyroscopePitch": cyberpi.get_pitch(),
             # Daten des Gyrosensors (Links & Rechts), z-Achse
             "gyroscopeYaw": cyberpi.get_yaw(),
-            # Daten des Gyrosensors (Oben & Unten), y-Achse
+            # Daten des Gyroscopesensors (Oben & Unten), y-Achse
             "gyroscopeRoll": cyberpi.get_roll(),
             # Daten des Beschleunigungsmessers
             "accelerometer": cyberpi.get_acc("y"),
             # Daten des RGB-Sensors(Lichtsensors), Links
-            "rgbSensorLeft": cyberpi.quad_rgb_sensor.get_color_sta(4, index=1),
+            "rgbSensorLeft": cyberpi.quad_rgb_sensor.get_color(4, index=1),
             # Daten des RGB-Sensors(Lichtsensors), Mitte Links
-            "rgbSensorMiddleLeft": cyberpi.quad_rgb_sensor.get_color_sta(3, index=1),
+            "rgbSensorMiddleLeft": cyberpi.quad_rgb_sensor.get_color(3, index=1),
             # Daten des RGB-Sensors(Lichtsensors), Mitte Rechts
-            "rgbSensorMiddleRight": cyberpi.quad_rgb_sensor.get_color_sta(2, index=1),
+            "rgbSensorMiddleRight": cyberpi.quad_rgb_sensor.get_color(2, index=1),
             # Daten des RGB-Sensors(Lichtsensors), Rechts
-            "rgbSensorRight": cyberpi.quad_rgb_sensor.get_color_sta(1, index=1),
+            "rgbSensorRight": cyberpi.quad_rgb_sensor.get_color(1, index=1),
             # Daten des Ultraschallsensors
-            "ultrasonicSensor": cyberpi.ultrasonic2.get(index=1)
+            "ultrasonicSensor": cyberpi.ultrasonic2.get(index=1),
+            "suicideActivated": suicideActivated
         }
         return json.dumps(response_data)
     except Exception as ex:

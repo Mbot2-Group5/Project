@@ -239,13 +239,13 @@ class MBotController:
                 # Daten des Beschleunigungsmessers
                 "accelerometer": cyberpi.get_acc("y"),
                 # Daten des RGB-Sensors(Lichtsensors), Links
-                "rgbSensorLeft": cyberpi.quad_rgb_sensor.get_color_sta(4, index=1),
+                "rgbSensorLeft": cyberpi.quad_rgb_sensor.get_color(4, index=1),
                 # Daten des RGB-Sensors(Lichtsensors), Mitte Links
-                "rgbSensorMiddleLeft": cyberpi.quad_rgb_sensor.get_color_sta(3, index=1),
+                "rgbSensorMiddleLeft": cyberpi.quad_rgb_sensor.get_color(3, index=1),
                 # Daten des RGB-Sensors(Lichtsensors), Mitte Rechts
-                "rgbSensorMiddleRight": cyberpi.quad_rgb_sensor.get_color_sta(2, index=1),
+                "rgbSensorMiddleRight": cyberpi.quad_rgb_sensor.get_color(2, index=1),
                 # Daten des RGB-Sensors(Lichtsensors), Rechts
-                "rgbSensorRight": cyberpi.quad_rgb_sensor.get_color_sta(1, index=1),
+                "rgbSensorRight": cyberpi.quad_rgb_sensor.get_color(1, index=1),
                 # Daten des Ultraschallsensors
                 "ultrasonicSensor": cyberpi.ultrasonic2.get(index=1),
                 # SuicidePrevention ausgelöst, dann Geschwindigkeit resetten
