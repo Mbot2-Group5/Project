@@ -141,6 +141,8 @@ async def sendDataToMBot2FromWebApp(websocket):
                     tcp_socket.close()
                 print("Client closed")
                 print("Disconnected from Client & MBot")
+                print("Deleting the Intermediary Server...")
+                time.sleep(1)
                 await deleteScript()
                 await websocket.close()
                 break
