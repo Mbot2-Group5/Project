@@ -3,6 +3,11 @@ Geschwindigkeiten für LineFollower noch anpassen (Zeilen 30 & 31 in webApp-Conn
 Neues MBot-Script testen & debuggen
 Funktionieren Zeilen 106 & 107 so richtig (sollten die complete Klasse "neu aufsetzen")?
 
+Zwischenserver irgendwie änders finden (nicht statisch) oder Auswahl ob auf localhost oder auf anderem Gerät gehostet
+heißt: Auf Mobilem Gerät (Handy, Tablet, ...) User nach der IP-Adresse des Geräts auf welchem der Zwischenserver gehostet wird fragen
+Auf WebApp automatisch erkennen ob mobil gerät, wenn ja dann eigene html seite automatisch aufmachen, wo nach ip addresse gefragt wird, wenn px dann dieses fenster nicht anzeigen und automatisch auf localhost stellen
+ip adresse auf zwischenserver anzeigen, dass user diese nicht suchen muss
+
 
 
 
