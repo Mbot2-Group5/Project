@@ -50,6 +50,9 @@ const duration = 11000; //11 Sekunden
 //Variable für Verbindungsstatus mit MBot
 let connected = false;
 
+//IP-Addresse des Zwischenservers
+let intermediaryServerIP = "127.0.0.1";
+
 //Überprüfung, ob jede Sekunde mindestens eine Nachricht empfangen wurde
 setInterval(checkConnectionStatus, 1000);
 
@@ -734,25 +737,41 @@ async function disconnectFromMBot2() {
 
 //Zwischenserver downloaden & Benutzer anweisen den Zwischenserver zu starten
 window.addEventListener("DOMContentLoaded", async function () {
-    //Zwischenserver downloaden
-    try {
-        //Iframe erstellen, konfigurieren & dadurch ZwischenServer Downloaden
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
-        iframe.src = '../WebSocketServer/IntermediaryServerForMBotConnection.py';
 
-        //Debug Ausgabe, wenn Zwischenserver heruntergeladen wurde
-        console.log("Intermediary Server downloaded");
-    } catch (error) {
-        console.error(`Error while downloading the Intermediary Server: ${error}`);
-    }
+    let mobileDevice = false;
 
-    //Benutzer Zwischenserver ausführen lassen
-    try {
-        alert("Bitte führen Sie das gerade Heruntergeladene Python-Skript 'IntermediaryServerFromBotConnection.py' in ihrem Download-Ordner aus");
-    } catch (error) {
-        console.error(`Error while giving User Instructions to execute Intermediary Server locally: ${error}`);
+    //UserAgent auslesen
+    const userAgent = navigator.userAgent.toLowerCase();
+
+    // Schlüsselwörter, die auf Mobilgeräte hinweisen können
+    const mobileKeywords = ['android', 'webos', 'iphone', 'ipad', 'ipod', 'blackberry', 'windows phone'];
+
+    //Überprüfen ob eines der Wörter im UserAgent vorhanden ist
+    if (mobileKeywords.some(keyword => userAgent.includes(keyword))) {
+        mobileDevice = true;
+        alert("Zum Steuern des MBot benötigen Sie einen PC!\nBitte öffnen Sie auf ihrem PC diese Seite erneut (dadurch wird der Zwischenserver heruntergeladen).\nDanach führen Sie diesen bitte auf ihrem PC aus, geben Sie in dem folgenden Eingabefeld die (auf dem Zwischenserver) angezeigte IP-Addresse ein und zu guter Letzt kreuzen Sie bitte die Checkbox 'Zwischenserver gestartet' an.\nJetzt können Sie den MBot auch über ihr Mobilgerät steuern!");
+        //HIER LOGIK ZUM ANZEIGEN DES EINGABEFELDS FÜR DIE IP-ADDRESSE DES ZWISCHENSERVERS
+    } else {
+        //Zwischenserver downloaden
+        try {
+            //Iframe erstellen, konfigurieren & dadurch ZwischenServer Downloaden
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            iframe.src = '../WebSocketServer/IntermediaryServerForMBotConnection.py';
+
+            //Debug Ausgabe, wenn Zwischenserver heruntergeladen wurde
+            console.log("Intermediary Server downloaded");
+
+            //Benutzer Zwischenserver ausführen lassen
+            try {
+                alert("Bitte führen Sie das gerade Heruntergeladene Python-Skript 'IntermediaryServerFromBotConnection.py' in ihrem Download-Ordner aus");
+            } catch (error) {
+                console.error(`Error while giving User Instructions to execute Intermediary Server locally: ${error}`);
+            }
+        } catch (error) {
+            console.error(`Error while downloading the Intermediary Server: ${error}`);
+        }
     }
 
     //Überprüfen, ob Benutzer mitteilt, dass er den Zwischenserver gestartet hat
@@ -767,8 +786,13 @@ window.addEventListener("DOMContentLoaded", async function () {
         }
         console.log("Intermediary Server started");
 
+        //Wenn Mobilgerät, dann andere ServerIP als localhost benötigt
+        if(mobileDevice) {
+            intermediaryServerIP = document.getElementById("").value;
+        }
+
         //Socket verbinden
-        socket = new WebSocket('ws://localhost:5431');
+        socket = new WebSocket('ws://' + intermediaryServerIP + ':5431');
         createWebSocketConnection();
 
         //100 ms warten, um sicherzugehen, das der WebSocket verbunden ist)
@@ -788,7 +812,7 @@ window.addEventListener("beforeunload", async function () {
         initialized = false;
 
         // Schließen-Nachricht senden
-        if(socket.readyState === WebSocket.OPEN) {
+        if (socket.readyState === WebSocket.OPEN) {
             socket.send("Close");
             socket.close();
         }

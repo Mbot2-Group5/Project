@@ -55,6 +55,18 @@ possibleMBots = []
 duration = 10
 last_execution = 0
 
+# Locale IP-Adresse erhalten
+localIp = ""
+tmpSocket = None
+try:
+    tmpSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    tmpSocket.connect(("8.8.8.8", 80))
+    localIp = tmpSocket.getsockname()[0]
+except Exception:
+    localIp = "127.0.0.1"
+finally:
+    tmpSocket.close()
+
 
 # Verbindung zum UDP-Server herstellen
 async def openUDPClient():
@@ -184,8 +196,9 @@ async def checkTCPSocketStatus():
 
 # Main
 async def main():
-    print("Server reading and listening on 'ws://localhost:5431'")
-    async with websockets.serve(sendDataToMBot2FromWebApp, "localhost", 5431):
+    print("Server reading and listening on 'ws://0.0.0.0:5431'")
+    print(f"Server IP-Address (You need this IP-Address if you want to control the MBot from a mobile device): {localIp}")
+    async with websockets.serve(sendDataToMBot2FromWebApp, "0.0.0.0", 5431):
         await asyncio.Future()
 #
 
