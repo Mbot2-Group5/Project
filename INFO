@@ -3,10 +3,6 @@ Geschwindigkeiten für LineFollower noch anpassen (Zeilen 30 & 31 in webApp-Conn
 Neues MBot-Script testen & debuggen
 Funktionieren Zeilen 106 & 107 so richtig (sollten die complete Klasse "neu aufsetzen")?
 
-Eingabefeld für Mobilgeräte hinzufügen, wo die IP-Adresse des Servers eingegeben wird (Anzeigen aufrufen in Zeile 750 des webApp-Connection.js Scripts)
-Eingabefeld (hervorgehoben wie MBot-Auswahl) oder eigene HTML-Seite? (tendenz wenn möglich zu ersterem)
-Zeile 791 die ID des Eingabelements eingeben
-
 
 
 

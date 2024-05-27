@@ -750,7 +750,7 @@ window.addEventListener("DOMContentLoaded", async function () {
     if (mobileKeywords.some(keyword => userAgent.includes(keyword))) {
         mobileDevice = true;
         alert("Zum Steuern des MBot benötigen Sie einen PC!\nBitte öffnen Sie auf ihrem PC diese Seite erneut (dadurch wird der Zwischenserver heruntergeladen).\nDanach führen Sie diesen bitte auf ihrem PC aus, geben Sie in dem folgenden Eingabefeld die (auf dem Zwischenserver) angezeigte IP-Addresse ein und zu guter Letzt kreuzen Sie bitte die Checkbox 'Zwischenserver gestartet' an.\nJetzt können Sie den MBot auch über ihr Mobilgerät steuern!");
-        //HIER LOGIK ZUM ANZEIGEN DES EINGABEFELDS FÜR DIE IP-ADDRESSE DES ZWISCHENSERVERS
+        document.getElementById("settingForIntermediaryServer").style.display = "block";
     } else {
         //Zwischenserver downloaden
         try {
@@ -788,7 +788,7 @@ window.addEventListener("DOMContentLoaded", async function () {
 
         //Wenn Mobilgerät, dann andere ServerIP als localhost benötigt
         if(mobileDevice) {
-            intermediaryServerIP = document.getElementById("").value;
+            intermediaryServerIP = document.getElementById("IPAddressOfIntermediaryServer").value;
         }
 
         //Socket verbinden
