@@ -1,4 +1,5 @@
 Geschwindigkeiten für LineFollower noch anpassen (Zeilen 30 & 31 in webApp-Connection.js)
+Dafür Test-Script verwenden, möglicherweise Fehler in Zeile 61
 
 Neues MBot-Script testen & debuggen
 Funktionieren Zeilen 106 & 107 so richtig (sollten die komplete Klasse "neu aufsetzen")?

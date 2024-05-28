@@ -28,8 +28,8 @@ let ultrasonicSensorData = [];
 let accelerometerData = [];
 
 //Geschwindigkeiten für den LineFollower
-const lineFollowerSpeed = 40; //Line-Follower Geschwindigkeit (muss noch angepasst & getestet werden)
-const lineFollowerCurveSpeed = 20; //Kurvengeschwindigkeit des Line-Followers (muss noch angepasst & getestet werden)
+const lineFollowerSpeed = 40;       //DEBUG: muss noch auf Testergebnis von Testscript gesetzt werden
+const lineFollowerCurveSpeed = 20;  //DEBUG: muss noch auf Testergebnis von Testscript gesetzt werden
 let lineFollowerSpeedLeft = 0;
 let lineFollowerSpeedRight = 0;
 
