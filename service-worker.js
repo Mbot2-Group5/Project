@@ -1,7 +1,7 @@
 /* Autor: Stefan Rautner */
 
 // Definition Cache-Version
-let cacheVersion = 'my-cache';
+let cacheVersion = 'mbotController-cache';
 
 // Überprüfen ob service-worker schon einmal gefetched wurde
 let checkedForUpdatesAtOpening = false;
@@ -166,7 +166,7 @@ async function checkForUpdates() {
 
         if (newerVersion) {
             console.log("Update found");
-            cacheVersion = 'my-cache-' + Date.now();
+            cacheVersion = 'mbotController-cache-' + Date.now();
             console.log("Updating cache");
             await addToCacheInBatches(); // Hinzufügen der Ressourcen in Chargen aktualisieren
             console.log("Cache updated");
