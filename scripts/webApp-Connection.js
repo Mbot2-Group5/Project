@@ -787,7 +787,7 @@ window.addEventListener("DOMContentLoaded", async function () {
         console.log("Intermediary Server started");
 
         //Wenn Mobilgerät, dann andere ServerIP als localhost benötigt
-        if(mobileDevice) {
+        if (mobileDevice) {
             intermediaryServerIP = document.getElementById("IPAddressOfIntermediaryServer").value;
         }
 
