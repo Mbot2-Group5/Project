@@ -127,7 +127,7 @@ class MBotController:
                         self.TCP_socket.close()
                         cyberpi.console.clear()
                         cyberpi.console.print("Disconnected")
-                        time.sleep(2)
+                        time.sleep(5)
                         cyberpi.console.clear()
                         break
                     else:

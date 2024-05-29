@@ -35,7 +35,7 @@ let lineFollowerSpeedRight = 0;
 
 //Geschwindigkeiten
 let speed = 0;
-const addedSpeedForCurve = 20;
+const addedSpeedForCurve = 10;
 const maxReverseSpeed = -100;
 const maxForwardSpeed = 100;
 
@@ -585,18 +585,17 @@ async function checkGamepadInput() {
 //Nachricht an Server senden
 async function sendToMBot2() {
     try {
-        //Linken Motor limitieren
-        if (left > maxForwardSpeed) {
-            left = maxForwardSpeed - 1;
-        } else if (left < maxReverseSpeed) {
-            left = maxReverseSpeed + 1;
-        }
-
-        //Rechten Motor limitieren
-        if (right > maxForwardSpeed) {
-            right = maxForwardSpeed - 1;
-        } else if (right < maxReverseSpeed) {
-            right = maxReverseSpeed + 1;
+        //Motoren limitieren
+        while (true) {
+            if (left > maxForwardSpeed || right > maxForwardSpeed) {
+                left -= 1;
+                right -= 1;
+            } else if (left < maxReverseSpeed || right < maxReverseSpeed) {
+                left += 1;
+                right += 1;
+            } else {
+                break;
+            }
         }
 
         //LineFollower
@@ -760,7 +759,7 @@ window.addEventListener("DOMContentLoaded", async function () {
             document.body.appendChild(iframe);
             iframe.src = '../WebSocketServer/IntermediaryServerForMBotConnection.py';
 
-            //Debug Ausgabe, wenn Zwischenserver heruntergeladen wurde
+            //Ausgabe, wenn Zwischenserver heruntergeladen wurde
             console.log("Intermediary Server downloaded");
 
             //Benutzer Zwischenserver ausführen lassen
