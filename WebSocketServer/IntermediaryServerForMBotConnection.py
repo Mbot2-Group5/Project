@@ -143,14 +143,12 @@ async def sendDataToMBot2FromWebApp(websocket):
     try:
         async for message in websocket:
             if message == "Disconnect":
-                if await checkTCPSocketStatus():
-                    tcp_socket.send("Disconnect".encode('utf-8'))
-                    tcp_socket.close()
+                tcp_socket.send("Disconnect".encode('utf-8'))
+                tcp_socket.close()
                 print("MBot disconnected")
             elif message == "Close":
-                if await checkTCPSocketStatus():
-                    tcp_socket.send("Disconnect".encode('utf-8'))
-                    tcp_socket.close()
+                tcp_socket.send("Disconnect".encode('utf-8'))
+                tcp_socket.close()
                 print("Client closed")
                 print("Disconnected from Client & MBot")
                 print("Deleting the Intermediary Server...")
@@ -173,31 +171,17 @@ async def sendDataToMBot2FromWebApp(websocket):
                 await sendDataToWebAppFromMBot2()
     except Exception as e:
         print(f"Error while sending message to TCP-Server: {e}")
-
-
-# Funktion um zu Überprüfen, ob der Websocket verbunden ist
-async def checkWebSocketStatus(websocket):
-    try:
+        tcp_socket.send("Disconnect".encode('utf-8'))
+        tcp_socket.close()
+        await deleteScript()
         await websocket.close()
-        return True
-    except Exception:
-        return False
-
-
-# Funktion um zu Überprüfen, ob der TCP-Socket verbunden ist
-async def checkTCPSocketStatus():
-    global tcp_socket
-    try:
-        await tcp_socket.close()
-        return True
-    except Exception:
-        return False
 
 
 # Main
 async def main():
     print("Server reading and listening on 'ws://0.0.0.0:5431'")
-    print(f"Server IP-Address (You need this IP-Address if you want to control the MBot from a mobile device): {localIp}")
+    print(
+        f"Server IP-Address (You need this IP-Address if you want to control the MBot from a mobile device): {localIp}")
     async with websockets.serve(sendDataToMBot2FromWebApp, "0.0.0.0", 5431):
         await asyncio.Future()
 

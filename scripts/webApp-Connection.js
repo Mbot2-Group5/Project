@@ -28,8 +28,8 @@ let ultrasonicSensorData = [];
 let accelerometerData = [];
 
 //Geschwindigkeiten für den LineFollower
-const lineFollowerSpeed = 40;       //DEBUG: muss noch auf Testergebnis von Testscript gesetzt werden
-const lineFollowerCurveSpeed = 20;  //DEBUG: muss noch auf Testergebnis von Testscript gesetzt werden
+const lineFollowerSpeed = 17.5;       //DEBUG: muss noch auf Testergebnis von Testscript gesetzt werden
+const lineFollowerCurveSpeed = 15;  //DEBUG: muss noch auf Testergebnis von Testscript gesetzt werden
 let lineFollowerSpeedLeft = 0;
 let lineFollowerSpeedRight = 0;
 
@@ -795,7 +795,7 @@ window.addEventListener("DOMContentLoaded", async function () {
         socket = new WebSocket('ws://' + intermediaryServerIP + ':5431');
         createWebSocketConnection();
 
-        //100 ms warten, um sicherzugehen, das der WebSocket verbunden ist)
+        //100 ms warten, um sicherzugehen, das der WebSocket verbunden ist
         await new Promise(resolve => setTimeout(resolve, 100));
 
         //MBots vom Zwischenserver holen
@@ -810,6 +810,9 @@ window.addEventListener("beforeunload", async function () {
     try {
         // Kommunikation beenden
         initialized = false;
+
+        //5 Sekunde warten, um sicherzugehen, dass MBot getrennt ist
+        await new Promise(resolve => setTimeout(resolve, 5000));
 
         // Schließen-Nachricht senden
         if (socket.readyState === WebSocket.OPEN) {
