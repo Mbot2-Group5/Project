@@ -3,7 +3,6 @@
 import _thread
 import json
 import time
-
 import cyberpi
 import network
 import usocket
