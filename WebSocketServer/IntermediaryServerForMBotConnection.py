@@ -153,8 +153,8 @@ async def sendDataToMBot2FromWebApp(websocket):
                 print("Disconnected from Client & MBot")
                 print("Deleting the Intermediary Server...")
                 time.sleep(1)
-                await deleteScript()
                 await websocket.close()
+                await deleteScript()
                 break
             elif message == "searchForMBots":
                 if time.time() - last_execution >= duration + 2:
