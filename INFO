@@ -4,11 +4,6 @@ MBot-Script mit Multithreading für SuicidePrevention testen & debuggen
 
 
 
-Make gitignore-File and remove old TMP-Files with following command:
-git rm -r --cached . && git add . && git commit -am "Remove ignored files"
-
-
-
 
 
 Style-Probleme(HAAS):
