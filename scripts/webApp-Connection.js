@@ -35,7 +35,7 @@ let lineFollowerSpeedRight = 0;
 
 //Geschwindigkeiten
 let speed = 0;
-const addedSpeedForCurve = 10;
+const addedSpeedForCurve = 20;
 const maxReverseSpeed = -100;
 const maxForwardSpeed = 100;
 
