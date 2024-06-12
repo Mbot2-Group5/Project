@@ -55,6 +55,11 @@ p {
     gap: 10px;
 }
 
+.icon-close{
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+
 .button {
     background-color: transparent;
     color: white;
@@ -192,13 +197,11 @@ p {
     margin-right:700px;
     margin-bottom: 30px;
     position: relative;
-    z-index: 2;
 }
 
- #abstandsChartDiv{
+#abstandsChartDiv{
     margin-right:700px;
     position: relative;
-    z-index: 2;
 }
 
 #lineFollower{
@@ -415,8 +418,9 @@ p {
         margin-right: 5%;
         margin-top: 90px;
     }
+
     .icon-close{
-       margin-top:20px;
+       margin-top: 20px;
        margin-bottom: 20px;
     }
 
