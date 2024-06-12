@@ -21,13 +21,13 @@
     <h2 class="logo"><a style="text-decoration: none; color: inherit;" href="https://github.com/Mbot2-Group5">Group 5</a></h2>
     <nav class="navigation">
         <div class="button-container-small">
-            <button class="btnLogin-popup" id="phone-login">Game</button>
+            <button class="btnLogin-popup" id="phone-login">Login</button>
             <div class="icon-menu">&#9776;</div> <!-- Hamburger icon for mobile -->
         </div>
-        <a class="anav" href="./start.html#home">Home</a>
-        <a class="anav" href="./start.html#about">About</a>
-        <a class="anav" href="./start.html#team">Team</a>
-        <a class="anav" href="./start.html#log">Log</a>
+        <a class="anav" href="start.html#home">Home</a>
+        <a class="anav" href="start.html#about">About</a>
+        <a class="anav" href="start.html#team">Team</a>
+        <a class="anav" href="start.html#log">Log</a>
         <a class="anav" href="index.html">Controller</a>
         <button class="btnLogin-popup" id="one-login">Dino-Game</button>
     </nav>
@@ -128,23 +128,32 @@
             </div>
             <button class="Connect" onclick="connectToFormerMBot()">Connect</button>
             <button class="Disconnect" onclick="disconnectFromMBot2()">Disconnect</button>
-            <button onclick="removeFromFormerConnected()">Entfernen</button>
+            <button class = "RemoveButton" onclick="removeFromFormerConnected()">Entfernen</button>
         </div>
-        <div>
+        <div id = "beschleunigungsChartDiv" >
             <canvas id="beschleunigungsChart"></canvas>
+        </div>
+        <div id = "abstandsChartDiv" >
             <canvas id="abstandsChart"></canvas>
         </div>
     </div>
 </div>
 
-<script type="module" src="./librarys/ionicons/ionicons-lib.esm.js"></script>
-<script nomodule src="./librarys/ionicons/ionicons-lib.js"></script>
+<script type="module" src="librarys/ionicons/ionicons-lib.esm.js"></script>
+<script nomodule src="librarys/ionicons/ionicons-lib.js"></script>
 <script src="./scripts/gamebutton.js"></script>
 <script src="./scripts/connection.js"></script>
 <script src="./scripts/charts.js"></script>
-<script type="module" src="./librarys/modelViewer/model-viewer-lib.js"></script>
+<script type="module" src="librarys/modelViewer/model-viewer-lib.js"></script>
 
 <script>
+
+    var Canvas1 = document.getElementById('beschleunigungsChart');
+    var context = Canvas1.getContext('2d');
+    context.fillStyle='white';
+
+    var Canvas2 = document.getElementById('abstandsChart');
+
     window.addEventListener("resize", function () {
         const label1 = document.querySelector(".fum");
         if (window.innerWidth < 610) {
